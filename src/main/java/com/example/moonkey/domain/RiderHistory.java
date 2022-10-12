@@ -10,5 +10,7 @@ public class RiderHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int deliveyr_number;
 
-    private String rider_id; // FK로 등록
+    @ManyToOne
+    @JoinColumn(name = "rider_rider_id")
+    private Rider rider_id; // FK로 등록
 }

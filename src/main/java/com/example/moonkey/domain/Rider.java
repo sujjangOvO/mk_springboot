@@ -1,7 +1,8 @@
 package com.example.moonkey.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Rider {
@@ -9,13 +10,22 @@ public class Rider {
     @Id
     private String rider_id;
 
-    private String store_id; // FK
-
     private String nickname;
 
-    private int order_number; // FK
+    @OneToOne
+    @JoinColumn(name = "store_id")
+    private Store store_id; // FK
 
-    private int menu_number; // FK
+    @OneToMany(mappedBy = "rider_id")
+    private List<RiderHistory> riderHistories = new ArrayList<>();
 
-    private String customer_id; // FK
+    @OneToOne
+    @JoinColumn(name = "orders_order_number")
+    private Orders order_number; // FK
+
+    /*
+    @OneToMany(mappedBy = "rider")
+    private List<Customer> customers = new ArrayList<>(); // FK
+
+    손님이 Rider 정보를 알 필요가 있나? */
 }

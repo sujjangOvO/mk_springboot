@@ -1,9 +1,8 @@
 package com.example.moonkey.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Orders {
@@ -14,7 +13,17 @@ public class Orders {
 
     private int total_price;
 
-    private int menu_number; // FK
+    @OneToMany(mappedBy = "order_id")
+    private List<Menu> menus = new ArrayList<>(); // FK
 
-    private String store_id; // FK
+    @OneToOne(mappedBy = "order_number")
+    private Rider rider_id;
+
+    @ManyToOne
+    @JoinColumn(name = "store_id")
+    private Store store_id; // FK
+
+    @ManyToOne
+    @JoinColumn(name = "customer_customer_id")
+    private Customer customer_id; // FK
 }

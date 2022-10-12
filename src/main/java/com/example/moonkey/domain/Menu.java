@@ -1,8 +1,6 @@
 package com.example.moonkey.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Menu {
@@ -10,7 +8,13 @@ public class Menu {
     @Id
     private long menu_number;
 
-    private String store_id; // FK
+    @ManyToOne
+    @JoinColumn(name = "orders_order_number")
+    private Orders order_id;
+
+    @ManyToOne
+    @JoinColumn(name="store_id")
+    private Store store_id; // FK
 
     private int price;
     private String menu_name;
