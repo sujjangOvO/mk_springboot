@@ -8,7 +8,10 @@ import java.util.List;
 public class Rider {
 
     @Id
-    private String rider_id;
+    private long rider_id;
+
+    @Column(unique = true)
+    private String id;
 
     private String nickname;
 
