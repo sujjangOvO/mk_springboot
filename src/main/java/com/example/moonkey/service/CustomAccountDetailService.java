@@ -14,7 +14,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component("accountDetailsService")
-public class CustomAccountDetailService implements UserDetailsService {
+public class CustomAccountDetailService implements UserDetailsService { // UserDetailsService는 Spring Security에서 사용자의 정보를 담는 인터페이스이다.
+                                                    // Spring Security에서 사용자의 정보를 불러오기 위해 구현하는 인터페이스이다.
 
     private final AccountRepository accountRepository;
 

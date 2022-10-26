@@ -3,18 +3,19 @@ package com.example.moonkey.controller;
 import com.example.moonkey.dto.AccountDto;
 import com.example.moonkey.dto.UserDto;
 import com.example.moonkey.service.AccountService;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 
+
+@RestController
+@RequestMapping("/api")
 public class AccountController {
     private final AccountService accountService;
 
