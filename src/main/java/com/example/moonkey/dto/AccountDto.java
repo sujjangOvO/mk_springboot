@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class AccountDto { // 회원가입시 사용할 Dto
 
-    // private long user_id;
 
     @NotNull
     private String username;
