@@ -45,8 +45,8 @@ public class CustomAccountDetailService implements UserDetailsService { // UserD
                 .map(authority -> new SimpleGrantedAuthority(authority.getAuthorityName()))
                 .collect(Collectors.toList());
 
-        return new org.springframework.security.core.userdetails.User(account.getUsername(),
-                account.getPw(),
+        return new org.springframework.security.core.userdetails.User(account.getId(),
+                account.getKey(),
                 grantedAuthorities);
     }
 

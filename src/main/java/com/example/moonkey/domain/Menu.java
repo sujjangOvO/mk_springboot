@@ -1,24 +1,29 @@
 package com.example.moonkey.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
+@Table(name="menu")
 public class Menu {
 
     @Id
-    private long menu_number;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long menuId;
 
     @ManyToOne
-    @JoinColumn(name = "orders_order_number")
-    private Orders order_id;
+    @JoinColumn(name="store_storeId")
+    private Store storeId; // FK
 
-    @ManyToOne
-    @JoinColumn(name="store_id")
-    private Store store_id; // FK
-
+    @NotNull
     private int price;
-    private String menu_name;
+
+    @NotNull
+    private String menuName;
 
     @Column(nullable = true)
     private String option;
+
+    @Column(nullable = true)
+    private String description;
 }

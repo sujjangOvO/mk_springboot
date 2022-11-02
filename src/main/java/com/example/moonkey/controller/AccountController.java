@@ -1,7 +1,6 @@
 package com.example.moonkey.controller;
 
 import com.example.moonkey.dto.AccountDto;
-import com.example.moonkey.dto.UserDto;
 import com.example.moonkey.service.AccountService;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.ResponseEntity;

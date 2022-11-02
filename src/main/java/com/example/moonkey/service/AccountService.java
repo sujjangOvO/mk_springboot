@@ -27,7 +27,7 @@ public class AccountService {
 
     @Transactional
     public AccountDto signup(AccountDto accountDto){
-        if(accountRepository.findOneWithAuthoritiesByUsername(accountDto.getUsername()).orElse(null) != null){
+        if(accountRepository.findOneWithAuthoritiesByUsername(accountDto.getId()).orElse(null) != null){
             throw new DuplicateMemberException("이미 가입되어 있는 유저입니다.");
         }
 
@@ -37,8 +37,9 @@ public class AccountService {
                 .build();                   // => 이 차이를 통해 권한 검증 부분을 테스트.
 
         Account account = Account.builder()
-                .username(accountDto.getUsername())
-                .pw(accountDto.getPw())
+                .id(accountDto.getId())
+                .key(accountDto.getKey())
+                .nickname(accountDto.getNickname())
                 .phone(accountDto.getPhone())
                 .flag(accountDto.getFlag())
                 .authorities(Collections.singleton(authority))

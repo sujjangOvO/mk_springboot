@@ -1,23 +1,25 @@
 package com.example.moonkey.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
+@Table(name = "package")
 public class Package {
     @Id
-    private int package_number;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int packageId;
 
     @OneToOne
-    @JoinColumn(name="party_party_number")
-    private Party party_number; // FK
+    @JoinColumn(name="orders_orderId")
+    private Orders orderId; // FK
 
-    private String customer_id;
+    @NotNull
+    private String product;
 
-    private String package_name;
-    private String package_menu;
+    @NotNull
     private String address;
-    private int join_amount;
+
+    @NotNull
+    private int amount;
 }

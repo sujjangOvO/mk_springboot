@@ -1,6 +1,7 @@
 package com.example.moonkey.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,27 +10,30 @@ import java.util.List;
 public class Store {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long storeId;
 
-    @OneToMany(mappedBy = "store_id")
-    private List<Menu> menus = new ArrayList<>();
+    /*
+    @OneToMany(mappedBy = "store")
+    private List<Menu> menus = new ArrayList<>(); 오류
 
-    @OneToMany(mappedBy = "store_id")
-    private List<Party> parties = new ArrayList<>();
+    @OneToMany(mappedBy = "party_partyId")
+    private List<Party> partyList;
+    */
 
-    @OneToMany(mappedBy = "store_id")
-    private List<Orders> orderList = new ArrayList<>();
-
-    @OneToOne(mappedBy = "store_id")
-    private Rider rider_id;
-
+    @NotNull
     private String store_name;
 
     @ManyToOne
-    @JoinColumn(name = "producer_id")
-    private Producer producer_id; // FK
+    @JoinColumn(name = "account_uid")
+    private Account ownerId; // FK
 
-
+    @NotNull
     private String address;
+
+    @Column(nullable = true)
+    private String description;
+
+
+
 
 }

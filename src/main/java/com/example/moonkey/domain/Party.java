@@ -1,20 +1,32 @@
 package com.example.moonkey.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import org.hibernate.criterion.Order;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@Table(name = "party")
 public class Party {
 
     @Id
-    private int party_number;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int partyId;
+
+    /*
+    @OneToMany(mappedBy = "party_partyId")
+    private List<Account> members = new ArrayList<>(); 오류*/
 
     @ManyToOne
-    @JoinColumn(name = "store_id")
-    private Store store_id; // FK로 등록
+    @JoinColumn(name = "store_storeId")
+    private Store storeId;
 
-    private String nickname;
+    @OneToOne
+    @JoinColumn(name = "orders_orderId")
+    private Orders orderId;
 
+    @NotNull
+    private String partyTitle;
 }
