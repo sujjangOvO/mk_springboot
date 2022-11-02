@@ -22,7 +22,7 @@ public class Menu {
     private String menuName;
 
     @Column(nullable = true)
-    private String option;
+    private String options;
 
     @Column(nullable = true)
     private String description;

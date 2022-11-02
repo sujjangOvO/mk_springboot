@@ -26,7 +26,7 @@ public class Account {
     private String id;
 
     @NotNull
-    private String key;
+    private String password;
 
     @NotNull
     private String phone;
@@ -54,13 +54,6 @@ public class Account {
     @ManyToOne
     @JoinColumn(name="store_storeId")
     private Store storeId;
-
-    /*
-    @OneToMany(mappedBy = "orders_orderId")
-    private List<Orders> orderList = new ArrayList<>(); // 에러
-
-    @OneToMany(mappedBy = "account")
-    private List<Store> storeList = new ArrayList<>(); */
 
     @ManyToOne
     @JoinColumn(name = "party_partyId")

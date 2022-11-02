@@ -28,7 +28,7 @@ public class CustomAccountDetailService implements UserDetailsService { // UserD
     @Override
     @Transactional
     public UserDetails loadUserByUsername(final String username){
-        return accountRepository.findOneWithAuthoritiesByUsername(username)
+        return accountRepository.findOneWithAuthoritiesById(username)
                 .map(account -> createUser(username, account))
                 .orElseThrow(() -> new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
     }
@@ -46,7 +46,7 @@ public class CustomAccountDetailService implements UserDetailsService { // UserD
                 .collect(Collectors.toList());
 
         return new org.springframework.security.core.userdetails.User(account.getId(),
-                account.getKey(),
+                account.getPassword(),
                 grantedAuthorities);
     }
 

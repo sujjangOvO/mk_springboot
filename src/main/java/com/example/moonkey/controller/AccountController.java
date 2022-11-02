@@ -49,10 +49,10 @@ public class AccountController {
     }
 
     // 해당 메소드는 ADMIN 권한만 호출할 수 있다.
-    @GetMapping("/account/{username}")
+    @GetMapping("/account/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<AccountDto> getUserInfo(@PathVariable String username){
-        return ResponseEntity.ok(accountService.getUserWithAuthorities(username));
+    public ResponseEntity<AccountDto> getUserInfo(@PathVariable String id){
+        return ResponseEntity.ok(accountService.getUserWithAuthorities(id));
     }
 
 }

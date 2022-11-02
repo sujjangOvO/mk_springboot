@@ -27,7 +27,7 @@ public class AccountService {
 
     @Transactional
     public AccountDto signup(AccountDto accountDto){
-        if(accountRepository.findOneWithAuthoritiesByUsername(accountDto.getId()).orElse(null) != null){
+        if(accountRepository.findOneWithAuthoritiesById(accountDto.getId()).orElse(null) != null){
             throw new DuplicateMemberException("이미 가입되어 있는 유저입니다.");
         }
 
@@ -38,7 +38,7 @@ public class AccountService {
 
         Account account = Account.builder()
                 .id(accountDto.getId())
-                .key(accountDto.getKey())
+                .password(accountDto.getPassword())
                 .nickname(accountDto.getNickname())
                 .phone(accountDto.getPhone())
                 .flag(accountDto.getFlag())
@@ -51,14 +51,14 @@ public class AccountService {
 
     @Transactional(readOnly = true)
     public AccountDto getUserWithAuthorities(String username){ // 인자로 받은 username에 해당하는 유저 객체와 권한 정보를 가져오는 메소드
-        return AccountDto.from(accountRepository.findOneWithAuthoritiesByUsername(username).orElse(null));
+        return AccountDto.from(accountRepository.findOneWithAuthoritiesById(username).orElse(null));
     }
 
     @Transactional(readOnly = true)
     public AccountDto getMyUserWithAuthorities() { // 현재 Security Context에 저장된 username에 해당하는 유저, 권한 정보를 가져오는 메소드.
         return AccountDto.from(
                 SecurityUtil.getCurrentUsername()
-                        .flatMap(accountRepository::findOneWithAuthoritiesByUsername)
+                        .flatMap(accountRepository::findOneWithAuthoritiesById)
                         .orElseThrow(()->new NotFoundMemberException("Member not found"))
         );
     }

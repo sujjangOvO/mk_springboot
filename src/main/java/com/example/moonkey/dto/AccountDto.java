@@ -21,7 +21,7 @@ public class AccountDto { // 회원가입시 사용할 Dto
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // 필드값을 쓰는 경우에만 접근이 허용
     @NotNull
-    private String key;
+    private String password;
 
     @NotNull
     private String phone;
@@ -39,7 +39,7 @@ public class AccountDto { // 회원가입시 사용할 Dto
 
         return AccountDto.builder()
                 .id(account.getId())
-                .key(account.getKey())
+                .password(account.getPassword())
                 .phone(account.getPhone())
                 .flag(account.getFlag())
                 .authorityDtoSet(account.getAuthorities().stream()

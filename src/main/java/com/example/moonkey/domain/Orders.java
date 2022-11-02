@@ -2,6 +2,7 @@ package com.example.moonkey.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,11 +15,11 @@ public class Orders {
     private int orderId;
 
     @NotNull
-    private int total_price;
+    private int number;
 
-    /*
-    @OneToMany(mappedBy = "orders")
-    private List<Menu> menus = new ArrayList<>(); 오류*/
+    @ManyToOne
+    @JoinColumn(name="menu_menuId")
+    private Menu menuId;
 
     @ManyToOne
     @JoinColumn(name = "store_id")
@@ -26,5 +27,8 @@ public class Orders {
 
     @ManyToOne
     @JoinColumn(name = "account_uid")
-    private Account uid; // FK
+    private Account account_uid; // FK
+
+    @NotNull
+    private Timestamp orderDate;
 }
