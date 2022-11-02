@@ -48,7 +48,7 @@ public class Account {
     @JoinTable(
             name = "account_authority",
             joinColumns = @JoinColumn(name = "account_uid"),
-            inverseJoinColumns = @JoinColumn(name="authority_authority_name"))
+            inverseJoinColumns = @JoinColumn(name="authority_name"))
     private Set<Authority> authorities;
 
     @ManyToOne

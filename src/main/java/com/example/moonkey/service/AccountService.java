@@ -42,6 +42,7 @@ public class AccountService {
                 .nickname(accountDto.getNickname())
                 .phone(accountDto.getPhone())
                 .flag(accountDto.getFlag())
+                .addr(accountDto.getAddr())
                 .authorities(Collections.singleton(authority))
                 .activated(true)
                 .build();

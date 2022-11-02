@@ -34,7 +34,7 @@ public class AuthController { // 로그인 api
     public ResponseEntity<TokenDto> authorize(@Valid @RequestBody LoginDto loginDto) {
 
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPw());
+                new UsernamePasswordAuthenticationToken(loginDto.getId(), loginDto.getPassword());
 
         // authenticate 메소드가 실행될 때 CustomAccountDetailService에서 만든 loadUserByUsername 메소드가 실행된다. 따라서 Authentication 객체를 생성한다.
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);

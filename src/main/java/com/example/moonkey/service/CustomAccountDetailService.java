@@ -27,18 +27,18 @@ public class CustomAccountDetailService implements UserDetailsService { // UserD
     // 해당 정보를 기반으로 userdetails.User 객체를 생성
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(final String username){
-        return accountRepository.findOneWithAuthoritiesById(username)
-                .map(account -> createUser(username, account))
-                .orElseThrow(() -> new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
+    public UserDetails loadUserByUsername(final String id){
+        return accountRepository.findOneWithAuthoritiesById(id)
+                .map(account -> createUser(id, account))
+                .orElseThrow(() -> new UsernameNotFoundException(id + " -> 데이터베이스에서 찾을 수 없습니다."));
     }
 
 
 
-    private org.springframework.security.core.userdetails.User createUser(String username, Account account){
+    private org.springframework.security.core.userdetails.User createUser(String id, Account account){
 
         if (!account.isActivated()) {
-            throw new RuntimeException(username + " -> 활성화되어 있지 않습니다.");
+            throw new RuntimeException(id + " -> 활성화되어 있지 않습니다.");
         }
 
         List<GrantedAuthority> grantedAuthorities = account.getAuthorities().stream()

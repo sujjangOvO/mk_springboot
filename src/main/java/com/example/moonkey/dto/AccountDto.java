@@ -32,6 +32,9 @@ public class AccountDto { // 회원가입시 사용할 Dto
     @NotNull
     private int flag;
 
+    @NotNull
+    private String addr;
+
     private Set<AuthorityDto> authorityDtoSet;
 
     public static AccountDto from(Account account){
