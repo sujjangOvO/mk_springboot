@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 @RestController
 @RequestMapping("/api")
@@ -33,7 +35,7 @@ public class AccountController {
     }
 
     // AccountDto를 인자로 받아서 UserService의 signup 메소드를 호출
-    @PostMapping("/accountSignup")
+    @PostMapping("/account/signup")
     public ResponseEntity<AccountDto> signup(
             @Valid @RequestBody AccountDto accountDto
     ){
