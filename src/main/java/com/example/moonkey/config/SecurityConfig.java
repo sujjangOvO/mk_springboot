@@ -55,6 +55,7 @@ public class SecurityConfig { // WebSecurityConfigurer를 implement하는 방법
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity
+                .cors().disable()
                 .csrf().disable()
 
                 .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
