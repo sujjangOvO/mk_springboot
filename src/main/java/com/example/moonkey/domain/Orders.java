@@ -12,13 +12,14 @@ public class Orders {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "order_id")
     private int orderId;
 
     @NotNull
     private int number;
 
     @ManyToOne
-    @JoinColumn(name="menu_menuId")
+    @JoinColumn(name="menu_id")
     private Menu menuId;
 
     @ManyToOne

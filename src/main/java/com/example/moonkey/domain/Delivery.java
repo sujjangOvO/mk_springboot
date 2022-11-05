@@ -9,6 +9,7 @@ public class Delivery {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "delivery_id")
     private int deliveryId;
 
     @OneToOne
@@ -16,11 +17,11 @@ public class Delivery {
     private Account uid; // 배달원
 
     @OneToOne
-    @JoinColumn(name = "orders_orderId")
+    @JoinColumn(name = "order_id")
     private Orders orderId;
 
     @ManyToOne
-    @JoinColumn(name = "store_storeId")
+    @JoinColumn(name = "store_id")
     private Store storeId;
 
     @NotNull

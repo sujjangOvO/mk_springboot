@@ -8,10 +8,11 @@ import javax.validation.constraints.NotNull;
 public class Package {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "package_id")
     private int packageId;
 
     @OneToOne
-    @JoinColumn(name="orders_orderId")
+    @JoinColumn(name="order_id")
     private Orders orderId; // FK
 
     @NotNull

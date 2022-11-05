@@ -52,10 +52,10 @@ public class Account {
     private Set<Authority> authorities;
 
     @ManyToOne
-    @JoinColumn(name="store_storeId")
+    @JoinColumn(name="store_id")
     private Store storeId;
 
     @ManyToOne
-    @JoinColumn(name = "party_partyId")
+    @JoinColumn(name = "party_id")
     private Party partyId;
 }

@@ -38,7 +38,7 @@ public class AccountService {
 
         Account account = Account.builder()
                 .id(accountDto.getId())
-                .password(accountDto.getPassword())
+                .password(passwordEncoder.encode(accountDto.getPassword()))
                 .nickname(accountDto.getNickname())
                 .phone(accountDto.getPhone())
                 .flag(accountDto.getFlag())
