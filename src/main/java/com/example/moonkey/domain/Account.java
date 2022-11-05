@@ -47,15 +47,15 @@ public class Account {
     @ManyToMany // Account 객체와 authority 객체의 다대다 관계를 일대다, 다대일 관계의 조인 테이블로 정의하는 어노테이션
     @JoinTable(
             name = "account_authority",
-            joinColumns = @JoinColumn(name = "account_uid"),
-            inverseJoinColumns = @JoinColumn(name="authority_name"))
+            joinColumns = @JoinColumn(name = "accountUid"),
+            inverseJoinColumns = @JoinColumn(name="authorityName"))
     private Set<Authority> authorities;
 
     @ManyToOne
-    @JoinColumn(name="store_id")
+    @JoinColumn(name="storeId")
     private Store storeId;
 
     @ManyToOne
-    @JoinColumn(name = "party_id")
+    @JoinColumn(name = "partyId")
     private Party partyId;
 }

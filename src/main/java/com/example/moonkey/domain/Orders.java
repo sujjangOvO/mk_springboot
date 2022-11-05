@@ -12,23 +12,23 @@ public class Orders {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_id")
+    @Column(name = "orderId")
     private int orderId;
 
     @NotNull
     private int number;
 
     @ManyToOne
-    @JoinColumn(name="menu_id")
+    @JoinColumn(name="menuId")
     private Menu menuId;
 
     @ManyToOne
-    @JoinColumn(name = "store_id")
-    private Store store_id; // FK
+    @JoinColumn(name = "storeId")
+    private Store storeId; // FK
 
     @ManyToOne
-    @JoinColumn(name = "account_uid")
-    private Account account_uid; // FK
+    @JoinColumn(name = "accountUid")
+    private Account accountUid; // FK
 
     @NotNull
     private Timestamp orderDate;

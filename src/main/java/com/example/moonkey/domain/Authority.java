@@ -17,6 +17,6 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class Authority {
     @Id
-    @Column(name = "authority_name", length = 50)
+    @Column(name = "authorityName", length = 50)
     private String authorityName;
 }

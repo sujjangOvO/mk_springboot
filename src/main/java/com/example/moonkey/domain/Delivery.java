@@ -9,19 +9,19 @@ public class Delivery {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "delivery_id")
+    @Column(name = "deliveryId")
     private int deliveryId;
 
     @OneToOne
-    @JoinColumn(name = "Account_uid")
+    @JoinColumn(name = "accountUid")
     private Account uid; // 배달원
 
     @OneToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "orderId")
     private Orders orderId;
 
     @ManyToOne
-    @JoinColumn(name = "store_id")
+    @JoinColumn(name = "storeId")
     private Store storeId;
 
     @NotNull

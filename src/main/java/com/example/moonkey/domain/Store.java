@@ -1,11 +1,18 @@
 package com.example.moonkey.domain;
 
+import lombok.*;
+
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Builder
+@Getter
+@AllArgsConstructor
+@RequiredArgsConstructor
 @Table(name = "store")
 public class Store {
 
@@ -22,10 +29,10 @@ public class Store {
     */
 
     @NotNull
-    private String store_name;
+    private String name;
 
     @ManyToOne
-    @JoinColumn(name = "account_uid")
+    @JoinColumn(name = "accountUid")
     private Account ownerId; // FK
 
     @NotNull
@@ -33,8 +40,6 @@ public class Store {
 
     @Column(nullable = true)
     private String description;
-
-
 
 
 }

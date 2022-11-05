@@ -12,7 +12,7 @@ public class Package {
     private int packageId;
 
     @OneToOne
-    @JoinColumn(name="order_id")
+    @JoinColumn(name="orderId")
     private Orders orderId; // FK
 
     @NotNull

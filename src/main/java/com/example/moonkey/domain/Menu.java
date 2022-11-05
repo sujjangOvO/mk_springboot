@@ -9,11 +9,11 @@ public class Menu {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "menu_id")
+    @Column(name = "menuId")
     private long menuId;
 
     @ManyToOne
-    @JoinColumn(name="store_id")
+    @JoinColumn(name="storeId")
     private Store storeId; // FK
 
     @NotNull

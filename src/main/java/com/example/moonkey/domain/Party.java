@@ -13,7 +13,7 @@ public class Party {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="party_id")
+    @Column(name="partyId")
     private int partyId;
 
     /*
@@ -21,11 +21,11 @@ public class Party {
     private List<Account> members = new ArrayList<>(); 오류*/
 
     @ManyToOne
-    @JoinColumn(name = "store_id")
+    @JoinColumn(name = "storeId")
     private Store storeId;
 
     @OneToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "orderId")
     private Orders orderId;
 
     @NotNull
