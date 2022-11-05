@@ -10,47 +10,35 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.CorsFilter;
 
 @EnableGlobalMethodSecurity(prePostEnabled = true) // @PreAuthorize 어노테이션을 메소드 단위로 사용하기 위한 어노테이션
 @EnableWebSecurity // 기본적인 web 보안을 활성하하는 어노테이션
-public class SecurityConfig extends WebSecurityConfigurerAdapter { // WebSecurityConfigurer를 implement하는 방법도 있다.
+public class SecurityConfig { // WebSecurityConfigurer를 implement하는 방법도 있다.
 
+    private final CorsFilter corsFilter;
     private final TokenProvider tokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-
-    @Override
-    public void configure(WebSecurity web){ // h2-console 하위 모든 요청, 파비콘 관련 요청은 Spring Security 로직을 수행하지 않도록 함.
-        web
-                .ignoring()
-                .antMatchers(
-                        "/h2-console/**"
-                        ,"/favicon.ico"
-                );
-    }
-
-    /*
-    @Override
-    protected void configure(HttpSecurity http) throws Exception{
-        http
-                .authorizeRequests() // HttpServletRequest를 사용하는 요청들에 대한 접근 제한을 설정
-                .antMatchers("/api/hello").permitAll() // "/api/hello"에 대한 요청은 인증없이 접근을 허용
-                .anyRequest().authenticated(); // 나머지 요청들은 모두 인증을 받아야 한다.
-    } */
 
     // jwt 패키지에 만든 5가지 클래스를 추가한다.
 
     public SecurityConfig(
             TokenProvider tokenProvider,
+            CorsFilter corsFilter,
             JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
             JwtAccessDeniedHandler jwtAccessDeniedHandler
     ){
         this.tokenProvider = tokenProvider;
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
         this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
+        this.corsFilter = corsFilter;
     }
 
     @Bean
@@ -58,18 +46,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter { // WebSecurit
         return new BCryptPasswordEncoder();
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception{
-        http
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().antMatchers("/h2-console/**"
+                , "/favicon.ico"
+                , "/error");
+    }
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
+        httpSecurity
                 .csrf().disable()
+
+                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
+
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler)
-
-                .and()
-                .headers()
-                .frameOptions()
-                .sameOrigin() // h2-console 설정
 
                 .and()
                 .sessionManagement()
@@ -83,6 +75,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter { // WebSecurit
 
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider));
+
+        return httpSecurity.build();
     }
 
 }
