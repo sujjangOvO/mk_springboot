@@ -8,14 +8,9 @@ import com.example.moonkey.repository.AccountRepository;
 import com.example.moonkey.repository.StoreRepository;
 import com.example.moonkey.util.SecurityUtil;
 import com.example.moonkey.domain.Store;
-import com.example.moonkey.dto.AccountUidDto;
-import com.example.moonkey.service.AccountService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Collections;
 
 
 @Service

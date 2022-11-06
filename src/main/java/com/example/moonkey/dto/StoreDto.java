@@ -1,15 +1,11 @@
 package com.example.moonkey.dto;
 
-import com.example.moonkey.dto.AccountUidDto;
 import com.example.moonkey.domain.Store;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 
 @Getter
