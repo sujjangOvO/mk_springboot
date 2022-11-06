@@ -23,8 +23,8 @@ public class StoreController {
 		this.storeService = storeService;
 	}
 
-	@PostMapping("/store/register")
-	@PreAuthorize("hasAnyRole('USER','ADMIN','OWNER')")
+	@PostMapping("/store/reg")
+	@PreAuthorize("hasAnyRole('USER','ADMIN')")
 	public ResponseEntity<StoreDto> register(
 			@Valid @RequestBody StoreDto storeDto
 	){
@@ -32,10 +32,18 @@ public class StoreController {
 	}
 
 	@GetMapping("/store/{name}")
-	@PreAuthorize("hasAnyRole('User','ADMIN')")
+	@PreAuthorize("hasAnyRole('USER','ADMIN')")
 	public ResponseEntity<StoreDto> getStoreInfo(@PathVariable String name){
 		return ResponseEntity.ok(storeService.getStore(name));
 	}
+
+//	@GetMapping("/store")
+//	@PreAuthorize("hasAnyRole('USER','ADMIN')")
+//	public ResponseEntity<List<StoreDto>> getStoresInfo(HttpServletRequest request){
+//
+//
+//		return ResponseEntity.ok();
+//	}
 
 
 }
