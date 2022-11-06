@@ -24,11 +24,11 @@ public class Orders {
 
     @ManyToOne
     @JoinColumn(name = "storeId")
-    private Store storeId; // FK
+    private Store storeId;
 
     @ManyToOne
-    @JoinColumn(name = "accountUid")
-    private Account accountUid; // FK
+    @JoinColumn(name = "partyId")
+    private Party partyId;
 
     @NotNull
     private Timestamp orderDate;
