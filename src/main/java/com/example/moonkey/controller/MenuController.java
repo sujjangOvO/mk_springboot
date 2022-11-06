@@ -1,5 +1,6 @@
 package com.example.moonkey.controller;
 
+import com.example.moonkey.domain.Menu;
 import com.example.moonkey.dto.MenuDto;
 import com.example.moonkey.service.MenuService;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 
 
 @RestController
@@ -28,6 +30,13 @@ public class MenuController {
 		){
 			return ResponseEntity.ok(
 					menuService.register(storeUid, menuDto));
+		}
+
+		public ResponseEntity<List<MenuDto>> search(
+				@Valid @RequestBody long storeUid
+		){
+			return ResponseEntity.ok(
+					menuService.getMenu(storeUid));
 		}
 
 }

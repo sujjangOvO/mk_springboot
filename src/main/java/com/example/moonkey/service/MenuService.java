@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.ListIterator;
 
 @Service
 public class MenuService {
@@ -34,9 +35,12 @@ public class MenuService {
 		return new MenuDto();
 	}
 
-	public List<Menu> getMenu(long storeid){
+	public List<MenuDto> getMenu(long storeid){
+		List<Menu> menuList = menuRepository.findAllbyStoreId(storeid);
 
-		return menuRepository.findAllbyStoreId(storeid);
+		List<MenuDto> menuDtos;
+		// TO-DO:Converting Menu list -> MenuDto list
+		return	menuDtos;
 	}
 
 }
