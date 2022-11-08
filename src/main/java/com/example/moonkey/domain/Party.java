@@ -1,5 +1,9 @@
 package com.example.moonkey.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.criterion.Order;
 
 import javax.persistence.*;
@@ -10,6 +14,10 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
+@Builder
+@Getter
+@AllArgsConstructor
+@RequiredArgsConstructor
 @Table(name = "party")
 public class Party {
 
@@ -21,19 +29,6 @@ public class Party {
     @OneToMany
     @JoinColumn(name = "accountUid")
     private Set<Account> members = new HashSet<>();
-
-    /*
-    @OneToMany(mappedBy = "party_partyId")
-    private List<Account> members = new ArrayList<>();
-
-    @ManyToOne
-    @JoinColumn(name = "storeId")
-    private Store storeId;
-
-    @OneToOne
-    @JoinColumn(name = "orderId")
-    private Orders orderId;
-    */
 
     @NotNull
     private String partyTitle;
