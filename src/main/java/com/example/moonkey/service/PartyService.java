@@ -13,10 +13,8 @@ import com.example.moonkey.util.SecurityUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import javax.servlet.http.Part;
+import java.util.*;
 
 @Service
 public class PartyService {
@@ -31,12 +29,6 @@ public class PartyService {
 
     @Transactional
     public PartyDto register(PartyDto partyDto){
-        /*
-        Account account = SecurityUtil.getCurrentUsername()
-                .flatMap(accountRepository::findOneWithAuthoritiesById)
-                .orElseThrow(()->new NotFoundMemberException("Member not found")); */
-
-
         Party party = Party.builder()
                 .partyId(partyDto.getPartyId())
                 .partyTitle(partyDto.getPartyTitle())
@@ -70,5 +62,26 @@ public class PartyService {
         return PartyDto.from(
                 partyRepository.findOneByPartyTitle(partyTitle)
                         .orElseThrow(()->new NotFoundPartyException("Party not found")));
+    }
+
+    @Transactional
+    public PartyDto join(int partyId){
+        Account account = SecurityUtil.getCurrentUsername()
+                .flatMap(accountRepository::findOneWithAuthoritiesById)
+                .orElseThrow(()->new NotFoundMemberException("Member not found"));
+
+        Party party = partyRepository.findOneByPartyId(partyId)
+                .orElseThrow(()->new NotFoundPartyException("Party not found"));
+
+        Set<Account> members = party.getMembers();
+        members.add(account);
+
+        party = Party.builder()
+                .partyId(party.getPartyId())
+                .partyTitle(party.getPartyTitle())
+                .members(members)
+                .build();
+
+        return PartyDto.from(party);
     }
 }

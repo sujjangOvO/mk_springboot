@@ -28,6 +28,7 @@ public class PartyDto {
         return PartyDto.builder().
                 partyId(party.getPartyId()).
                 partyTitle(party.getPartyTitle()).
+                members(party.getMembers()).
                 build();
     }
 }

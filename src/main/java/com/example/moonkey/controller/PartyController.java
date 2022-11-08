@@ -34,4 +34,11 @@ public class PartyController {
         return ResponseEntity.ok(partyService.register(partyDto));
     }
 
+    @PostMapping("/party/join")
+    public ResponseEntity<PartyDto> partyJoin(
+            @Valid @RequestBody int partyId
+    ){
+        return ResponseEntity.ok(partyService.join(partyId));
+    }
+
 }
