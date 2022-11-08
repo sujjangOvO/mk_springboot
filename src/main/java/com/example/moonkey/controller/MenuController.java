@@ -26,10 +26,10 @@ public class MenuController {
 
 		@PostMapping("/menu/reg")
 		public ResponseEntity<MenuDto> register (
-				@Valid @RequestBody long storeUid,MenuDto menuDto
+				@Valid @RequestBody MenuDto menuDto
 		){
 			return ResponseEntity.ok(
-					menuService.register(storeUid, menuDto));
+					menuService.register(menuDto));
 		}
 
 		public ResponseEntity<List<MenuDto>> search(
