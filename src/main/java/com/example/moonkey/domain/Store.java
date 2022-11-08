@@ -20,14 +20,6 @@ public class Store {
     @Column(name="storeId")
     private long storeId;
 
-    /*
-    @OneToMany(mappedBy = "store")
-    private List<Menu> menus = new ArrayList<>(); 오류
-
-    @OneToMany(mappedBy = "party_partyId")
-    private List<Party> partyList;
-    */
-
     @NotNull
     private String name;
 
