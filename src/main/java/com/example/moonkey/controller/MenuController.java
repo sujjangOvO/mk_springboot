@@ -32,6 +32,7 @@ public class MenuController {
 					menuService.register(menuDto));
 		}
 
+		@GetMapping("/menu/list")
 		public ResponseEntity<List<MenuDto>> search(
 				@Valid @RequestBody long storeUid
 		){
