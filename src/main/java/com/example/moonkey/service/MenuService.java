@@ -54,11 +54,18 @@ public class MenuService {
 
 
 		List<MenuDto> menuDtos = new List<MenuDto>;
-		// TO-DO:Converting Menu list -> MenuDto list
+
 		while(iter.hasNext())
 		{
 			Menu menu = iter.next();
-			MenuDto menuDto;
+			MenuDto menuDto = MenuDto.builder()
+					.menuId(menu.getMenuId())
+					.menuName(menu.getMenuName())
+					.price(menu.getPrice())
+					.options(menu.getOptions())
+					.description(menu.getDescription())
+					.storeId(menu.getStoreId().getStoreId())
+					.build();
 			menuDtos.add(menuDto);
 		}
 
