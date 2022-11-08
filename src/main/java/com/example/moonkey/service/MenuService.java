@@ -14,15 +14,15 @@ import com.example.moonkey.util.SecurityUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 @Service
 public class MenuService {
 
 	private final MenuRepository menuRepository;
-	private StoreRepository storeRepository;
+	private final StoreRepository storeRepository;
 
 
 	public MenuService(StoreRepository storeRepository, MenuRepository menuRepository){
@@ -53,7 +53,7 @@ public class MenuService {
 
 
 
-		List<MenuDto> menuDtos = new List<MenuDto>;
+		List<MenuDto> menuDtos = Collections.emptyList();
 
 		while(iter.hasNext())
 		{
