@@ -15,6 +15,10 @@ public class Package {
     @JoinColumn(name="orderId")
     private Orders orderId; // FK
 
+    @OneToOne
+    @JoinColumn(name="partyId")
+    private Party partyId; // FK
+
     @NotNull
     private String product;
 

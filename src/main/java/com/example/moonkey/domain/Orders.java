@@ -27,8 +27,8 @@ public class Orders {
     private Store storeId;
 
     @ManyToOne
-    @JoinColumn(name = "partyId")
-    private Party partyId;
+    @JoinColumn(name = "accountUid")
+    private Account uid;
 
     @NotNull
     private Timestamp orderDate;
