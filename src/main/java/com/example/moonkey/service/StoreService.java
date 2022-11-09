@@ -1,6 +1,9 @@
 package com.example.moonkey.service;
 
 import com.example.moonkey.domain.Account;
+import com.example.moonkey.domain.Menu;
+import com.example.moonkey.dto.MenuDto;
+import com.example.moonkey.dto.StoreDisplayDto;
 import com.example.moonkey.dto.StoreDto;
 import com.example.moonkey.exception.NotFoundMemberException;
 import com.example.moonkey.exception.NotFoundStoreException;
@@ -11,6 +14,10 @@ import com.example.moonkey.domain.Store;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 
 @Service
@@ -42,9 +49,43 @@ public class StoreService {
 	}
 
 	@Transactional
+	public String unregister(long store_id){
+		Store store = storeRepository.findOneByStoreId(store_id);
+		if (store != null) {
+			storeRepository.delete(store);
+			return "Success to delete" + store.getName();
+		}
+		return "Store not found";
+	}
+
+	@Transactional
 	public StoreDto getStore(String name){
 		return StoreDto.from(
 				storeRepository.findOneByName(name)
 				.orElseThrow(()->new NotFoundStoreException("Store not found")));
+	}
+
+	@Transactional
+	public List<StoreDisplayDto> getStores(){
+
+		List<Store> storeList = storeRepository.findAll();
+		Iterator<Store> iter = storeList.iterator();
+
+
+		List<StoreDisplayDto> storeDisplayDtos = Collections.emptyList();
+
+		while(iter.hasNext())
+		{
+			Store store = iter.next();
+			StoreDisplayDto storeDisplayDto = StoreDisplayDto.builder()
+							.storeId(store.getStoreId())
+							.address(store.getAddress())
+							.name(store.getName())
+							.description(store.getDescription())
+							.build();
+			storeDisplayDtos.add(storeDisplayDto);
+		}
+		return storeDisplayDtos;
+
 	}
 }

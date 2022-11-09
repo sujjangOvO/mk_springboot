@@ -4,10 +4,13 @@ import com.example.moonkey.domain.Store;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface StoreRepository extends JpaRepository<Store,Long> {
 
 	Optional<Store> findOneByName(String name);
 	Store findOneByStoreId(long id);
+
+	List<Store> findAll();
 }

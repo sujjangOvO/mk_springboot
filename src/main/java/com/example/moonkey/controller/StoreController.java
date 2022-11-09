@@ -1,6 +1,7 @@
 package com.example.moonkey.controller;
 
 import com.example.moonkey.dto.StoreDto;
+import com.example.moonkey.dto.StoreDisplayDto;
 import com.example.moonkey.service.StoreService;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 
 
 @RestController
@@ -31,10 +33,22 @@ public class StoreController {
 		return ResponseEntity.ok(storeService.register(storeDto));
 	}
 
+	@PatchMapping("/store/leave")
+	public ResponseEntity <String> unregister(
+			@Valid @RequestBody long store_id
+	){
+		return ResponseEntity.ok(storeService.unregister(store_id));
+	}
+
 	@GetMapping("/store/{name}")
 	@PreAuthorize("hasAnyRole('USER','ADMIN')")
 	public ResponseEntity<StoreDto> getStoreInfo(@PathVariable String name){
 		return ResponseEntity.ok(storeService.getStore(name));
+	}
+
+	@GetMapping("/store/list")
+	public ResponseEntity<List<StoreDisplayDto>> getStores(HttpServletRequest request){
+		return ResponseEntity.ok(storeService.getStores());
 	}
 
 //	@GetMapping("/store")
