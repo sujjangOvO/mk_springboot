@@ -34,10 +34,10 @@ public class MenuController {
 
 		@GetMapping("/menu/list")
 		public ResponseEntity<List<MenuDto>> search(
-				@Valid @RequestBody long storeUid
+				@Valid @RequestBody long storeId
 		){
 			return ResponseEntity.ok(
-					menuService.getMenu(storeUid));
+					menuService.getMenu(storeId));
 		}
 
 }

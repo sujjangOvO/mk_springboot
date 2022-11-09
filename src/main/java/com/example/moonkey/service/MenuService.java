@@ -44,11 +44,12 @@ public class MenuService {
 				.options(menuDto.getOptions())
 				.build();
 
-		return new MenuDto();
+		return menuDto.from(menuRepository.save(menu));
 	}
 
 	public List<MenuDto> getMenu(long storeid){
-		List<Menu> menuList = menuRepository.findAllbyStore_storeId(storeid);
+		storeRepository.findOneByStoreId(storeid);
+		List<Menu> menuList = menuRepository.findAllByStoreId(storeRepository.findOneByStoreId(storeid));
 		Iterator<Menu> iter = menuList.iterator();
 
 
