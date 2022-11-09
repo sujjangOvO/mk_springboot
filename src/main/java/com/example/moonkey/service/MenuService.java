@@ -48,7 +48,7 @@ public class MenuService {
 	}
 
 	public List<MenuDto> getMenu(long storeid){
-		storeRepository.findOneByStoreId(storeid);
+
 		List<Menu> menuList = menuRepository.findAllByStoreId(storeRepository.findOneByStoreId(storeid));
 		Iterator<Menu> iter = menuList.iterator();
 
