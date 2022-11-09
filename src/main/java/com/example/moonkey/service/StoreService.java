@@ -52,8 +52,9 @@ public class StoreService {
 	public String unregister(long store_id){
 		Store store = storeRepository.findOneByStoreId(store_id);
 		if (store != null) {
+			String name = store.getName();
 			storeRepository.delete(store);
-			return "Success to delete" + store.getName();
+			return "Success to delete" + name;
 		}
 		return "Store not found";
 	}
