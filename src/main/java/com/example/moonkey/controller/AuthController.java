@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/app")
 public class AuthController { // 로그인 api
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -30,7 +30,7 @@ public class AuthController { // 로그인 api
         this.authenticationManagerBuilder = authenticationManagerBuilder;
     }
 
-    @PostMapping("/authenticate") // 로그인 api 경로 = /api/authenticate => post 요청을 받음
+    @PostMapping("/auth/login") // 로그인 api 경로 = /api/authenticate => post 요청을 받음
     public ResponseEntity<TokenDto> authorize(@Valid @RequestBody LoginDto loginDto) {
 
         UsernamePasswordAuthenticationToken authenticationToken =

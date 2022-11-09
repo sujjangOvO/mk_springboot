@@ -32,6 +32,13 @@ public class MenuController {
 					menuService.register(menuDto));
 		}
 
+		@PatchMapping("/menu/unreg")
+		public ResponseEntity<String> unregister(
+				@Valid @RequestBody  long menuId
+		){
+			return ResponseEntity.ok(menuService.unregister( menuId));
+		}
+
 		@GetMapping("/menu/list")
 		public ResponseEntity<List<MenuDto>> search(
 				@Valid @RequestBody long storeId

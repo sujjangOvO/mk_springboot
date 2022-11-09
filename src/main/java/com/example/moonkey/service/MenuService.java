@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MenuService {
@@ -47,12 +48,21 @@ public class MenuService {
 		return menuDto.from(menuRepository.save(menu));
 	}
 
+	@Transactional
+	public String unregister(long menuId){
+		Menu menu = menuRepository.findOneByMenuId(menuId);
+		if (menu != null) {
+			String name = menu.getMenuName();
+			menuRepository.delete(menu);
+			return "Success to delete " + name ;
+		}
+		return "Menu not found";
+	}
+	@Transactional
 	public List<MenuDto> getMenu(long storeid){
-		storeRepository.findOneByStoreId(storeid);
-		List<Menu> menuList = menuRepository.findAllByStoreId(storeRepository.findOneByStoreId(storeid));
+
+		List<Menu> menuList = menuRepository.findAllByStoreId(storeid);
 		Iterator<Menu> iter = menuList.iterator();
-
-
 
 		List<MenuDto> menuDtos = Collections.emptyList();
 
