@@ -50,7 +50,7 @@ public class MenuService {
 
 	@Transactional
 	public String unregister(long menuId){
-		Menu menu = menuRepository.findOneById(menuId);
+		Menu menu = menuRepository.findOneByMenuId(menuId);
 		if (menu != null) {
 			String name = menu.getMenuName();
 			menuRepository.delete(menu);
