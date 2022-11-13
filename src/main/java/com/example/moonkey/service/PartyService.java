@@ -4,7 +4,9 @@ import com.example.moonkey.domain.Account;
 import com.example.moonkey.domain.Menu;
 import com.example.moonkey.domain.Party;
 import com.example.moonkey.dto.MenuDto;
+import com.example.moonkey.dto.PartyDisplayDto;
 import com.example.moonkey.dto.PartyDto;
+import com.example.moonkey.dto.StoreDisplayDto;
 import com.example.moonkey.exception.NotFoundMemberException;
 import com.example.moonkey.exception.NotFoundPartyException;
 import com.example.moonkey.repository.AccountRepository;
@@ -51,16 +53,16 @@ public class PartyService {
     }
 
     @Transactional
-    public List<PartyDto> getlist(){
+    public List<PartyDisplayDto> getParties(){
         List<Party> partyList = partyRepository.findAll();
         Iterator<Party> iter = partyList.iterator();
 
-        List<PartyDto> partyDtos = Collections.emptyList();
+        List<PartyDisplayDto> partyDtos = new ArrayList<>(Collections.emptyList());
 
         while(iter.hasNext())
         {
             Party party = iter.next();
-            PartyDto partyDto = PartyDto.builder()
+            PartyDisplayDto partyDto = PartyDisplayDto.builder()
                     .partyId(party.getPartyId())
                     .partyTitle(party.getPartyTitle())
                     .build();
