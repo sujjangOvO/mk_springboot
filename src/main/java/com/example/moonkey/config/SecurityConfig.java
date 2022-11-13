@@ -70,8 +70,7 @@ public class SecurityConfig { // WebSecurityConfigurer를 implement하는 방법
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/**").permitAll()
- // 회원가입 api 이 2개는 토큰이 없는 상태에서 요청이 오기때문에 permitAll()
+                .antMatchers("/app/**").permitAll()
                 .anyRequest().authenticated()
 
                 .and()
