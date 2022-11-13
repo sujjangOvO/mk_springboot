@@ -15,6 +15,7 @@ import com.example.moonkey.domain.Store;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -73,7 +74,7 @@ public class StoreService {
 		Iterator<Store> iter = storeList.iterator();
 
 
-		List<StoreDisplayDto> storeDisplayDtos = Collections.emptyList();
+		List<StoreDisplayDto> storeDisplayDtos = new ArrayList<>(Collections.emptyList());
 
 		while(iter.hasNext())
 		{
