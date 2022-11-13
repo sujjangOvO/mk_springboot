@@ -38,6 +38,19 @@ public class PartyService {
     }
 
     @Transactional
+    public void unregister(int partyId){
+        Party party = partyRepository.findOneByPartyId(partyId)
+                .orElseThrow(()->new NotFoundPartyException("Party not found"));
+
+        PartyDto partyDto = PartyDto.builder()
+                .partyId(party.getPartyId())
+                .partyTitle(party.getPartyTitle())
+                .build();
+
+        partyRepository.deleteById(partyDto.getPartyId());
+    }
+
+    @Transactional
     public List<PartyDto> getlist(){
         List<Party> partyList = partyRepository.findAll();
         Iterator<Party> iter = partyList.iterator();
@@ -84,4 +97,6 @@ public class PartyService {
 
         return PartyDto.from(party);
     }
+
+
 }
