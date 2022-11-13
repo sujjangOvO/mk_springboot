@@ -24,7 +24,7 @@ public class Party {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="partyId")
-    private int partyId;
+    private long partyId;
 
     @OneToMany
     @JoinColumn(name = "accountUid")

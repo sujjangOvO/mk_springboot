@@ -16,7 +16,7 @@ import java.util.Set;
 public class PartyDto {
 
     @NotNull
-    private int partyId;
+    private long partyId;
 
     @NotNull
     private String partyTitle;
