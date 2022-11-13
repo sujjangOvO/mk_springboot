@@ -11,7 +11,6 @@ import javax.validation.constraints.NotNull;
 @Setter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
 public class PackageDto {
 
 
