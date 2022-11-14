@@ -1,11 +1,17 @@
 package com.example.moonkey.domain;
 
+import lombok.*;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 
+
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "orders")
 public class Orders {
@@ -18,6 +24,9 @@ public class Orders {
     @NotNull
     private int number;
 
+    @NotNull
+    private Timestamp orderDate;
+
     @ManyToOne
     @JoinColumn(name="menuId")
     private Menu menuId;
@@ -29,7 +38,4 @@ public class Orders {
     @ManyToOne
     @JoinColumn(name = "accountUid")
     private Account uid;
-
-    @NotNull
-    private Timestamp orderDate;
 }

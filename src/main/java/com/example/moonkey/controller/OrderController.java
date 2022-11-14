@@ -2,6 +2,7 @@ package com.example.moonkey.controller;
 
 import com.example.moonkey.domain.Orders;
 import com.example.moonkey.dto.OrderDto;
+import com.example.moonkey.dto.StoreDisplayDto;
 import com.example.moonkey.repository.OrderRepository;
 import com.example.moonkey.service.OrderService;
 
@@ -21,6 +22,15 @@ import java.util.Optional;
 @RequestMapping("/app")
 public class OrderController {
 
+    private final OrderService orderService;
 
+    public OrderController(OrderService orderService){
+        this.orderService = orderService;
+    }
+
+    @GetMapping("/order/list")
+    public ResponseEntity<List<OrderDto>> getStores(HttpServletRequest request){
+        return ResponseEntity.ok(orderService.getOrders());
+    }
 
 }
