@@ -54,6 +54,9 @@ public class OrderService {
                     orderId(order.getOrderId()).
                     number(order.getNumber()).
                     orderDate(order.getOrderDate()).
+                    menuId(order.getMenuId()).
+                    storeId(order.getStoreId()).
+                    uid(order.getUid()).
                     build();
 
             orderDtoList.add(orderDto);

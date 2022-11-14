@@ -27,12 +27,12 @@ public class OrderDto {
     @NotNull
     private Timestamp orderDate;
 
-    @JsonIgnore
-    private long menuId;
+    @NotNull
+    private Menu menuId;
 
-    @JsonIgnore
-    private long storeId;
+    @NotNull
+    private Store storeId;
 
-    @JsonIgnore
-    private long uid;
+    @NotNull
+    private Account uid;
 }
