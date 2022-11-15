@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface MenuRepository extends JpaRepository<Menu,Long>{
 
 	List<Menu> findAll();
-	List<Menu> findAllByStoreId(long storeId);
+	List<Menu> findAllByStoreId(Store storeId);
 
 	Menu findOneByMenuId(long menuId);
 

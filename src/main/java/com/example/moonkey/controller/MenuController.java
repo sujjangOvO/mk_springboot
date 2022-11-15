@@ -34,17 +34,19 @@ public class MenuController {
 
 		@PatchMapping("/menu/unreg")
 		public ResponseEntity<String> unregister(
-				@Valid @RequestBody  long menuId
+				@Valid @RequestBody  String menuId
 		){
-			return ResponseEntity.ok(menuService.unregister( menuId));
+
+			return ResponseEntity.ok(menuService.unregister(Long.getLong(menuId)));
 		}
 
-		@GetMapping("/menu/list")
+		@GetMapping("/{storeId}/menu/list")
 		public ResponseEntity<List<MenuDto>> search(
-				@Valid @RequestBody long storeId
+				@PathVariable("storeId") String storeId
 		){
+
 			return ResponseEntity.ok(
-					menuService.getMenu(storeId));
+					menuService.getMenu(Long.parseLong(storeId)));
 		}
 
 }
