@@ -29,8 +29,9 @@ public class MenuService {
 	}
 
 	@Transactional
-	public MenuDto register(MenuDto menuDto){
-		Store store = Store.builder().build();
+	public MenuDto register(Long storeId, MenuDto menuDto){
+
+		Store store = storeRepository.findOneByStoreId(storeId);
 
 		Menu menu = Menu.builder()
 				.menuName(menuDto.getMenuName())

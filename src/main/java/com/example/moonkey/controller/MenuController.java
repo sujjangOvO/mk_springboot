@@ -24,17 +24,17 @@ public class MenuController {
 			this.menuService = menuService;
 		}
 
-		@PostMapping("/menu/reg")
+		@PostMapping("{storeId}/menu/reg")
 		public ResponseEntity<MenuDto> register (
-				@Valid @RequestBody MenuDto menuDto
+				@PathVariable("storeId") String storeId , @Valid @RequestBody MenuDto menuDto
 		){
 			return ResponseEntity.ok(
-					menuService.register(menuDto));
+					menuService.register(Long.parseLong(storeId),menuDto));
 		}
 
-		@PatchMapping("/menu/unreg")
+		@PatchMapping("{storeId}/menu/unreg/{menuId}")
 		public ResponseEntity<String> unregister(
-				@Valid @RequestBody  String menuId
+				@PathVariable("storeId") String storeId, @PathVariable("menuId") String menuId
 		){
 
 			return ResponseEntity.ok(menuService.unregister(Long.getLong(menuId)));
