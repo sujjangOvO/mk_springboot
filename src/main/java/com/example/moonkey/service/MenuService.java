@@ -14,10 +14,7 @@ import com.example.moonkey.util.SecurityUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class MenuService {
@@ -32,9 +29,9 @@ public class MenuService {
 	}
 
 	@Transactional
-	public MenuDto register(MenuDto menuDto){
-		long storeId = menuDto.getStoreId();
-		Store store = Store.builder().build();
+	public MenuDto register(Long storeId, MenuDto menuDto){
+
+		Store store = storeRepository.findOneByStoreId(storeId);
 
 		Menu menu = Menu.builder()
 				.menuName(menuDto.getMenuName())
@@ -61,10 +58,11 @@ public class MenuService {
 	@Transactional
 	public List<MenuDto> getMenu(long storeid){
 
-		List<Menu> menuList = menuRepository.findAllByStoreId(storeid);
+		Store store = storeRepository.findOneByStoreId(storeid);
+		List<Menu> menuList = menuRepository.findAllByStoreId(store);
 		Iterator<Menu> iter = menuList.iterator();
 
-		List<MenuDto> menuDtos = Collections.emptyList();
+		List<MenuDto> menuDtos = new ArrayList<>(Collections.emptyList());
 
 		while(iter.hasNext())
 		{

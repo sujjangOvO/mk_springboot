@@ -42,7 +42,7 @@ public class StoreController {
 
 	@GetMapping("/store/{name}")
 	@PreAuthorize("hasAnyRole('USER','ADMIN')")
-	public ResponseEntity<StoreDto> getStoreInfo(@PathVariable String name){
+	public ResponseEntity<StoreDto> getStoreInfo(@PathVariable("name") String name){
 		return ResponseEntity.ok(storeService.getStore(name));
 	}
 
