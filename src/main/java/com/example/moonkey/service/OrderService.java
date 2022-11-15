@@ -8,6 +8,7 @@ import com.example.moonkey.dto.MenuDto;
 import com.example.moonkey.dto.StoreDisplayDto;
 import com.example.moonkey.dto.StoreDto;
 import com.example.moonkey.dto.OrderDto;
+import com.example.moonkey.dto.OrderDisplayDto;
 
 import com.example.moonkey.exception.NotFoundMemberException;
 import com.example.moonkey.exception.NotFoundStoreException;
@@ -38,29 +39,31 @@ public class OrderService {
         this.orderRepository = orderRepository;
         this.accountRepository = accountRepository;
     }
+
     @Transactional
-    public List<OrderDto> getOrders(){
+    public List<OrderDisplayDto> getOrderList(){
 
         List<Orders> ordersList = orderRepository.findAll();
         Iterator<Orders> iter = ordersList.iterator();
 
 
-        List<OrderDto> orderDtoList = new ArrayList<>(Collections.emptyList());
+
+        List<OrderDisplayDto> orderDisplayDtoList = new ArrayList<>(Collections.emptyList());
 
         while(iter.hasNext())
         {
             Orders order = iter.next();
-            OrderDto orderDto = OrderDto.builder().
+            OrderDisplayDto orderDisplayDto = OrderDisplayDto.builder().
                     orderId(order.getOrderId()).
                     number(order.getNumber()).
                     orderDate(order.getOrderDate()).
-                    menuId(order.getMenuId()).
-                    storeId(order.getStoreId()).
-                    uid(order.getUid()).
+                    menuName(order.getMenuId().getMenuName()).
+                    storeNmae(order.getStoreId().getName()).
+                    price(order.getMenuId().getPrice()*order.getNumber()).
                     build();
 
-            orderDtoList.add(orderDto);
+            orderDisplayDtoList.add(orderDisplayDto);
         }
-        return orderDtoList;
+        return orderDisplayDtoList;
     }
 }
