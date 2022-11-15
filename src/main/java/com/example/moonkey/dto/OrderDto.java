@@ -35,4 +35,15 @@ public class OrderDto {
 
     @NotNull
     private Account uid;
+
+    public static OrderDto from(Orders order){
+        return OrderDto.builder().
+                orderId(order.getOrderId()).
+                number(order.getNumber()).
+                orderDate(order.getOrderDate()).
+                menuId(order.getMenuId()).
+                storeId(order.getStoreId()).
+                uid(order.getUid()).
+                build();
+    }
 }

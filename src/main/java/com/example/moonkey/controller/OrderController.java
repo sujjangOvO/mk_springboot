@@ -33,4 +33,12 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getOrders());
     }
 
+    @PostMapping("/order/reg")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<OrderDto> register(
+            @Valid @RequestBody OrderDto orderDto
+    ) {
+        return ResponseEntity.ok(orderService.register(orderDto));
+    }
+
 }
