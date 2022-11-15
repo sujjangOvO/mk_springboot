@@ -8,6 +8,8 @@ import java.util.Optional;
 
 public interface PartyRepository extends JpaRepository<Party,Long> {
     Optional<Party> findOneByPartyTitle(String partyTitle);
-    Optional<Party> findOneByPartyId(int partyId);
+    // Optional<Party> findOneByPartyId(int partyId);
+
+    Party findOneByPartyId(long partyId);
     List<Party> findAll();
 }

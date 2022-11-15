@@ -50,9 +50,9 @@ public class PartyController {
     public String partyUnreg(
             @RequestBody @Valid int partyId
     ){
-        Optional<Party> partyDto =  partyRepository.findOneByPartyId(partyId);
+        Party party =  partyRepository.findOneByPartyId(partyId);
 
-        if(partyDto == null){
+        if(party == null){
             throw new NotFoundPartyException("Party not found");
         }
 
