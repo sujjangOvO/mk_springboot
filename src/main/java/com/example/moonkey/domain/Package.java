@@ -1,15 +1,22 @@
 package com.example.moonkey.domain;
 
+import lombok.*;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "package")
 public class Package {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "package_id")
-    private int packageId;
+    private long packageId;
 
     @OneToOne
     @JoinColumn(name="orderId")

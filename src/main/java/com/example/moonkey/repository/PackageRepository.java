@@ -12,5 +12,8 @@ import java.util.List;
 import java.util.Optional;
 
 
-public interface PackageRepository {
+public interface PackageRepository extends JpaRepository<Package,Long>{
+    List<Package> findAll();
+    Package findOneByPackageId(long id);
+
 }
