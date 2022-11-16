@@ -37,7 +37,7 @@ public class StoreDisplayDto {
 				.name(store.getName())
 				.address(store.getAddress())
 				.description(store.getDescription())
-				.category(store.getCategory())
+				.category(store.getCategory().getCategoryName())
 				.build();
 	}
 

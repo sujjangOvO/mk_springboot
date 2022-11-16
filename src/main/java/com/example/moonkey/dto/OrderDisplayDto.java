@@ -34,6 +34,9 @@ public class OrderDisplayDto {
 	private String storeNmae;
 
 	@NotNull
+	private String categoryName;
+
+	@NotNull
 	private int price;
 
 }

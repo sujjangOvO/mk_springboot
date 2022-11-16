@@ -42,7 +42,7 @@ public class StoreDto {
 				.address(store.getAddress())
 				.ownerId(store.getOwnerId().getUid())
 				.description(store.getDescription())
-				.category(store.getCategory())
+				.category(store.getCategory().getCategoryName())
 				.build();
 	}
 
