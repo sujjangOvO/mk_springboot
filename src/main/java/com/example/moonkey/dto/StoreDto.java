@@ -32,6 +32,9 @@ public class StoreDto {
 	@JsonIgnore
 	private long ownerId;
 
+	@NotNull
+	private String category;
+
 	public static StoreDto from(Store store){
 		return StoreDto.builder()
 				.storeId(store.getStoreId())
@@ -39,6 +42,7 @@ public class StoreDto {
 				.address(store.getAddress())
 				.ownerId(store.getOwnerId().getUid())
 				.description(store.getDescription())
+				.category(store.getCategory())
 				.build();
 	}
 

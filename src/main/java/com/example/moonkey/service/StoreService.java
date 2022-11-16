@@ -84,6 +84,7 @@ public class StoreService {
 							.address(store.getAddress())
 							.name(store.getName())
 							.description(store.getDescription())
+							.category(store.getCategory())
 							.build();
 			storeDisplayDtos.add(storeDisplayDto);
 		}

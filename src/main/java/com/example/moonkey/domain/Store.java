@@ -33,5 +33,7 @@ public class Store {
     @Column(nullable = true)
     private String description;
 
+    @NotNull
+    private String category;
 
 }

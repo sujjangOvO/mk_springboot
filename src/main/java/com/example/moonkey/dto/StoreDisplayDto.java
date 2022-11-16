@@ -28,12 +28,16 @@ public class StoreDisplayDto {
 	@Column(nullable = true)
 	private String description;
 
+	@NotNull
+	private String category;
+
 	public static StoreDto from(Store store){
 		return StoreDto.builder()
 				.storeId(store.getStoreId())
 				.name(store.getName())
 				.address(store.getAddress())
 				.description(store.getDescription())
+				.category(store.getCategory())
 				.build();
 	}
 
