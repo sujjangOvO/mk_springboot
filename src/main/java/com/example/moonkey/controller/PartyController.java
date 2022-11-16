@@ -6,13 +6,16 @@ import com.example.moonkey.dto.PartyDto;
 import com.example.moonkey.exception.NotFoundPartyException;
 import com.example.moonkey.repository.PartyRepository;
 import com.example.moonkey.service.PartyService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,19 +49,18 @@ public class PartyController {
         return ResponseEntity.ok(partyService.join(partyId));
     }
 
-    @PostMapping("/party/unreg")
-    public String partyUnreg(
-            @RequestBody @Valid int partyId
+    @PostMapping("/party/unreg/{partyId}")
+    public ResponseEntity<?> unregister(
+            @PathVariable @Valid Long partyId
     ){
-        Party party =  partyRepository.findOneByPartyId(partyId);
-
-        if(party == null){
-            throw new NotFoundPartyException("Party not found");
-        }
+        Party party =  partyRepository.findOneByPartyId(partyId)
+                .orElseThrow(()->new NotFoundPartyException("Party not found"));
 
         partyService.unregister(partyId);
 
-        return "/app/party/list";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create("/app/party/list"));
+        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 
     @PostMapping("/party/leave")
