@@ -80,9 +80,3 @@ public class SecurityConfig { // WebSecurityConfigurer를 implement하는 방법
     }
 
 }
-/*
-                .antMatchers("/api/accountSignup").permitAll()
-                .antMatchers("/api/helloAccount").permitAll()
-                .antMatchers("/api/authenticate").permitAll() // 로그인 api
-                .antMatchers("/api/signup").permitAll()
- */
