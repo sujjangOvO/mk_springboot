@@ -4,14 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.criterion.Order;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Builder
@@ -32,4 +28,13 @@ public class Party {
 
     @NotNull
     private String partyTitle;
+
+    public Set<Long> getUids(){
+        Set<Long> memberList = new HashSet<>(members.size());
+        Iterator<Account> iter = members.iterator();
+        while(iter.hasNext()){
+            memberList.add(iter.next().getUid());
+        }
+        return memberList;
+    }
 }

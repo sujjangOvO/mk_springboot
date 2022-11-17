@@ -7,17 +7,14 @@ import com.example.moonkey.exception.NotFoundPartyException;
 import com.example.moonkey.repository.PartyRepository;
 import com.example.moonkey.service.PartyService;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/app")
@@ -36,7 +33,7 @@ public class PartyController {
     }
 
     @PostMapping("/party/reg")
-    public ResponseEntity<PartyDto> partyReg(
+    public ResponseEntity<PartyDto> register(
             @Valid @RequestBody PartyDto partyDto
     ){
         return ResponseEntity.ok(partyService.register(partyDto));

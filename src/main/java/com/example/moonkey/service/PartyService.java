@@ -1,12 +1,9 @@
 package com.example.moonkey.service;
 
 import com.example.moonkey.domain.Account;
-import com.example.moonkey.domain.Menu;
 import com.example.moonkey.domain.Party;
-import com.example.moonkey.dto.MenuDto;
 import com.example.moonkey.dto.PartyDisplayDto;
 import com.example.moonkey.dto.PartyDto;
-import com.example.moonkey.dto.StoreDisplayDto;
 import com.example.moonkey.exception.NotFoundMemberException;
 import com.example.moonkey.exception.NotFoundPartyException;
 import com.example.moonkey.repository.AccountRepository;
@@ -15,13 +12,12 @@ import com.example.moonkey.util.SecurityUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.Part;
 import java.util.*;
 
 @Service
 public class PartyService {
     private final PartyRepository partyRepository;
-    private AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
 
 
     public PartyService(PartyRepository partyRepository, AccountRepository accountRepository){
@@ -34,9 +30,10 @@ public class PartyService {
         Party party = Party.builder()
                 .partyId(partyDto.getPartyId())
                 .partyTitle(partyDto.getPartyTitle())
+                .members(partyDto.getAccounts(partyDto.getMembers()))
                 .build();
 
-        return PartyDto.from(party);
+        return PartyDto.from(partyRepository.save(party));
     }
 
     @Transactional
@@ -48,6 +45,7 @@ public class PartyService {
         PartyDto partyDto = PartyDto.builder()
                 .partyId(party.getPartyId())
                 .partyTitle(party.getPartyTitle())
+                .members(party.getUids())
                 .build();
 
         partyRepository.deleteById(partyDto.getPartyId());
@@ -66,6 +64,7 @@ public class PartyService {
             PartyDisplayDto partyDto = PartyDisplayDto.builder()
                     .partyId(party.getPartyId())
                     .partyTitle(party.getPartyTitle())
+                    .members(party.getUids())
                     .build();
             partyDtos.add(partyDto);
         }

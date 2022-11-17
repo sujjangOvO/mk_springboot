@@ -21,13 +21,13 @@ public class PartyDisplayDto {
     private String partyTitle;
 
     @NotNull
-    private Set<Account> members = new HashSet<>();
+    private Set<Long> members = new HashSet<>();
 
     public static PartyDto from(Party party){
         return PartyDto.builder().
                 partyId(party.getPartyId()).
                 partyTitle(party.getPartyTitle()).
-                members(party.getMembers()).
+                members(party.getUids()).
                 build();
     }
 }
