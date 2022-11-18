@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 public class DeliveryDto {
 
     @NotNull
-    private int deliveryId;
+    private long deliveryId;
 
     @NotNull
     private long uid; // 배달원

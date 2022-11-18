@@ -20,9 +20,9 @@ import java.util.Set;
 public class PartyDto {
 
     private AccountRepository accountRepository;
-    public PartyDto(AccountRepository accountRepository){
+/*    public PartyDto(AccountRepository accountRepository){
         this.accountRepository = accountRepository;
-    }
+    } */
 
     @NotNull
     private long partyId;
@@ -33,13 +33,14 @@ public class PartyDto {
     @NotNull
     private Set<Long> members = new HashSet<>();
 
+
     public Set<Account> getAccounts(Set<Long> list){
         Set<Account> memberList = new HashSet<>();
         Iterator iter = list.iterator();
         while(iter.hasNext()){
             long num = (long) iter.next();
-            System.out.println("iter.next(): "+num);
-            memberList.add(accountRepository.findAccountById((Long) num));
+            System.out.println(accountRepository.findAccountById((num)));
+            memberList.add(accountRepository.findAccountById((num)));
         }
         return memberList;
     }

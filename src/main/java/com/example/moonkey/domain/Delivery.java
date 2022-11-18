@@ -17,7 +17,7 @@ public class Delivery {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "deliveryId")
-    private int deliveryId;
+    private long deliveryId;
 
     @OneToOne
     @JoinColumn(name = "accountUid")
