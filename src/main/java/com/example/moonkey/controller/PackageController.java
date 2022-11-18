@@ -41,8 +41,8 @@ public class PackageController {
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<PackageDto> register(
             @Valid @RequestBody PackageDto packageDto,
-            @PathVariable long orderId,
-            @PathVariable long partyId
+            @PathVariable("orderId") long orderId,
+            @PathVariable("partyId") long partyId
     ){
         try{
             return ResponseEntity.ok(packageService.register(packageDto, orderId, partyId));
