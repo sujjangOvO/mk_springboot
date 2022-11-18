@@ -47,7 +47,7 @@ public class PackageController {
         try{
             return ResponseEntity.ok(packageService.register(packageDto, orderId, partyId));
         } catch(Exception e){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id Not Found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 

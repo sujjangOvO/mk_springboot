@@ -19,7 +19,7 @@ import java.sql.Timestamp;
 public class OrderDisplayDto {
 
 	@NotNull
-	private int orderId;
+	private long orderId;
 
 	@NotNull
 	private int number;

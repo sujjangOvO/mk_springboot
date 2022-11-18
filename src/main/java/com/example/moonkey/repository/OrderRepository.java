@@ -14,6 +14,6 @@ import java.util.Optional;
 
 public interface OrderRepository extends  JpaRepository<Orders,Long>{
     Orders findAllByOrderDate(LocalDateTime now);
-    Orders findOneByOrderId(long id);
+    Optional<Orders> findOneByOrderId(long id);
     List<Orders> findAll();
 }

@@ -5,6 +5,7 @@ import com.example.moonkey.domain.Package;
 import com.example.moonkey.domain.Party;
 import com.example.moonkey.dto.*;
 
+import com.example.moonkey.exception.NotFoundOrderException;
 import com.example.moonkey.exception.NotFoundPartyException;
 import com.example.moonkey.repository.*;
 import com.example.moonkey.repository.PackageRepository;
@@ -32,13 +33,11 @@ public class PackageService {
 
     @Transactional
     public PackageDto register(PackageDto packageDto, long orderId, long partyId){
-        Orders orders = orderRepository.findOneByOrderId(orderId);
+        Orders orders = orderRepository.findOneByOrderId(orderId)
+                .orElseThrow(()->new NotFoundOrderException("Order not found"));
         Party party =  partyRepository.findOneByPartyId(partyId)
                 .orElseThrow(()->new NotFoundPartyException("Party not found"));
 
-        if(orders == null){
-            return null;
-        }
 
         Package aPackage = Package.builder()
                 .packageId(packageDto.getPackageId())
