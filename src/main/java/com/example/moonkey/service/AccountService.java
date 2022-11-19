@@ -2,12 +2,14 @@ package com.example.moonkey.service;
 
 
 import com.example.moonkey.domain.Authority;
+import com.example.moonkey.domain.Category;
 import com.example.moonkey.domain.Orders;
 import com.example.moonkey.dto.AccountDto;
 import com.example.moonkey.dto.StatsDto;
 import com.example.moonkey.exception.DuplicateMemberException;
 import com.example.moonkey.exception.NotFoundMemberException;
 import com.example.moonkey.repository.AccountRepository;
+import com.example.moonkey.repository.CategoryRepository;
 import com.example.moonkey.repository.OrderRepository;
 import com.example.moonkey.util.SecurityUtil;
 import com.example.moonkey.util.StatsDtoCompartor;
@@ -24,10 +26,13 @@ public class AccountService {
     private final OrderRepository orderRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public AccountService(AccountRepository accountRepository, OrderRepository orderRepository, PasswordEncoder passwordEncoder){
+    private final CategoryRepository categoryRepository;
+
+    public AccountService(AccountRepository accountRepository, OrderRepository orderRepository, PasswordEncoder passwordEncoder, CategoryRepository categoryRepository){
         this.accountRepository = accountRepository;
         this.orderRepository = orderRepository;
         this.passwordEncoder = passwordEncoder;
+        this.categoryRepository = categoryRepository;
     }
 
     @Transactional
@@ -73,6 +78,7 @@ public class AccountService {
     // UserService의 메소드를 호출할 AccountController를 생성
     @Transactional
     public List<StatsDto> getMyUserStats(){
+
         Account account = SecurityUtil.getCurrentUsername()
                 .flatMap(accountRepository::findOneWithAuthoritiesById)
                 .orElseThrow(()->new NotFoundMemberException("Member not found"));
@@ -80,8 +86,17 @@ public class AccountService {
         HashMap<String,Integer> categoryCounts = new HashMap<>();
         List<StatsDto> statsList = new ArrayList<>(Collections.emptyList());
 
+        List<Category> categories = categoryRepository.findAll();
+        Iterator<Category> categoryIterator =categories.iterator();
+
+        while (categoryIterator.hasNext()){
+            String name = categoryIterator.next().getCategoryName();
+            categoryCounts.put(name,0);
+        }
+
         List<Orders> ordersList = orderRepository.findAllByUid(account);
         Iterator<Orders> iter = ordersList.iterator();
+
 
         // 받아온 order를 기반으로 category별 주문 횟수를 categoryCounts 에 HashMap 형태로 정리
         while(iter.hasNext()){
