@@ -32,7 +32,7 @@ public class MenuController {
 					menuService.register(Long.parseLong(storeId),menuDto));
 		}
 
-		@PatchMapping("{storeId}/menu/unreg/{menuId}")
+		@PostMapping("{storeId}/menu/unreg/{menuId}")
 		public ResponseEntity<String> unregister(
 				@PathVariable("storeId") String storeId, @PathVariable("menuId") String menuId
 		){

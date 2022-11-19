@@ -3,13 +3,11 @@ package com.example.moonkey.dto;
 import com.example.moonkey.domain.Account;
 import com.example.moonkey.domain.Party;
 import com.example.moonkey.repository.AccountRepository;
-import com.example.moonkey.repository.PartyRepository;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Optional;
 import java.util.Set;
 
 @Builder
@@ -20,9 +18,6 @@ import java.util.Set;
 public class PartyDto {
 
     private AccountRepository accountRepository;
-/*    public PartyDto(AccountRepository accountRepository){
-        this.accountRepository = accountRepository;
-    } */
 
     @NotNull
     private long partyId;
@@ -31,7 +26,7 @@ public class PartyDto {
     private String partyTitle;
 
     @NotNull
-    private Set<Long> members = new HashSet<>();
+    private Set<Long> members = new HashSet<>(); // uid 집합
 
 
     public Set<Account> getAccounts(Set<Long> list){

@@ -36,6 +36,7 @@ public class StoreService {
 				SecurityUtil.getCurrentUsername()
 				.flatMap(accountRepository::findOneWithAuthoritiesById)
 				.orElseThrow(()->new NotFoundMemberException("Member not found"));
+
 		Store store = Store.builder()
 				.storeId(storeDto.getStoreId())
 				.name(storeDto.getName())
