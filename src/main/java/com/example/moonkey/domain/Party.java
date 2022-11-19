@@ -23,7 +23,7 @@ public class Party {
     private long partyId;
 
     @ManyToOne
-    @JoinColumn(name = "store_id")
+    @JoinColumn(name = "storeId")
     private Store storeId;
 
     @OneToMany
