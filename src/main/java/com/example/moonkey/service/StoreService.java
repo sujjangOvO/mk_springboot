@@ -1,6 +1,7 @@
 package com.example.moonkey.service;
 
 import com.example.moonkey.domain.Account;
+import com.example.moonkey.domain.Category;
 import com.example.moonkey.dto.StoreDisplayDto;
 import com.example.moonkey.dto.StoreDto;
 import com.example.moonkey.exception.NotFoundMemberException;
@@ -37,15 +38,17 @@ public class StoreService {
 				.flatMap(accountRepository::findOneWithAuthoritiesById)
 				.orElseThrow(()->new NotFoundMemberException("Member not found"));
 
+		Category category = Category.builder().categoryName(storeDto.getCategory()).build();
+
 		Store store = Store.builder()
-				.storeId(storeDto.getStoreId())
 				.name(storeDto.getName())
 				.address(storeDto.getAddress())
 				.description(storeDto.getDescription())
+				.category(category)
 				.ownerId(account)
 				.build();
 
-		return storeDto.from(storeRepository.save(store));
+		return storeDto.from(storeRepository.save(store)); // occurs errors Field "category" dosen't have a default value
 	}
 
 	@Transactional
