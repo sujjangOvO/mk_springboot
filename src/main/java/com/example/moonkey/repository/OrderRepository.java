@@ -14,6 +14,6 @@ public interface OrderRepository extends  JpaRepository<Orders,Long>{
     Optional<Orders> findOneByOrderId(long id);
     List<Orders> findAll();
 
-    List<Orders> findAllByAccountUid(Account account);
+    List<Orders> findAllByUid(Account account);
 
 }

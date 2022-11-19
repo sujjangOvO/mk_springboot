@@ -80,7 +80,7 @@ public class AccountService {
         HashMap<String,Integer> categoryCounts = new HashMap<>();
         List<StatsDto> statsList = new ArrayList<>(Collections.emptyList());
 
-        List<Orders> ordersList = orderRepository.findAllByAccountUid(account);
+        List<Orders> ordersList = orderRepository.findAllByUid(account);
         Iterator<Orders> iter = ordersList.iterator();
 
         // 받아온 order를 기반으로 category별 주문 횟수를 categoryCounts 에 HashMap 형태로 정리
