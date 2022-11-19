@@ -3,25 +3,30 @@ package com.example.moonkey.service;
 
 import com.example.moonkey.domain.Authority;
 import com.example.moonkey.dto.AccountDto;
+import com.example.moonkey.dto.StatsDto;
 import com.example.moonkey.exception.DuplicateMemberException;
 import com.example.moonkey.exception.NotFoundMemberException;
 import com.example.moonkey.repository.AccountRepository;
+import com.example.moonkey.repository.OrderRepository;
 import com.example.moonkey.util.SecurityUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import com.example.moonkey.domain.Account;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 @Service
 public class AccountService {
     private final AccountRepository accountRepository;
+    private final OrderRepository orderRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public AccountService(AccountRepository accountRepository, PasswordEncoder passwordEncoder){
+    public AccountService(AccountRepository accountRepository, OrderRepository orderRepository, PasswordEncoder passwordEncoder){
         this.accountRepository = accountRepository;
+        this.orderRepository = orderRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -66,5 +71,11 @@ public class AccountService {
 
     // 따라서 이 두 가지 메소드의 허용 권한을 다르게 하여 권한 검증에 대한 부분을 테스트한다.
     // UserService의 메소드를 호출할 AccountController를 생성
+    @Transactional
+    public List<StatsDto> getMyUserStats(){
 
+        List<StatsDto> statsList = new ArrayList<>(Collections.emptyList());
+
+        return statsList;
+    }
 }
