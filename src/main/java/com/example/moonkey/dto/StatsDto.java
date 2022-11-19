@@ -17,5 +17,7 @@ public class StatsDto {
 	private String category;
 
 	@NotNull
-	private double score;
+	private float score;
+
+	private int counts;
 }
