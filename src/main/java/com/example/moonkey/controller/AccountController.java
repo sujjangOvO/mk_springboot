@@ -1,6 +1,7 @@
 package com.example.moonkey.controller;
 
 import com.example.moonkey.dto.AccountDto;
+import com.example.moonkey.dto.StatsDto;
 import com.example.moonkey.service.AccountService;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 
 //import com.google.gson.JsonArray;
 //import com.google.gson.JsonObject;
@@ -55,6 +57,12 @@ public class AccountController {
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<AccountDto> getUserInfo(@PathVariable String id){
         return ResponseEntity.ok(accountService.getUserWithAuthorities(id));
+    }
+
+    @GetMapping("/account/stat")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<List<StatsDto>> getUserStats(HttpServletRequest request){
+        return ResponseEntity.ok(accountService.getMyUserStats());
     }
 
 }

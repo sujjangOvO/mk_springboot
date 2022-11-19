@@ -1,5 +1,6 @@
 package com.example.moonkey.repository;
 
+import com.example.moonkey.domain.Account;
 import com.example.moonkey.domain.Orders;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -12,5 +13,7 @@ public interface OrderRepository extends  JpaRepository<Orders,Long>{
     Orders findAllByOrderDate(LocalDateTime now);
     Optional<Orders> findOneByOrderId(long id);
     List<Orders> findAll();
+
+    List<Orders> findAllByAccountUid(Account account);
 
 }

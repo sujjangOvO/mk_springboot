@@ -2,26 +2,31 @@ package com.example.moonkey.service;
 
 
 import com.example.moonkey.domain.Authority;
+import com.example.moonkey.domain.Orders;
 import com.example.moonkey.dto.AccountDto;
+import com.example.moonkey.dto.StatsDto;
 import com.example.moonkey.exception.DuplicateMemberException;
 import com.example.moonkey.exception.NotFoundMemberException;
 import com.example.moonkey.repository.AccountRepository;
+import com.example.moonkey.repository.OrderRepository;
 import com.example.moonkey.util.SecurityUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.moonkey.util.StatsDtoCompartor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import com.example.moonkey.domain.Account;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
+import java.util.*;
 
 @Service
 public class AccountService {
     private final AccountRepository accountRepository;
+    private final OrderRepository orderRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public AccountService(AccountRepository accountRepository, PasswordEncoder passwordEncoder){
+    public AccountService(AccountRepository accountRepository, OrderRepository orderRepository, PasswordEncoder passwordEncoder){
         this.accountRepository = accountRepository;
+        this.orderRepository = orderRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -66,5 +71,45 @@ public class AccountService {
 
     // 따라서 이 두 가지 메소드의 허용 권한을 다르게 하여 권한 검증에 대한 부분을 테스트한다.
     // UserService의 메소드를 호출할 AccountController를 생성
+    @Transactional
+    public List<StatsDto> getMyUserStats(){
+        Account account = SecurityUtil.getCurrentUsername()
+                .flatMap(accountRepository::findOneWithAuthoritiesById)
+                .orElseThrow(()->new NotFoundMemberException("Member not found"));
 
+        HashMap<String,Integer> categoryCounts = new HashMap<>();
+        List<StatsDto> statsList = new ArrayList<>(Collections.emptyList());
+
+        List<Orders> ordersList = orderRepository.findAllByAccountUid(account);
+        Iterator<Orders> iter = ordersList.iterator();
+
+        // 받아온 order를 기반으로 category별 주문 횟수를 categoryCounts 에 HashMap 형태로 정리
+        while(iter.hasNext()){
+            Orders order = iter.next();
+            String category = order.getStoreId().getCategory().getCategoryName();
+            int nums = order.getNumber();
+
+            categoryCounts.put(category, categoryCounts.getOrDefault(category,0)+nums);
+        }
+        // 정리된 categoryCounts를 기반으로 Category별 통계량 분석
+        int totalCounts = 0;
+        for (int val : categoryCounts.values()){
+            totalCounts+=val;
+        }
+
+        for(Map.Entry<String, Integer> entry:categoryCounts.entrySet()){
+            StatsDto statsDto = StatsDto.builder()
+                    .category(entry.getKey())
+                    .score(totalCounts!=0?entry.getValue()/totalCounts:0f)
+                    .counts(entry.getValue())
+                    .build();
+
+            statsList.add(statsDto);
+        }
+        StatsDtoCompartor statsDtoCompartor = new StatsDtoCompartor();
+
+        Collections.sort(statsList, statsDtoCompartor);
+
+        return statsList;
+    }
 }
