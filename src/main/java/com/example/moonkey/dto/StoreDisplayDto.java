@@ -31,8 +31,8 @@ public class StoreDisplayDto {
 	@NotNull
 	private String category;
 
-	public static StoreDto from(Store store){
-		return StoreDto.builder()
+	public static StoreDisplayDto from(Store store){
+		return StoreDisplayDto.builder()
 				.storeId(store.getStoreId())
 				.name(store.getName())
 				.address(store.getAddress())
