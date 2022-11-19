@@ -1,6 +1,7 @@
 package com.example.moonkey.repository;
 
 import com.example.moonkey.domain.Party;
+import com.example.moonkey.domain.Store;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -12,4 +13,6 @@ public interface PartyRepository extends JpaRepository<Party,Long> {
 
     //Party findOneByPartyId(long partyId);
     List<Party> findAll();
+
+    List<Party> findAllbyStoreId(Store store);
 }

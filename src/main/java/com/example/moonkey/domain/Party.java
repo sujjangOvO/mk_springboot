@@ -22,12 +22,21 @@ public class Party {
     @Column(name="partyId")
     private long partyId;
 
+    @ManyToOne
+    @JoinColumn(name = "store_id")
+    private Store storeId;
+
     @OneToMany
     @JoinColumn(name = "accountUid")
     private Set<Account> members = new HashSet<>();
 
+
     @NotNull
     private String partyTitle;
+
+    public void setStoreId(Store storeId) {
+        this.storeId = storeId;
+    }
 
     public Set<Long> getUids(){
         Set<Long> memberList = new HashSet<>(members.size());

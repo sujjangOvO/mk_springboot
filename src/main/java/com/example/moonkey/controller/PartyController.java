@@ -32,11 +32,17 @@ public class PartyController {
         return ResponseEntity.ok(partyService.getParties());
     }
 
-    @PostMapping("/party/reg")
+    @GetMapping("/party/list/{storeId}")
+    public ResponseEntity<List<PartyDisplayDto>> storePartyList(
+            @PathVariable @Valid long storeId){
+        return ResponseEntity.ok(partyService.getParties(storeId));
+    }
+
+    @PostMapping("/party/reg/{storeId}") // 어느 가게에 등록할 건지 추가 해둘 것
     public ResponseEntity<PartyDto> register(
-            @Valid @RequestBody PartyDto partyDto
+            @PathVariable @Valid long storeId, @Valid @RequestBody PartyDto partyDto
     ){
-        return ResponseEntity.ok(partyService.register(partyDto));
+        return ResponseEntity.ok(partyService.register(storeId,partyDto));
     }
 
     @PostMapping("/party/join")

@@ -2,12 +2,14 @@ package com.example.moonkey.service;
 
 import com.example.moonkey.domain.Account;
 import com.example.moonkey.domain.Party;
+import com.example.moonkey.domain.Store;
 import com.example.moonkey.dto.PartyDisplayDto;
 import com.example.moonkey.dto.PartyDto;
 import com.example.moonkey.exception.NotFoundMemberException;
 import com.example.moonkey.exception.NotFoundPartyException;
 import com.example.moonkey.repository.AccountRepository;
 import com.example.moonkey.repository.PartyRepository;
+import com.example.moonkey.repository.StoreRepository;
 import com.example.moonkey.util.SecurityUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,15 +21,20 @@ public class PartyService {
     private final PartyRepository partyRepository;
     private final AccountRepository accountRepository;
 
+    private final StoreRepository storeRepository;
 
-    public PartyService(PartyRepository partyRepository, AccountRepository accountRepository){
+
+    public PartyService(PartyRepository partyRepository, AccountRepository accountRepository, StoreRepository storeRepository){
         this.partyRepository = partyRepository;
         this.accountRepository = accountRepository;
+        this.storeRepository = storeRepository;
     }
 
-    @Transactional
-    public PartyDto register(PartyDto partyDto){
+    @Transactional //가게 정보 받아와야 함
+    public PartyDto register(long storeId, PartyDto partyDto){
+        Store store = storeRepository.findOneByStoreId(storeId);
         Party party = Party.builder()
+                .storeId(store)
                 .partyId(partyDto.getPartyId())
                 .partyTitle(partyDto.getPartyTitle())
                 .members(partyDto.getAccounts(partyDto.getMembers()))
@@ -68,6 +75,33 @@ public class PartyService {
                     .build();
             partyDtos.add(partyDto);
         }
+
+        /* TO-DO
+            현재 로그인 계정 기준 정렬
+
+         */
+
+        return	partyDtos;
+    }
+
+    @Transactional
+    public List<PartyDisplayDto> getParties(long storeId){
+        List<Party> partyList = partyRepository.findAll();
+        Iterator<Party> iter = partyList.iterator();
+
+        List<PartyDisplayDto> partyDtos = new ArrayList<>(Collections.emptyList());
+
+        while(iter.hasNext())
+        {
+            Party party = iter.next();
+            PartyDisplayDto partyDto = PartyDisplayDto.builder()
+                    .partyId(party.getPartyId())
+                    .partyTitle(party.getPartyTitle())
+                    .members(party.getUids())
+                    .build();
+            partyDtos.add(partyDto);
+        }
+
 
         return	partyDtos;
     }

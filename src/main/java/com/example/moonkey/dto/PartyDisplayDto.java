@@ -14,8 +14,11 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PartyDisplayDto {
+
     @NotNull
     private long partyId;
+
+    private String storeName;
 
     @NotNull
     private String partyTitle;
@@ -23,8 +26,9 @@ public class PartyDisplayDto {
     @NotNull
     private Set<Long> members = new HashSet<>();
 
-    public static PartyDto from(Party party){
-        return PartyDto.builder().
+    public static PartyDisplayDto from(Party party){
+        return PartyDisplayDto.builder().
+                storeName(party.getStoreId().getName()).
                 partyId(party.getPartyId()).
                 partyTitle(party.getPartyTitle()).
                 members(party.getUids()).

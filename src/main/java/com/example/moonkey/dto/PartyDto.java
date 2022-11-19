@@ -28,6 +28,8 @@ public class PartyDto {
     @NotNull
     private Set<Long> members = new HashSet<>(); // uid 집합
 
+    private long storeId;
+
 
     public Set<Account> getAccounts(Set<Long> list){
         Set<Account> memberList = new HashSet<>();
@@ -45,6 +47,7 @@ public class PartyDto {
                 partyId(party.getPartyId()).
                 partyTitle(party.getPartyTitle()).
                 members(party.getUids()).
+                storeId(party.getStoreId().getStoreId()).
                 build();
     }
 }
