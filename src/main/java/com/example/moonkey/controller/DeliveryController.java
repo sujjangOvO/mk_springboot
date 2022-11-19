@@ -2,14 +2,12 @@ package com.example.moonkey.controller;
 
 import com.example.moonkey.dto.DeliveryDto;
 import com.example.moonkey.service.DeliveryService;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -27,5 +25,12 @@ public class DeliveryController {
         return ResponseEntity.ok(deliveryService.getDeliveries());
     }
 
+    @PostMapping("/delivery/reg")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<DeliveryDto> register(
+            @Valid @RequestBody DeliveryDto deliveryDto
+    ){
+        return ResponseEntity.ok(deliveryService.register(deliveryDto));
+    }
 
 }
