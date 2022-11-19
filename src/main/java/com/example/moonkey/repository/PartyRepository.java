@@ -14,5 +14,5 @@ public interface PartyRepository extends JpaRepository<Party,Long> {
     //Party findOneByPartyId(long partyId);
     List<Party> findAll();
 
-    List<Party> findAllbyStoreId(Store store);
+    List<Party> findAllByStoreId(Store store);
 }
