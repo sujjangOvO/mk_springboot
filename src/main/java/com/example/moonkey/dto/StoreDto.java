@@ -13,7 +13,6 @@ import javax.validation.constraints.NotNull;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class StoreDto {
 
 	@NotNull
@@ -33,6 +32,7 @@ public class StoreDto {
 	private String category;
 
 	public static StoreDto from(Store store){
+		if(store==null) return null;
 		return StoreDto.builder()
 				.name(store.getName())
 				.address(store.getAddress())

@@ -32,6 +32,7 @@ public class StoreDisplayDto {
 	private String category;
 
 	public static StoreDisplayDto from(Store store){
+		if(store==null) return null;
 		return StoreDisplayDto.builder()
 				.storeId(store.getStoreId())
 				.name(store.getName())
