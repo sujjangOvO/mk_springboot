@@ -45,6 +45,8 @@ public class AccountDto { // 회원가입시 사용할 Dto
                 .password(account.getPassword())
                 .phone(account.getPhone())
                 .flag(account.getFlag())
+                .addr(account.getAddr())
+                .nickname(account.getNickname())
                 .authorityDtoSet(account.getAuthorities().stream()
                         .map(authority -> AuthorityDto.builder().authorityName(authority.getAuthorityName()).build())
                         .collect(Collectors.toSet()))
