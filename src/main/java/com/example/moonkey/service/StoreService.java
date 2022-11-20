@@ -7,6 +7,7 @@ import com.example.moonkey.dto.StoreDto;
 import com.example.moonkey.exception.NotFoundMemberException;
 import com.example.moonkey.exception.NotFoundStoreException;
 import com.example.moonkey.repository.AccountRepository;
+import com.example.moonkey.repository.CategoryRepository;
 import com.example.moonkey.repository.StoreRepository;
 import com.example.moonkey.util.SecurityUtil;
 import com.example.moonkey.domain.Store;
@@ -23,12 +24,15 @@ import java.util.List;
 @Service
 public class StoreService {
 	private final StoreRepository storeRepository;
-	private AccountRepository accountRepository;
+	private final AccountRepository accountRepository;
+
+	private final CategoryRepository categoryRepository;
 
 
-	public StoreService(StoreRepository storeRepository, AccountRepository accountRepository){
+	public StoreService(StoreRepository storeRepository, AccountRepository accountRepository, CategoryRepository categoryRepository){
 		this.storeRepository = storeRepository;
 		this.accountRepository = accountRepository;
+		this.categoryRepository = categoryRepository;
 	}
 
 	@Transactional
@@ -38,7 +42,7 @@ public class StoreService {
 				.flatMap(accountRepository::findOneWithAuthoritiesById)
 				.orElseThrow(()->new NotFoundMemberException("Member not found"));
 
-		Category category = Category.builder().categoryName(storeDto.getCategory()).build();
+		Category category = categoryRepository.findOneByCategoryName(storeDto.getCategory());
 
 		Store store = Store.builder()
 				.name(storeDto.getName())
@@ -47,6 +51,7 @@ public class StoreService {
 				.category(category)
 				.ownerId(account)
 				.build();
+
 
 		return storeDto.from(storeRepository.save(store)); // occurs errors Field "category" dosen't have a default value
 	}

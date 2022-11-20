@@ -10,5 +10,6 @@ import java.util.Optional;
 public interface CategoryRepository extends JpaRepository<Category,String> {
 
 	List<Category> findAll();
+	Category findOneByCategoryName(String name);
 
 }
