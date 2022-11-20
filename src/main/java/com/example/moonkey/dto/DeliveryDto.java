@@ -30,6 +30,9 @@ public class DeliveryDto {
     @NotNull
     private String address;
 
+    @NotNull
+    private boolean callCheck;
+
     public static DeliveryDto from(Delivery delivery){
         return DeliveryDto.builder().
                 deliveryId(delivery.getDeliveryId()).
@@ -38,6 +41,7 @@ public class DeliveryDto {
                 storeId(delivery.getStoreId().getStoreId()).
                 distance(delivery.getDistance()).
                 address(delivery.getAddress()).
+                callCheck(delivery.isCallCheck()).
                 build();
     }
 }

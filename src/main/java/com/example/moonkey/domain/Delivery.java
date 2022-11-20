@@ -36,4 +36,7 @@ public class Delivery {
 
     @NotNull
     private String address;
+
+    @NotNull
+    private boolean callCheck;
 }

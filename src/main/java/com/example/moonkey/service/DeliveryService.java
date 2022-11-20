@@ -50,6 +50,7 @@ public class DeliveryService {
                 .storeId(storeRepository.findOneByStoreId(deliveryDto.getStoreId()))
                 .distance(deliveryDto.getDistance())
                 .address(deliveryDto.getAddress())
+                .callCheck(deliveryDto.isCallCheck())
                 .build();
 
 
@@ -76,6 +77,7 @@ public class DeliveryService {
                     .storeId(delivery.getStoreId().getStoreId())
                     .distance(delivery.getDistance())
                     .address(delivery.getAddress())
+                    .callCheck(delivery.isCallCheck())
                     .build();
 
             deliveryDtos.add(deliveryDto);
