@@ -9,6 +9,7 @@ spring:
     url: jdbc:mysql://165.229.86.152:9500/MOONKEY?serverTimezone=UTC&characterEncoding=UTF-8
     password: newoop0510
 
+
   jpa:
     generate-ddl: 'true'
     properties:
@@ -24,3 +25,14 @@ jwt:
   # HS512 알고리즘 사용하므로 64byte 이상의 secret key를 사용해야 함. base64? ???? ?
   secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
   token-validity-in-seconds: 86400 # 초
+
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+
+logging:
+  charset:
+    console: UTF-8
+    file: UTF-8
