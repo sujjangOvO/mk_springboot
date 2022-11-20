@@ -1,15 +1,11 @@
 package com.example.moonkey.controller;
 
-import com.example.moonkey.domain.Menu;
 import com.example.moonkey.dto.MenuDto;
 import com.example.moonkey.service.MenuService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.List;
 
 
@@ -36,7 +32,6 @@ public class MenuController {
 		public ResponseEntity<String> unregister(
 				@PathVariable("storeId") String storeId, @PathVariable("menuId") String menuId
 		){
-
 			return ResponseEntity.ok(menuService.unregister(Long.getLong(menuId)));
 		}
 
