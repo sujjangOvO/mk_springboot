@@ -11,9 +11,5 @@ public interface AccountRepository extends JpaRepository<Account,Long>  { // Jpa
     @EntityGraph(attributePaths = "authorities") // 쿼리가 수행될 때 Lazy 조회가 아니라 Eager 조회로 authorities 정보를 같이 가져오는 어노테이션
     Optional<Account> findOneWithAuthoritiesById(String id); // username을 기준으로 Account 정보를 가져올 때 권한 정보도 함께 가져옴
     List<Account> findAll();
-    Account findOneByUid(long uid);
-
     Account findAccountById(long uid);
-
-    Account getAccountById(long uid);
 }

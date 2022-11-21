@@ -11,4 +11,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class TokenDto { // token 정보 response
     private String token;
+    private AccountDto accountDto;
 }

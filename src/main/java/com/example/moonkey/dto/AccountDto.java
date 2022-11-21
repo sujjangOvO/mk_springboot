@@ -35,6 +35,7 @@ public class AccountDto { // 회원가입시 사용할 Dto
     @NotNull
     private String addr;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Set<AuthorityDto> authorityDtoSet;
 
     public static AccountDto from(Account account){
