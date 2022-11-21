@@ -94,6 +94,9 @@ public class PartyService {
         while(iter.hasNext())
         {
             Party party = iter.next();
+
+            if(party.getStoreId().getStoreId() != storeId) continue;
+
             PartyDisplayDto partyDto = PartyDisplayDto.builder()
                     .partyId(party.getPartyId())
                     .partyTitle(party.getPartyTitle())
