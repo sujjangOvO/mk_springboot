@@ -1,6 +1,7 @@
 package com.example.moonkey.dto;
 
 import com.example.moonkey.domain.Orders;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
@@ -11,6 +12,7 @@ import java.sql.Timestamp;
 @Setter
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class OrderDto {
 
     @NotNull
@@ -19,7 +21,7 @@ public class OrderDto {
     @NotNull
     private int number;
 
-    @NotNull
+    @JsonIgnore
     private Timestamp orderDate;
 
     @NotNull
