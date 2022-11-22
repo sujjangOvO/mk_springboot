@@ -2,8 +2,10 @@ package com.example.moonkey.dto;
 
 import com.example.moonkey.domain.Account;
 import com.example.moonkey.domain.Party;
+import com.example.moonkey.exception.NotFoundMemberException;
 import com.example.moonkey.repository.AccountRepository;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
@@ -17,6 +19,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class PartyDto {
 
+    @Autowired
     private AccountRepository accountRepository;
 
     @NotNull
@@ -36,8 +39,7 @@ public class PartyDto {
         Iterator iter = list.iterator();
         while(iter.hasNext()){
             long num = (long) iter.next();
-            System.out.println(accountRepository.findAccountById((num)));
-            memberList.add(accountRepository.findAccountById((num)));
+            memberList.add(accountRepository.findAccountByUid((num)).orElseThrow(()->new NotFoundMemberException("Member not found")));
         }
         return memberList;
     }

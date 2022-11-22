@@ -126,18 +126,11 @@ public class PartyService {
     @Transactional
     public PartyDto join(long partyId, long uid){
 
-        /*
-        Account account = SecurityUtil.getCurrentUsername()
-                .flatMap(accountRepository::findOneWithAuthoritiesById)
-                .orElseThrow(()->new NotFoundMemberException("Member not found"));
-         */
-        Account account = accountRepository.findAccountById(uid);
-        if(account == null){
-            new NotFoundMemberException("Member not found");
-        }
-
         Party party =  partyRepository.findOneByPartyId(partyId)
                 .orElseThrow(()->new NotFoundPartyException("Party not found"));
+
+        Account account = accountRepository.findAccountByUid(uid)
+                .orElseThrow(()->new NotFoundMemberException("Member not found"));
 
 
         Set<Account> members = party.getMembers();
@@ -146,6 +139,7 @@ public class PartyService {
         party = Party.builder()
                 .partyId(party.getPartyId())
                 .partyTitle(party.getPartyTitle())
+                .storeId(party.getStoreId())
                 .members(members)
                 .build();
 
