@@ -11,7 +11,6 @@ import com.example.moonkey.exception.NotIncludeMemberException;
 import com.example.moonkey.repository.AccountRepository;
 import com.example.moonkey.repository.PartyRepository;
 import com.example.moonkey.repository.StoreRepository;
-import com.example.moonkey.util.SecurityUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -27,7 +27,7 @@ public class Party {
     private Store storeId;
 
     @OneToMany
-    @JoinColumn(name = "accountUid")
+    @JoinColumn(name = "uid")
     private Set<Account> members = new HashSet<>();
 
 
