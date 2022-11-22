@@ -36,6 +36,13 @@ public class AccountService {
     }
 
     @Transactional
+    public AccountDto getMyAccountInformation(long uid){
+        return AccountDto.from(
+                accountRepository.findAccountByUid(uid)
+                        .orElseThrow(()->new NotFoundMemberException("Member not found")));
+    }
+
+    @Transactional
     public AccountDto signup(AccountDto accountDto){
         if(accountRepository.findOneWithAuthoritiesById(accountDto.getId()).orElse(null) != null){
             throw new DuplicateMemberException("이미 가입되어 있는 유저입니다.");
