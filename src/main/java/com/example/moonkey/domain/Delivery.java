@@ -20,7 +20,7 @@ public class Delivery {
     private long deliveryId;
 
     @OneToOne
-    @JoinColumn(name = "accountUid")
+    @JoinColumn(name = "uid")
     private Account uid; // 배달원
 
     @OneToOne
