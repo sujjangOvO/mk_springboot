@@ -36,6 +36,6 @@ public class Orders {
     private Store storeId;
 
     @ManyToOne
-    @JoinColumn(name = "accountUid")
+    @JoinColumn(name = "uid")
     private Account uid;
 }
