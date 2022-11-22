@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -92,5 +93,9 @@ public class PartyController {
         headers.setLocation(URI.create("/app/party/list"));
         return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
     }
-
+    @GetMapping("party/list/rec")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<List<PartyDisplayDto>> partyRecList(HttpServletRequest request){
+        return ResponseEntity.ok(partyService.getRecParties());
+    }
 }

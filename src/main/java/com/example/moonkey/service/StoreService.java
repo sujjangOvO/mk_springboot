@@ -54,6 +54,8 @@ public class StoreService {
 				.build();
 
 
+		// account 접근해서 account의 store 변경
+
 		return storeDto.from(storeRepository.save(store)); // occurs errors Field "category" dosen't have a default value
 	}
 

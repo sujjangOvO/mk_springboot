@@ -131,7 +131,7 @@ public class AccountService {
         }
         StatsDtoCompartor statsDtoCompartor = new StatsDtoCompartor();
 
-        Collections.sort(statsList, statsDtoCompartor);
+        Collections.sort(statsList, statsDtoCompartor.reversed());
 
         return statsList;
     }

@@ -5,6 +5,7 @@ import com.example.moonkey.domain.Party;
 import com.example.moonkey.domain.Store;
 import com.example.moonkey.dto.PartyDisplayDto;
 import com.example.moonkey.dto.PartyDto;
+import com.example.moonkey.dto.StatsDto;
 import com.example.moonkey.exception.NotFoundMemberException;
 import com.example.moonkey.exception.NotFoundPartyException;
 import com.example.moonkey.exception.NotIncludeMemberException;
@@ -22,11 +23,13 @@ public class PartyService {
     private final AccountRepository accountRepository;
     private final StoreRepository storeRepository;
 
+    private final AccountService accountService;
 
-    public PartyService(PartyRepository partyRepository, AccountRepository accountRepository, StoreRepository storeRepository){
+    public PartyService(PartyRepository partyRepository, AccountRepository accountRepository, StoreRepository storeRepository, AccountService accountService){
         this.partyRepository = partyRepository;
         this.accountRepository = accountRepository;
         this.storeRepository = storeRepository;
+        this.accountService = accountService;
     }
 
     @Transactional // 가게 정보 받아와야 함
@@ -58,7 +61,8 @@ public class PartyService {
     }
 
     @Transactional
-    public List<PartyDisplayDto> getParties(){
+    public List<PartyDisplayDto> getRecParties(){
+
         List<Party> partyList = partyRepository.findAll();
         Iterator<Party> iter = partyList.iterator();
 
@@ -74,11 +78,31 @@ public class PartyService {
                     .build();
             partyDtos.add(partyDto);
         }
-
         /* TO-DO
             현재 로그인 계정 기준 정렬
-
          */
+        List<StatsDto> statsList = accountService.getMyUserStats();
+
+
+        return partyDtos;
+    }
+
+    @Transactional
+    public List<PartyDisplayDto> getParties(){
+        List<Party> partyList = partyRepository.findAll();
+        Iterator<Party> iter = partyList.iterator();
+
+        List<PartyDisplayDto> partyDtos = new ArrayList<>(Collections.emptyList());
+
+        while(iter.hasNext()) {
+            Party party = iter.next();
+            PartyDisplayDto partyDto = PartyDisplayDto.builder()
+                    .partyId(party.getPartyId())
+                    .partyTitle(party.getPartyTitle())
+                    .members(party.getUids())
+                    .build();
+            partyDtos.add(partyDto);
+        }
 
         return	partyDtos;
     }
