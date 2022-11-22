@@ -76,11 +76,21 @@ public class PartyController {
     }
 
     @PostMapping("/party/leave/{partyId}/{uid}")
-    public ResponseEntity<PartyDto> partyLeave(
+    public ResponseEntity<?> partyLeave(
             @PathVariable @Valid long partyId,
             @PathVariable @Valid long uid
     ){
-        return null;
+        Party party =  partyRepository.findOneByPartyId(partyId)
+                .orElseThrow(()->new NotFoundPartyException("Party not found"));
+
+        if(party.getMembers().size() == 1)
+            partyService.unregister(partyId);
+        else
+            partyService.leave(partyId, uid);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create("/app/party/list"));
+        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 
 }

@@ -7,6 +7,7 @@ import com.example.moonkey.dto.PartyDisplayDto;
 import com.example.moonkey.dto.PartyDto;
 import com.example.moonkey.exception.NotFoundMemberException;
 import com.example.moonkey.exception.NotFoundPartyException;
+import com.example.moonkey.exception.NotIncludeMemberException;
 import com.example.moonkey.repository.AccountRepository;
 import com.example.moonkey.repository.PartyRepository;
 import com.example.moonkey.repository.StoreRepository;
@@ -146,5 +147,27 @@ public class PartyService {
         return PartyDto.from(party);
     }
 
+    @Transactional
+    public void leave(long partyId, long uid){
+
+        Party party =  partyRepository.findOneByPartyId(partyId)
+                .orElseThrow(()->new NotFoundPartyException("Party not found"));
+
+        Account account = accountRepository.findAccountByUid(uid)
+                .orElseThrow(()->new NotFoundMemberException("Member not found"));
+
+
+        Set<Account> members = party.getMembers();
+        if(!members.remove(account)){
+            new NotIncludeMemberException("Not include member in party");
+        }
+
+        party = Party.builder()
+                .partyId(party.getPartyId())
+                .partyTitle(party.getPartyTitle())
+                .storeId(party.getStoreId())
+                .members(members)
+                .build();
+    }
 
 }
