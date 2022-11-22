@@ -20,7 +20,6 @@ import java.util.*;
 public class PartyService {
     private final PartyRepository partyRepository;
     private final AccountRepository accountRepository;
-
     private final StoreRepository storeRepository;
 
 
@@ -30,9 +29,10 @@ public class PartyService {
         this.storeRepository = storeRepository;
     }
 
-    @Transactional //가게 정보 받아와야 함
+    @Transactional // 가게 정보 받아와야 함
     public PartyDto register(long storeId, PartyDto partyDto){
         Store store = storeRepository.findOneByStoreId(storeId);
+
         Party party = Party.builder()
                 .storeId(store)
                 .partyId(partyDto.getPartyId())
@@ -47,7 +47,6 @@ public class PartyService {
     public void unregister(long partyId){
         Party party =  partyRepository.findOneByPartyId(partyId)
                 .orElseThrow(()->new NotFoundPartyException("Party not found"));
-
 
         PartyDto partyDto = PartyDto.builder()
                 .partyId(party.getPartyId())
@@ -117,10 +116,25 @@ public class PartyService {
     }
 
     @Transactional
-    public PartyDto join(long partyId){
+    public PartyDto getParty(long partyId){
+        return PartyDto.from(
+                partyRepository.findOneByPartyId(partyId)
+                        .orElseThrow(()->new NotFoundPartyException("Party not found")));
+    }
+
+
+    @Transactional
+    public PartyDto join(long partyId, long uid){
+
+        /*
         Account account = SecurityUtil.getCurrentUsername()
                 .flatMap(accountRepository::findOneWithAuthoritiesById)
                 .orElseThrow(()->new NotFoundMemberException("Member not found"));
+         */
+        Account account = accountRepository.findAccountById(uid);
+        if(account == null){
+            new NotFoundMemberException("Member not found");
+        }
 
         Party party =  partyRepository.findOneByPartyId(partyId)
                 .orElseThrow(()->new NotFoundPartyException("Party not found"));

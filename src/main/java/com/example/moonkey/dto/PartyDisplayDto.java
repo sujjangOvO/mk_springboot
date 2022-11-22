@@ -18,6 +18,7 @@ public class PartyDisplayDto {
     @NotNull
     private long partyId;
 
+    @NotNull
     private String storeName;
 
     @NotNull

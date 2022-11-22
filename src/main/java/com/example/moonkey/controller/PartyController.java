@@ -6,6 +6,7 @@ import com.example.moonkey.dto.PartyDto;
 import com.example.moonkey.exception.NotFoundPartyException;
 import com.example.moonkey.repository.PartyRepository;
 import com.example.moonkey.service.PartyService;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,14 +53,6 @@ public class PartyController {
         return ResponseEntity.ok(partyService.register(storeId,partyDto));
     }
 
-    @PostMapping("/party/join/{partyId}")
-    public ResponseEntity<PartyDto> partyJoin(
-            @Valid @PathVariable long partyId,
-            @Valid @RequestBody long uid
-    ){
-        return ResponseEntity.ok(partyService.join(partyId, uid));
-    }
-
     @PostMapping("/party/unreg/{partyId}")
     public ResponseEntity<?> unregister(
             @PathVariable @Valid Long partyId
@@ -74,10 +67,18 @@ public class PartyController {
         return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 
-    @PostMapping("/party/leave")
+    @PostMapping("/party/join/{partyId}/{uid}")
+    public ResponseEntity<PartyDto> partyJoin(
+            @Valid @PathVariable long partyId,
+            @Valid @PathVariable long uid
+    ){
+        return ResponseEntity.ok(partyService.join(partyId, uid));
+    }
+
+    @PostMapping("/party/leave/{partyId}/{uid}")
     public ResponseEntity<PartyDto> partyLeave(
-            @RequestBody @Valid long partyId,
-            @RequestBody @Valid long uid
+            @PathVariable @Valid long partyId,
+            @PathVariable @Valid long uid
     ){
         return null;
     }
