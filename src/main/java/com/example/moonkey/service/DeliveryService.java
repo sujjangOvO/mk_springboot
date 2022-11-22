@@ -97,6 +97,115 @@ public class DeliveryService {
 
     }
 
+
+    @Transactional
+    public List<DeliveryDto> getRequests(){
+
+        List<Delivery> deliveryList = deliveryRepository.findAll();
+        Iterator<Delivery> iter = deliveryList.iterator();
+
+
+        List<DeliveryDto> deliveryDtos = new ArrayList<>(Collections.emptyList());
+
+        while(iter.hasNext())
+        {
+            Delivery delivery = iter.next();
+
+            if(delivery.isCallCheck() == true) continue;
+
+            DeliveryDto deliveryDto = DeliveryDto.builder()
+                    .deliveryId(delivery.getDeliveryId())
+                    .uid(delivery.getUid().getUid())
+                    .orderId(delivery.getOrderId().getOrderId())
+                    .storeId(delivery.getStoreId().getStoreId())
+                    .distance(delivery.getDistance())
+                    .address(delivery.getAddress())
+                    .callCheck(delivery.isCallCheck())
+                    .deliveryId(delivery.getDeliveryId())
+                    .requests(delivery.getRequests())
+                    .pay(delivery.getPay())
+                    .totalPay(delivery.getTotalPay())
+                    .build();
+
+            deliveryDtos.add(deliveryDto);
+        }
+        return deliveryDtos;
+
+    }
+    @Transactional
+    public List<DeliveryDto> getProcesses(){
+
+        List<Delivery> deliveryList = deliveryRepository.findAll();
+        Iterator<Delivery> iter = deliveryList.iterator();
+
+
+        List<DeliveryDto> deliveryDtos = new ArrayList<>(Collections.emptyList());
+
+        while(iter.hasNext())
+        {
+            Delivery delivery = iter.next();
+
+            if(delivery.isCallCheck()==true)
+                if(delivery.isDeliveryCheck()==false){
+                    DeliveryDto deliveryDto = DeliveryDto.builder()
+                            .deliveryId(delivery.getDeliveryId())
+                            .uid(delivery.getUid().getUid())
+                            .orderId(delivery.getOrderId().getOrderId())
+                            .storeId(delivery.getStoreId().getStoreId())
+                            .distance(delivery.getDistance())
+                            .address(delivery.getAddress())
+                            .callCheck(delivery.isCallCheck())
+                            .deliveryId(delivery.getDeliveryId())
+                            .requests(delivery.getRequests())
+                            .pay(delivery.getPay())
+                            .totalPay(delivery.getTotalPay())
+                            .build();
+
+                    deliveryDtos.add(deliveryDto);
+                }
+
+        }
+        return deliveryDtos;
+
+    }
+
+
+    @Transactional
+    public List<DeliveryDto> getCompletes(){
+
+        List<Delivery> deliveryList = deliveryRepository.findAll();
+        Iterator<Delivery> iter = deliveryList.iterator();
+
+
+        List<DeliveryDto> deliveryDtos = new ArrayList<>(Collections.emptyList());
+
+        while(iter.hasNext())
+        {
+            Delivery delivery = iter.next();
+
+            if(delivery.isCallCheck()==false || delivery.isDeliveryCheck()==false) continue;
+
+            DeliveryDto deliveryDto = DeliveryDto.builder()
+                    .deliveryId(delivery.getDeliveryId())
+                    .uid(delivery.getUid().getUid())
+                    .orderId(delivery.getOrderId().getOrderId())
+                    .storeId(delivery.getStoreId().getStoreId())
+                    .distance(delivery.getDistance())
+                    .address(delivery.getAddress())
+                    .callCheck(delivery.isCallCheck())
+                    .deliveryId(delivery.getDeliveryId())
+                    .requests(delivery.getRequests())
+                    .pay(delivery.getPay())
+                    .totalPay(delivery.getTotalPay())
+                    .build();
+
+            deliveryDtos.add(deliveryDto);
+        }
+        return deliveryDtos;
+
+    }
+
+
     @Transactional
     public List<DeliveryDto> getDeliveries(){
 
@@ -126,7 +235,6 @@ public class DeliveryService {
             deliveryDtos.add(deliveryDto);
         }
         return deliveryDtos;
-
     }
 
 

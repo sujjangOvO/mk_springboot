@@ -27,17 +27,17 @@ public class DeliveryController {
 
     @GetMapping("/delivery/requestList")
     public ResponseEntity<List<DeliveryDto>> getRequests(HttpServletRequest request){
-        return ResponseEntity.ok(deliveryService.getDeliveries());
+        return ResponseEntity.ok(deliveryService.getRequests());
     }
 
     @GetMapping("/delivery/processList")
     public ResponseEntity<List<DeliveryDto>> getProcesses(HttpServletRequest request){
-        return ResponseEntity.ok(deliveryService.getDeliveries());
+        return ResponseEntity.ok(deliveryService.getProcesses());
     }
 
     @GetMapping("/delivery/completeList")
     public ResponseEntity<List<DeliveryDto>> getCompletes(HttpServletRequest request){
-        return ResponseEntity.ok(deliveryService.getDeliveries());
+        return ResponseEntity.ok(deliveryService.getCompletes());
     }
 
     @PostMapping("/delivery/reg")
