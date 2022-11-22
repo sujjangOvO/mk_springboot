@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class AccountDto { // 회원가입시 사용할 Dto
 
+    @NotNull
+    private long uid;
 
     @NotNull
     private String id;
@@ -42,6 +44,7 @@ public class AccountDto { // 회원가입시 사용할 Dto
         if(account == null) return null;
 
         return AccountDto.builder()
+                .uid(account.getUid())
                 .id(account.getId())
                 .password(account.getPassword())
                 .phone(account.getPhone())

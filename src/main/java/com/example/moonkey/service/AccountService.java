@@ -47,6 +47,7 @@ public class AccountService {
                 .build();                   // => 이 차이를 통해 권한 검증 부분을 테스트.
 
         Account account = Account.builder()
+                .uid(accountDto.getUid())
                 .id(accountDto.getId())
                 .password(passwordEncoder.encode(accountDto.getPassword()))
                 .nickname(accountDto.getNickname())
