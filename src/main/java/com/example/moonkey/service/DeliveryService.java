@@ -51,14 +51,51 @@ public class DeliveryService {
                 .distance(deliveryDto.getDistance())
                 .address(deliveryDto.getAddress())
                 .callCheck(deliveryDto.isCallCheck())
+                .deliveryCheck(deliveryDto.isDeliveryCheck())
                 .requests(deliveryDto.getRequests())
                 .pay(deliveryDto.getPay())
+                .totalPay(deliveryDto.getTotalPay())
                 .build();
 
 
         return deliveryDto.from(deliveryRepository.save(delivery));
     }
 
+
+    @Transactional
+    public List<DeliveryDto> getMyDeliveries(long uid){
+
+        List<Delivery> deliveryList = deliveryRepository.findAll();
+        Iterator<Delivery> iter = deliveryList.iterator();
+
+
+        List<DeliveryDto> deliveryDtos = new ArrayList<>(Collections.emptyList());
+
+        while(iter.hasNext())
+        {
+            Delivery delivery = iter.next();
+
+            if(delivery.getUid().getUid() != uid) continue;
+
+            DeliveryDto deliveryDto = DeliveryDto.builder()
+                    .deliveryId(delivery.getDeliveryId())
+                    .uid(delivery.getUid().getUid())
+                    .orderId(delivery.getOrderId().getOrderId())
+                    .storeId(delivery.getStoreId().getStoreId())
+                    .distance(delivery.getDistance())
+                    .address(delivery.getAddress())
+                    .callCheck(delivery.isCallCheck())
+                    .deliveryCheck(delivery.isDeliveryCheck())
+                    .requests(delivery.getRequests())
+                    .pay(delivery.getPay())
+                    .totalPay(delivery.getTotalPay())
+                    .build();
+
+            deliveryDtos.add(deliveryDto);
+        }
+        return deliveryDtos;
+
+    }
 
     @Transactional
     public List<DeliveryDto> getDeliveries(){
@@ -80,8 +117,10 @@ public class DeliveryService {
                     .distance(delivery.getDistance())
                     .address(delivery.getAddress())
                     .callCheck(delivery.isCallCheck())
+                    .deliveryId(delivery.getDeliveryId())
                     .requests(delivery.getRequests())
                     .pay(delivery.getPay())
+                    .totalPay(delivery.getTotalPay())
                     .build();
 
             deliveryDtos.add(deliveryDto);

@@ -25,6 +25,21 @@ public class DeliveryController {
         return ResponseEntity.ok(deliveryService.getDeliveries());
     }
 
+    @GetMapping("/delivery/requestList")
+    public ResponseEntity<List<DeliveryDto>> getRequests(HttpServletRequest request){
+        return ResponseEntity.ok(deliveryService.getDeliveries());
+    }
+
+    @GetMapping("/delivery/processList")
+    public ResponseEntity<List<DeliveryDto>> getProcesses(HttpServletRequest request){
+        return ResponseEntity.ok(deliveryService.getDeliveries());
+    }
+
+    @GetMapping("/delivery/completeList")
+    public ResponseEntity<List<DeliveryDto>> getCompletes(HttpServletRequest request){
+        return ResponseEntity.ok(deliveryService.getDeliveries());
+    }
+
     @PostMapping("/delivery/reg")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<DeliveryDto> register(
@@ -32,5 +47,12 @@ public class DeliveryController {
     ){
         return ResponseEntity.ok(deliveryService.register(deliveryDto));
     }
+
+    @GetMapping("/delivery/list/{uid}")
+    public ResponseEntity<List<DeliveryDto>> getMyDeliveries(@PathVariable @Valid long uid){
+        return ResponseEntity.ok(deliveryService.getMyDeliveries(uid));
+    }
+
+
 
 }

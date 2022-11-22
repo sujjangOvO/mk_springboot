@@ -34,11 +34,17 @@ public class DeliveryDto {
     @NotNull
     private boolean callCheck;
 
+    @NotNull
+    private boolean deliveryCheck;
+
     @Column(nullable = true)
     private String requests;
 
     @NotNull
     private int pay;
+
+    @Column(nullable = true)
+    private long totalPay;
 
     public static DeliveryDto from(Delivery delivery){
         return DeliveryDto.builder().
@@ -49,8 +55,10 @@ public class DeliveryDto {
                 distance(delivery.getDistance()).
                 address(delivery.getAddress()).
                 callCheck(delivery.isCallCheck()).
+                deliveryCheck(delivery.isDeliveryCheck()).
                 requests(delivery.getRequests()).
                 pay(delivery.getPay()).
+                totalPay(delivery.getTotalPay()).
                 build();
     }
 }
