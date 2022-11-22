@@ -60,7 +60,7 @@ public class OrderService {
                     menuName(order.getMenuId().getMenuName()).
                     storeNmae(order.getStoreId().getName()).
                     price(order.getMenuId().getPrice()*order.getNumber()).
-                    categoryName(order.getStoreId().getCategory().getCategoryName()).
+                    categoryName(order.getStoreId().getCategoryName().getCategoryName()).
                     build();
 
             orderDisplayDtoList.add(orderDisplayDto);
