@@ -51,6 +51,8 @@ public class DeliveryService {
                 .distance(deliveryDto.getDistance())
                 .address(deliveryDto.getAddress())
                 .callCheck(deliveryDto.isCallCheck())
+                .requests(deliveryDto.getRequests())
+                .pay(deliveryDto.getPay())
                 .build();
 
 
@@ -78,6 +80,8 @@ public class DeliveryService {
                     .distance(delivery.getDistance())
                     .address(delivery.getAddress())
                     .callCheck(delivery.isCallCheck())
+                    .requests(delivery.getRequests())
+                    .pay(delivery.getPay())
                     .build();
 
             deliveryDtos.add(deliveryDto);

@@ -39,4 +39,10 @@ public class Delivery {
 
     @NotNull
     private boolean callCheck;
+
+    @Column(nullable = true)
+    private String requests; // 요청사항
+
+    @NotNull
+    private int pay; // 배달료
 }

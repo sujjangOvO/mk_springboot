@@ -31,6 +31,9 @@ public class StoreDto {
 	@NotNull
 	private String category;
 
+	@NotNull
+	private String contact;
+
 	public static StoreDto from(Store store){
 		if(store==null) return null;
 		return StoreDto.builder()

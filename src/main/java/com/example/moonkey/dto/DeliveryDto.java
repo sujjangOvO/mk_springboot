@@ -3,6 +3,7 @@ package com.example.moonkey.dto;
 import com.example.moonkey.domain.*;
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -33,6 +34,12 @@ public class DeliveryDto {
     @NotNull
     private boolean callCheck;
 
+    @Column(nullable = true)
+    private String requests;
+
+    @NotNull
+    private int pay;
+
     public static DeliveryDto from(Delivery delivery){
         return DeliveryDto.builder().
                 deliveryId(delivery.getDeliveryId()).
@@ -42,6 +49,8 @@ public class DeliveryDto {
                 distance(delivery.getDistance()).
                 address(delivery.getAddress()).
                 callCheck(delivery.isCallCheck()).
+                requests(delivery.getRequests()).
+                pay(delivery.getPay()).
                 build();
     }
 }

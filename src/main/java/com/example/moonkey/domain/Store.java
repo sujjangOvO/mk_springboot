@@ -37,4 +37,7 @@ public class Store {
     @JoinColumn(name="categoryName")
     private Category category;
 
+    @NotNull
+    private String contact;
+
 }
