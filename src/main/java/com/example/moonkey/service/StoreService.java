@@ -48,7 +48,7 @@ public class StoreService {
 				.name(storeDto.getName())
 				.address(storeDto.getAddress())
 				.description(storeDto.getDescription())
-				.category(category)
+				.categoryName(category)
 				.ownerId(account)
 				.build();
 
@@ -91,7 +91,7 @@ public class StoreService {
 							.address(store.getAddress())
 							.name(store.getName())
 							.description(store.getDescription())
-							.category(store.getCategory().getCategoryName())
+							.category(store.getCategoryName().getCategoryName())
 							.build();
 			storeDisplayDtos.add(storeDisplayDto);
 		}

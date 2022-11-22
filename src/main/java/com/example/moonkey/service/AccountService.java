@@ -101,7 +101,7 @@ public class AccountService {
         // 받아온 order를 기반으로 category별 주문 횟수를 categoryCounts 에 HashMap 형태로 정리
         while(iter.hasNext()){
             Orders order = iter.next();
-            String category = order.getStoreId().getCategory().getCategoryName();
+            String category = order.getStoreId().getCategoryName().getCategoryName();
             int nums = order.getNumber();
 
             categoryCounts.put(category, categoryCounts.getOrDefault(category,0)+nums);

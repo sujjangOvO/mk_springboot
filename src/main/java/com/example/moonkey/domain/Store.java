@@ -35,7 +35,7 @@ public class Store {
 
     @ManyToOne
     @JoinColumn(name="categoryName")
-    private Category category;
+    private Category categoryName;
 
     @NotNull
     private String contact;
