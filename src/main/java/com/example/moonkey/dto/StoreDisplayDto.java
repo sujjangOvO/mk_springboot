@@ -31,6 +31,9 @@ public class StoreDisplayDto {
 	@NotNull
 	private String category;
 
+	@NotNull
+	private String contact;
+
 	public static StoreDisplayDto from(Store store){
 		if(store==null) return null;
 		return StoreDisplayDto.builder()
@@ -38,7 +41,8 @@ public class StoreDisplayDto {
 				.name(store.getName())
 				.address(store.getAddress())
 				.description(store.getDescription())
-				.category(store.getCategory().getCategoryName())
+				.category(store.getCategoryName().getCategoryName())
+				.contact(store.getContact())
 				.build();
 	}
 

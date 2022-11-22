@@ -41,7 +41,7 @@ public class StoreDto {
 				.address(store.getAddress())
 				.ownerId(store.getOwnerId().getUid())
 				.description(store.getDescription())
-				.category(store.getCategory().getCategoryName())
+				.category(store.getCategoryName().getCategoryName())
 				.build();
 	}
 
