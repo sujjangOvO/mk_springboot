@@ -4,6 +4,7 @@ import com.example.moonkey.domain.Account;
 import com.example.moonkey.domain.Party;
 import com.example.moonkey.exception.NotFoundMemberException;
 import com.example.moonkey.repository.AccountRepository;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,6 +21,7 @@ import java.util.Set;
 public class PartyDto {
 
     @Autowired
+    @JsonIgnore
     private AccountRepository accountRepository;
 
     @NotNull
