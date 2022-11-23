@@ -1,6 +1,7 @@
 package com.example.moonkey.dto;
 
 import com.example.moonkey.domain.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -44,6 +45,7 @@ public class DeliveryDto {
     private int pay;
 
     @Column(nullable = true)
+    @JsonIgnore
     private long totalPay;
 
     public static DeliveryDto from(Delivery delivery){

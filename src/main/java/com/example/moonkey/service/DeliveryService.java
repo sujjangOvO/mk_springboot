@@ -4,6 +4,7 @@ import com.example.moonkey.domain.Account;
 import com.example.moonkey.domain.Delivery;
 import com.example.moonkey.domain.Orders;
 import com.example.moonkey.dto.DeliveryDto;
+import com.example.moonkey.exception.NotFoundDeliveryException;
 import com.example.moonkey.exception.NotFoundMemberException;
 import com.example.moonkey.exception.NotFoundOrderException;
 import com.example.moonkey.repository.AccountRepository;
@@ -237,5 +238,16 @@ public class DeliveryService {
         return deliveryDtos;
     }
 
+    @Transactional
+    public DeliveryDto setDeliveryCheck(long deliveryId){
+
+        Delivery delivery = deliveryRepository.findOneByDeliveryId(deliveryId)
+                .orElseThrow(()->new NotFoundDeliveryException("Delivery not found"));
+
+        delivery.setDeliveryCheck(true);
+        deliveryRepository.save(delivery);
+
+        return DeliveryDto.from(delivery);
+    }
 
 }
