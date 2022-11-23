@@ -46,6 +46,12 @@ public class StoreController {
 		return ResponseEntity.ok(storeService.getStore(name));
 	}
 
+	@GetMapping("/store/get/{ownerId}")
+	@PreAuthorize("hasAnyRole('USER','ADMIN')")
+	public ResponseEntity<StoreDto> getStoreInfoByUid(@PathVariable("ownerId") long ownerId){
+		return ResponseEntity.ok(storeService.getStore(ownerId));
+	}
+
 	@GetMapping("/store/list")
 	public ResponseEntity<List<StoreDisplayDto>> getStores(HttpServletRequest request){
 		return ResponseEntity.ok(storeService.getStores());

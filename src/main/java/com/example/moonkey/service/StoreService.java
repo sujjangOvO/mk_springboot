@@ -78,6 +78,17 @@ public class StoreService {
 	}
 
 	@Transactional
+	public StoreDto getStore(long ownerId){
+		Account account = accountRepository.findAccountByUid(ownerId)
+				.orElseThrow(()->new NotFoundMemberException("Member not found"));
+
+		Store store = storeRepository.findStoreByOwnerId(account)
+				.orElseThrow(()->new NotFoundStoreException("Store not found"));
+
+		return StoreDto.from(store);
+	}
+
+	@Transactional
 	public List<StoreDisplayDto> getStores(){
 
 		List<Store> storeList = storeRepository.findAll();

@@ -16,6 +16,9 @@ import javax.validation.constraints.NotNull;
 public class StoreDto {
 
 	@NotNull
+	private long storeId;
+
+	@NotNull
 	private String name;
 
 	@NotNull
@@ -37,6 +40,7 @@ public class StoreDto {
 	public static StoreDto from(Store store){
 		if(store==null) return null;
 		return StoreDto.builder()
+				.storeId(store.getStoreId())
 				.name(store.getName())
 				.address(store.getAddress())
 				.ownerId(store.getOwnerId().getUid())
