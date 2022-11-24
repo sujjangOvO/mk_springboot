@@ -2,12 +2,14 @@ package com.example.moonkey.service;
 
 import com.example.moonkey.domain.Account;
 import com.example.moonkey.domain.Category;
+import com.example.moonkey.domain.Menu;
 import com.example.moonkey.dto.StoreDisplayDto;
 import com.example.moonkey.dto.StoreDto;
 import com.example.moonkey.exception.NotFoundMemberException;
 import com.example.moonkey.exception.NotFoundStoreException;
 import com.example.moonkey.repository.AccountRepository;
 import com.example.moonkey.repository.CategoryRepository;
+import com.example.moonkey.repository.MenuRepository;
 import com.example.moonkey.repository.StoreRepository;
 import com.example.moonkey.util.SecurityUtil;
 import com.example.moonkey.domain.Store;
@@ -26,12 +28,14 @@ public class StoreService {
 	private final StoreRepository storeRepository;
 	private final AccountRepository accountRepository;
 	private final CategoryRepository categoryRepository;
+	private final MenuRepository menuRepository;
 
 
-	public StoreService(StoreRepository storeRepository, AccountRepository accountRepository, CategoryRepository categoryRepository){
+	public StoreService(StoreRepository storeRepository, AccountRepository accountRepository, CategoryRepository categoryRepository, MenuRepository menuRepository){
 		this.storeRepository = storeRepository;
 		this.accountRepository = accountRepository;
 		this.categoryRepository = categoryRepository;
+		this.menuRepository = menuRepository;
 	}
 
 	@Transactional
@@ -63,7 +67,12 @@ public class StoreService {
 		Store store = storeRepository.findOneByStoreId(store_id);
 		if (store != null) {
 			String name = store.getName();
+			List<Menu> menuList = menuRepository.findAllByStoreId(store);
+			Iterator<Menu> menuIter = menuList.iterator();
+
+			menuRepository.deleteAll(menuList);
 			storeRepository.delete(store);
+
 			return "Success to delete" + name;
 		}
 		return "Store not found";

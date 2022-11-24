@@ -38,7 +38,7 @@ public class StoreController {
 		return ResponseEntity.ok(storeService.register(storeDto));
 	}
 
-	@PostMapping("/store/leave/{storeId}")
+	@PostMapping("/store/unreg/{storeId}")
 	public ResponseEntity <String> unregister(
 			@PathVariable("storeId") Long storeId
 	){
