@@ -218,8 +218,11 @@ public class PartyService {
 
 
         Set<Account> members = party.getMembers();
-        if(!members.remove(account)){
+        if(!members.contains(account)){
             throw new NotIncludeMemberException("Not include member in party");
+        }
+        else{
+            members.remove(account);
         }
 
         party = Party.builder()
