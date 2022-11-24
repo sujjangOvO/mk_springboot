@@ -8,10 +8,8 @@ import com.example.moonkey.repository.ReviewRepository;
 import com.example.moonkey.repository.StoreRepository;
 import com.example.moonkey.service.ReviewService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -36,4 +34,14 @@ public class ReviewController {
 
         return ResponseEntity.ok(reviewService.storeReviewList(storeId));
     }
+
+    @PostMapping("/review/{storeId}/post")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<ReviewDto> reviewRegister(@PathVariable("storeId") long storeId
+            , @RequestBody ReviewDto reviewDto){
+
+        Store store = storeRepository.findStoreByStoreId(storeId).orElseThrow(()->new NotFoundStoreException("Store not found"));
+        return ResponseEntity.ok(reviewService.reviewRegister(reviewDto,store));
+    }
+
 }
