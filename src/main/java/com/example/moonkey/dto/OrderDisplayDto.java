@@ -46,7 +46,7 @@ public class OrderDisplayDto {
 				orderDate(order.getOrderDate()).
 				menuName(order.getMenuId().getMenuName()).
 				storeNmae(order.getStoreId().getName()).
-				//categoryName(order.)
+				categoryName(order.getStoreId().getCategoryName().getCategoryName()).
 				build();
 	}
 
