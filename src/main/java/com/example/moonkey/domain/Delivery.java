@@ -54,4 +54,7 @@ public class Delivery {
 
     @Column(nullable = true)
     private long totalPay; // 배달비 총 정산금
+
+    @Builder.Default
+    private boolean deleted = Boolean.FALSE;
 }

@@ -28,6 +28,7 @@ public class Party {
 
     @OneToMany
     @JoinColumn(name = "accountUid")
+    @Builder.Default
     private Set<Account> members = new HashSet<>();
 
 
@@ -46,4 +47,6 @@ public class Party {
         }
         return memberList;
     }
+    @Builder.Default
+    private boolean deleted = Boolean.FALSE;
 }

@@ -38,4 +38,7 @@ public class Store {
     @NotNull
     private String contact;
 
+    @Builder.Default
+    private boolean deleted = Boolean.FALSE;
+
 }

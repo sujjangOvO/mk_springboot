@@ -25,6 +25,7 @@ public class PartyDisplayDto {
     private String partyTitle;
 
     @NotNull
+    @Builder.Default
     private Set<Long> members = new HashSet<>();
 
     public static PartyDisplayDto from(Party party){

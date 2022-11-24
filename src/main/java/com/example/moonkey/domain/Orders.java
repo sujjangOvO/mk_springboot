@@ -38,4 +38,7 @@ public class Orders {
     @ManyToOne
     @JoinColumn(name = "uid")
     private Account uid;
+
+    @Builder.Default
+    private boolean deleted = Boolean.FALSE;
 }

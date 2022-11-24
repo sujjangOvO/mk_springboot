@@ -36,4 +36,7 @@ public class Menu {
 
     @Column(nullable = true)
     private String description;
+
+    @Builder.Default
+    private boolean deleted = Boolean.FALSE;
 }

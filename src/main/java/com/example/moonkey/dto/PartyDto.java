@@ -31,6 +31,7 @@ public class PartyDto {
     private String partyTitle;
 
     @NotNull
+    @Builder.Default
     private Set<Long> members = new HashSet<>(); // uid 집합
 
     private long storeId;

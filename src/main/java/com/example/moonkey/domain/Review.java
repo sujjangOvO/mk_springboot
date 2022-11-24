@@ -36,4 +36,6 @@ public class Review {
     @JoinColumn(name = "storeId")
     private Store storeId; // 리뷰 of 가게
 
+    @Builder.Default
+    private boolean deleted = Boolean.FALSE;
 }

@@ -61,4 +61,7 @@ public class Account {
     @ManyToOne
     @JoinColumn(name = "partyId")
     private Party partyId;
+
+    @Builder.Default
+    private boolean deleted = Boolean.FALSE;
 }

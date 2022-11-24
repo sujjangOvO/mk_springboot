@@ -44,4 +44,7 @@ public class Package {
         }
         return ordersList;
     }
+
+    @Builder.Default
+    private boolean deleted = Boolean.FALSE;
 }
