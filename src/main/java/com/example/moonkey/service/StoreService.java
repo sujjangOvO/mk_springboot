@@ -76,6 +76,12 @@ public class StoreService {
 				.orElseThrow(()->new NotFoundStoreException("Store not found")));
 	}
 
+	public StoreDto getStoreByStoreId(long storeId){
+		return StoreDto.from(
+				storeRepository.findStoreByStoreId(storeId)
+						.orElseThrow(()->new NotFoundStoreException("Store not found")));
+	}
+
 	@Transactional
 	public StoreDto getStore(long ownerId){
 		Account account = accountRepository.findAccountByUid(ownerId)

@@ -46,6 +46,11 @@ public class StoreController {
 		return ResponseEntity.ok(storeService.getStore(name));
 	}
 
+	@GetMapping("/store/{storeId}/get")
+	public ResponseEntity<StoreDto> getStoreByStoreId(@PathVariable("storeId") long storeId){
+		return ResponseEntity.ok(storeService.getStoreByStoreId(storeId));
+	}
+
 	@GetMapping("/store/get/{ownerId}")
 	public ResponseEntity<StoreDto> getStoreInfoByUid(@PathVariable("ownerId") long ownerId){
 		return ResponseEntity.ok(storeService.getStore(ownerId));
