@@ -23,8 +23,7 @@ public class Package {
     @Column(name = "packageId")
     private long packageId;
 
-    @OneToMany
-    @JoinColumn(name="orderId")
+    @OneToMany(mappedBy= "orderId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Orders> orderId; // FK
 
     @OneToOne
