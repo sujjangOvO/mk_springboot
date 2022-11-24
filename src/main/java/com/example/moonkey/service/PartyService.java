@@ -81,8 +81,16 @@ public class PartyService {
         /* TO-DO
             현재 로그인 계정 기준 정렬
          */
-        List<StatsDto> statsList = accountService.getMyUserStats();
+        List<StatsDto> statsList = accountService.getMyUserStats(); // 카테고리별 사용자 주문량 및 순서
+        int i =0;
+        Iterator<StatsDto> statsIter = statsList.iterator();
+        HashMap<String,Integer> ordering = new HashMap<>();
 
+        while(statsIter.hasNext()){
+            StatsDto statsDto = statsIter.next();
+            ordering.put(statsDto.getCategory(),i++);
+        }
+        //Collections.sort(partyDtos,);
 
         return partyDtos;
     }

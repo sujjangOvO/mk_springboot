@@ -56,6 +56,12 @@ public class StoreController {
 		return ResponseEntity.ok(storeService.getStores());
 	}
 
+	@GetMapping("store/myList")
+	@PreAuthorize("hasAnyRole('USER','ADMIN')")
+	public ResponseEntity<List<StoreDto>> getMyStores(HttpServletRequest request){
+		return ResponseEntity.ok(storeService.getMyStores());
+	}
+
 //	@GetMapping("/store")
 //	@PreAuthorize("hasAnyRole('USER','ADMIN')")
 //	public ResponseEntity<List<StoreDto>> getStoresInfo(HttpServletRequest request){

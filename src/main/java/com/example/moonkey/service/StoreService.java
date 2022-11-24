@@ -25,7 +25,6 @@ import java.util.List;
 public class StoreService {
 	private final StoreRepository storeRepository;
 	private final AccountRepository accountRepository;
-
 	private final CategoryRepository categoryRepository;
 
 
@@ -111,6 +110,22 @@ public class StoreService {
 			storeDisplayDtos.add(storeDisplayDto);
 		}
 		return storeDisplayDtos;
+	}
 
+	@Transactional
+	public List<StoreDto> getMyStores(){
+		Account user =  SecurityUtil.getCurrentUsername()
+				.flatMap(accountRepository::findOneWithAuthoritiesById)
+				.orElseThrow(()->new NotFoundMemberException("Member not found"));
+		List<Store> storeList = storeRepository.findAllByOwnerId(user);
+		List<StoreDto> storeDtoList = new ArrayList<>(Collections.emptyList());
+
+		Iterator<Store> iter = storeList.iterator();
+
+		while(iter.hasNext()){
+			Store store = iter.next();
+			storeDtoList.add(StoreDto.from(store));
+		}
+		return storeDtoList;
 	}
 }

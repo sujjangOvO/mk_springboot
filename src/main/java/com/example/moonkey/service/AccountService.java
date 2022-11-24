@@ -25,7 +25,6 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final OrderRepository orderRepository;
     private final PasswordEncoder passwordEncoder;
-
     private final CategoryRepository categoryRepository;
 
     public AccountService(AccountRepository accountRepository, OrderRepository orderRepository, PasswordEncoder passwordEncoder, CategoryRepository categoryRepository){
