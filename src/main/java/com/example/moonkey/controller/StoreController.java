@@ -1,7 +1,10 @@
 package com.example.moonkey.controller;
 
+import com.example.moonkey.domain.Store;
 import com.example.moonkey.dto.StoreDto;
 import com.example.moonkey.dto.StoreDisplayDto;
+import com.example.moonkey.exception.NotFoundStoreException;
+import com.example.moonkey.repository.StoreRepository;
 import com.example.moonkey.service.StoreService;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +23,11 @@ import java.util.List;
 public class StoreController {
 
 	private final StoreService storeService;
+	private final StoreRepository storeRepository;
 
-	public StoreController(StoreService storeService){
+	public StoreController(StoreService storeService, StoreRepository storeRepository){
 		this.storeService = storeService;
+		this.storeRepository = storeRepository;
 	}
 
 	@PostMapping("/store/reg")
@@ -48,6 +53,7 @@ public class StoreController {
 
 	@GetMapping("/store/{storeId}/get")
 	public ResponseEntity<StoreDto> getStoreByStoreId(@PathVariable("storeId") long storeId){
+		Store store = storeRepository.findStoreByStoreId(storeId).orElseThrow(()->new NotFoundStoreException("Store not found"));
 		return ResponseEntity.ok(storeService.getStoreByStoreId(storeId));
 	}
 
