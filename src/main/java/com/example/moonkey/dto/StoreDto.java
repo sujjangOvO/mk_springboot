@@ -46,6 +46,7 @@ public class StoreDto {
 				.ownerId(store.getOwnerId().getUid())
 				.description(store.getDescription())
 				.category(store.getCategoryName().getCategoryName())
+				.contact(store.getContact())
 				.build();
 	}
 
