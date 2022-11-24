@@ -83,4 +83,32 @@ public class PackageService {
         return packageDtoList;
 
     }
+
+
+    @Transactional
+    public List<PackageDto> getPackagesByStoreId(long storeId){
+        List<Package> packageList = packageRepository.findAll();
+        Iterator<Package> iter = packageList.iterator();
+
+        List<PackageDto> packageDtoList = new ArrayList<>(Collections.emptyList());
+
+        while(iter.hasNext())
+        {
+            Package aPackage = iter.next();
+
+            if(aPackage.getPartyId().getStoreId().getStoreId() == storeId){
+                PackageDto packageDto = PackageDto.builder()
+                        .packageId(aPackage.getPackageId())
+                        .product(aPackage.getProduct())
+                        .address(aPackage.getAddress())
+                        .amount(aPackage.getAmount())
+                        .orderId(aPackage.getOrderIds())
+                        .partyId(aPackage.getPartyId().getPartyId())
+                        .build();
+                packageDtoList.add(packageDto);
+            }
+        }
+        return packageDtoList;
+
+    }
 }

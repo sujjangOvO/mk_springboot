@@ -37,6 +37,11 @@ public class PackageController {
         return ResponseEntity.ok(packageService.getPackages());
     }
 
+    @GetMapping("/package/{storeId}/list")
+    public ResponseEntity<List<PackageDto>> getPackages(@PathVariable long storeId){
+        return ResponseEntity.ok(packageService.getPackagesByStoreId(storeId));
+    }
+
     @PostMapping("/package/reg/{orderId}/{partyId}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<PackageDto> register(
