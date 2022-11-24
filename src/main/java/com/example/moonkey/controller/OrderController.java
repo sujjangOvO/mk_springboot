@@ -1,7 +1,10 @@
 package com.example.moonkey.controller;
 
+import com.example.moonkey.domain.Account;
 import com.example.moonkey.dto.OrderDisplayDto;
 import com.example.moonkey.dto.OrderDto;
+import com.example.moonkey.exception.NotFoundMemberException;
+import com.example.moonkey.repository.AccountRepository;
 import com.example.moonkey.service.OrderService;
 
 import org.springframework.http.HttpHeaders;
@@ -21,15 +24,23 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
+    private final AccountRepository accountRepository;
 
-    public OrderController(OrderService orderService){
+    public OrderController(OrderService orderService, AccountRepository accountRepository){
         this.orderService = orderService;
+        this.accountRepository = accountRepository;
     }
 
 
     @GetMapping("/order/list")
     public ResponseEntity<List<OrderDisplayDto>> getStores(HttpServletRequest request){
         return ResponseEntity.ok(orderService.getOrderList());
+    }
+
+    @GetMapping("/order/list/{uid}")
+    public ResponseEntity<List<OrderDisplayDto>> getOrderListByUid(@PathVariable long uid){   // 사용자 주문내역
+        Account account = accountRepository.findAccountByUid(uid).orElseThrow(()->new NotFoundMemberException("Member not found"));
+        return ResponseEntity.ok(orderService.getOrderListByUid(uid));
     }
 
     @PostMapping("/order/reg")

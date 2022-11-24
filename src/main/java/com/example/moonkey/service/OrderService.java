@@ -69,6 +69,35 @@ public class OrderService {
     }
 
     @Transactional
+    public List<OrderDisplayDto> getOrderListByUid(long uid){
+
+        List<Orders> ordersList = orderRepository.findAll();
+        Iterator<Orders> iter = ordersList.iterator();
+
+        List<OrderDisplayDto> orderDisplayDtoList = new ArrayList<>(Collections.emptyList());
+
+        while(iter.hasNext())
+        {
+            Orders order = iter.next();
+
+            if(order.getUid().getUid() == uid) {
+                OrderDisplayDto orderDisplayDto = OrderDisplayDto.builder().
+                        orderId(order.getOrderId()).
+                        number(order.getNumber()).
+                        orderDate(order.getOrderDate()).
+                        menuName(order.getMenuId().getMenuName()).
+                        storeNmae(order.getStoreId().getName()).
+                        price(order.getMenuId().getPrice() * order.getNumber()).
+                        categoryName(order.getStoreId().getCategoryName().getCategoryName()).
+                        build();
+
+                orderDisplayDtoList.add(orderDisplayDto);
+            }
+        }
+        return orderDisplayDtoList;
+    }
+
+    @Transactional
     public OrderDto register(OrderDto orderDto){
 
         Account account =
