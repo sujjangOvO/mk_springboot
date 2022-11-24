@@ -34,6 +34,11 @@ public class PartyController {
         return ResponseEntity.ok(partyService.getParties());
     }
 
+    @GetMapping("/party/{uid}/list")
+    public ResponseEntity<PartyDisplayDto> userPartyList(@PathVariable long uid){
+        return ResponseEntity.ok(partyService.getUserParties(uid));
+    }
+
     @GetMapping("/party/list/{storeId}")
     public ResponseEntity<List<PartyDisplayDto>> storePartyList(
             @PathVariable @Valid long storeId){

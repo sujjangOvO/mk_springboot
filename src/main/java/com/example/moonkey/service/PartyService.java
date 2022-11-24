@@ -6,6 +6,7 @@ import com.example.moonkey.domain.Store;
 import com.example.moonkey.dto.PartyDisplayDto;
 import com.example.moonkey.dto.PartyDto;
 import com.example.moonkey.dto.StatsDto;
+import com.example.moonkey.exception.DuplicateMemberInPartyException;
 import com.example.moonkey.exception.NotFoundMemberException;
 import com.example.moonkey.exception.NotFoundPartyException;
 import com.example.moonkey.exception.NotIncludeMemberException;
@@ -116,6 +117,31 @@ public class PartyService {
     }
 
     @Transactional
+    public PartyDisplayDto getUserParties(long uid){
+        Account user = accountRepository.findAccountByUid(uid).
+                orElseThrow(()->new NotFoundMemberException("Member not found"));
+
+        List<Party> partyList = partyRepository.findAll();
+        Iterator<Party> iter = partyList.iterator();
+        PartyDisplayDto partyDto = null;
+
+        while(iter.hasNext()) {
+            Party party = iter.next();
+            Set<Account> members = party.getMembers();
+
+            if(members.contains(user)){
+                partyDto = PartyDisplayDto.builder()
+                        .partyId(party.getPartyId())
+                        .partyTitle(party.getPartyTitle())
+                        .members(party.getUids())
+                        .build();
+            }
+        }
+
+        return	partyDto;
+    }
+
+    @Transactional
     public List<PartyDisplayDto> getParties(long storeId){
         List<Party> partyList = partyRepository.findAll();
         Iterator<Party> iter = partyList.iterator();
@@ -166,7 +192,9 @@ public class PartyService {
 
 
         Set<Account> members = party.getMembers();
-        members.add(account);
+
+        if(!members.contains(account)) members.add(account);
+        else throw new DuplicateMemberInPartyException("Member already exits in party"); // 파티에 이미 있는 사용자인 경우 예외 처리
 
         party = Party.builder()
                 .partyId(party.getPartyId())
