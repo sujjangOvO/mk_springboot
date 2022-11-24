@@ -40,6 +40,7 @@ public class OrderService {
         this.storeRepository = storeRepository;
     }
 
+
     @Transactional
     public List<OrderDisplayDto> getOrderList(){
 
@@ -106,10 +107,10 @@ public class OrderService {
                         .orElseThrow(()->new NotFoundMemberException("Member not found"));
 
         Menu menu = menuRepository.findOneByMenuId(orderDto.getMenuId());
-        if(menu == null) new NotFoundMenuException("Menu not found");
+        if(menu == null) throw new NotFoundMenuException("Menu not found");
 
         Store store = storeRepository.findOneByStoreId(orderDto.getStoreId());
-        if(store == null) new NotFoundStoreException("Store not found");
+        if(store == null) throw new NotFoundStoreException("Store not found");
 
         LocalDateTime now = LocalDateTime.now();
 
