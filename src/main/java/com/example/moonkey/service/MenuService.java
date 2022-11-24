@@ -33,16 +33,30 @@ public class MenuService {
 
 		Store store = storeRepository.findOneByStoreId(storeId);
 
-		Menu menu = Menu.builder()
-				.menuName(menuDto.getMenuName())
-				.storeId(store)
-				.description(menuDto.getDescription())
-				.options(menuDto.getOptions())
-				.price(menuDto.getPrice())
-				.options(menuDto.getOptions())
-				.build();
+		if(menuDto.getMenuId()!=0) {
+			Menu originMenu = menuRepository.findOneByMenuId(menuDto.getMenuId());
+			Menu menu = Menu.builder()
+					.menuId(originMenu.getMenuId())
+					.menuName(menuDto.getMenuName())
+					.storeId(store)
+					.description(menuDto.getDescription())
+					.options(menuDto.getOptions())
+					.price(menuDto.getPrice())
+					.build();
+			return menuDto.from(menuRepository.save(menu));
+		}
+		else {
+			 Menu menu = Menu.builder()
+					.menuName(menuDto.getMenuName())
+					.storeId(store)
+					.description(menuDto.getDescription())
+					.options(menuDto.getOptions())
+					.price(menuDto.getPrice())
+					.build();
+			return menuDto.from(menuRepository.save(menu));
+		}
 
-		return menuDto.from(menuRepository.save(menu));
+
 	}
 
 	@Transactional

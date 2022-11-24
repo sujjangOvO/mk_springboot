@@ -19,7 +19,6 @@ public class MenuDto {
 	private long menuId;
 	@NotNull
 	private int price;
-
 	@NotNull
 	private String menuName;
 
