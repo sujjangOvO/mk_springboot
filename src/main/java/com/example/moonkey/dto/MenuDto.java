@@ -19,6 +19,7 @@ public class MenuDto {
 	private long menuId;
 	@NotNull
 	private int price;
+
 	@NotNull
 	private String menuName;
 
@@ -34,6 +35,7 @@ public class MenuDto {
 
 	public static MenuDto from(Menu menu){
 		return MenuDto.builder()
+				.menuId(menu.getMenuId())
 				.menuName(menu.getMenuName())
 				.price(menu.getPrice())
 				.options(menu.getOptions())

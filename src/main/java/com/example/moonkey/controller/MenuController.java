@@ -22,17 +22,18 @@ public class MenuController {
 
 		@PostMapping("{storeId}/menu/reg")
 		public ResponseEntity<MenuDto> register (
-				@PathVariable("storeId") String storeId , @Valid @RequestBody MenuDto menuDto
+				@PathVariable("storeId") Long storeId , @Valid @RequestBody MenuDto menuDto
 		){
+
 			return ResponseEntity.ok(
-					menuService.register(Long.parseLong(storeId),menuDto));
+					menuService.register(storeId,menuDto));
 		}
 
 		@PostMapping("{storeId}/menu/unreg/{menuId}")
 		public ResponseEntity<String> unregister(
-				@PathVariable("storeId") String storeId, @PathVariable("menuId") String menuId
+				@PathVariable("storeId") Long storeId, @PathVariable("menuId") Long menuId
 		){
-			return ResponseEntity.ok(menuService.unregister(Long.getLong(menuId)));
+			return ResponseEntity.ok(menuService.unregister(menuId));
 		}
 
 		@GetMapping("/{storeId}/menu/list")
