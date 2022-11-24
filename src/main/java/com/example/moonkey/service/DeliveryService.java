@@ -250,4 +250,16 @@ public class DeliveryService {
         return DeliveryDto.from(delivery);
     }
 
+    @Transactional
+    public DeliveryDto setCallCheck(long deliveryId){
+
+        Delivery delivery = deliveryRepository.findOneByDeliveryId(deliveryId)
+                .orElseThrow(()->new NotFoundDeliveryException("Delivery not found"));
+
+        delivery.setCallCheck(true);
+        deliveryRepository.save(delivery);
+
+        return DeliveryDto.from(delivery);
+    }
+
 }

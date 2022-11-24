@@ -58,6 +58,9 @@ public class DeliveryController {
         return ResponseEntity.ok((deliveryService.setDeliveryCheck(deliveryId)));
     }
 
-
+    @PatchMapping("/delivery/callCheck/{deliveryId}")
+    public ResponseEntity<DeliveryDto> setCallCheck(@PathVariable @Valid long deliveryId){
+        return ResponseEntity.ok((deliveryService.setCallCheck(deliveryId)));
+    }
 
 }
