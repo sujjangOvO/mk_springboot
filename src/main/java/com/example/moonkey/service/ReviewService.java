@@ -27,6 +27,26 @@ public class ReviewService {
     }
 
     @Transactional
+    public List<ReviewDto> myReviewList(long uid){
+        List<Review> reviewList = reviewRepository.findAll();
+        Iterator<Review> iter = reviewList.iterator();
+
+        List<ReviewDto> reviewDtos = new ArrayList<>(Collections.emptyList());
+
+        while(iter.hasNext())
+        {
+            Review review = iter.next();
+
+            if(review.getAccount().getUid() == uid) {
+                ReviewDto reviewDto = ReviewDto.from(review);
+                reviewDtos.add(reviewDto);
+            }
+        }
+
+        return reviewDtos;
+    }
+
+    @Transactional
     public List<ReviewDto> storeReviewList(long storeId){
         List<Review> reviewList = reviewRepository.findAll();
         Iterator<Review> iter = reviewList.iterator();
@@ -37,10 +57,7 @@ public class ReviewService {
         {
             Review review = iter.next();
 
-            long reviewsStoreId = review.getStoreId().getStoreId();
-            System.out.println("reviewsStoreId: "+reviewsStoreId);
-
-            if(reviewsStoreId == storeId) {
+            if(review.getStoreId().getStoreId() == storeId) {
                 ReviewDto reviewDto = ReviewDto.from(review);
                 reviewDtos.add(reviewDto);
             }
