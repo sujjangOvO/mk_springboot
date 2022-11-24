@@ -37,6 +37,12 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getOrderList());
     }
 
+
+    @GetMapping("/order/{orderId}/get")  //  OrderId로 Order 정보 찾기
+    public ResponseEntity<OrderDisplayDto> getOrdersByOrderId(@PathVariable long orderId){
+        return ResponseEntity.ok(orderService.getOrdersByOrderId(orderId));
+    }
+
     @GetMapping("/order/list/{uid}")
     public ResponseEntity<List<OrderDisplayDto>> getOrderListByUid(@PathVariable long uid){   // 사용자 주문내역
         Account account = accountRepository.findAccountByUid(uid).orElseThrow(()->new NotFoundMemberException("Member not found"));

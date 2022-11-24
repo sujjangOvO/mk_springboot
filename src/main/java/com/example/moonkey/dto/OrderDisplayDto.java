@@ -39,4 +39,15 @@ public class OrderDisplayDto {
 	@NotNull
 	private int price;
 
+	public static OrderDisplayDto from(Orders order){
+		return OrderDisplayDto.builder().
+				orderId(order.getOrderId()).
+				number(order.getNumber()).
+				orderDate(order.getOrderDate()).
+				menuName(order.getMenuId().getMenuName()).
+				storeNmae(order.getStoreId().getName()).
+				//categoryName(order.)
+				build();
+	}
+
 }

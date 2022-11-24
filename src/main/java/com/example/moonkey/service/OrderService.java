@@ -143,4 +143,12 @@ public class OrderService {
 
         orderRepository.deleteById(orderDto.getOrderId());
     }
+
+    @Transactional
+    public OrderDisplayDto getOrdersByOrderId(long orderId){
+        Orders orders = orderRepository.findOneByOrderId(orderId)
+                .orElseThrow(()->new NotFoundOrderException("Order not found"));
+
+        return OrderDisplayDto.from(orders);
+    }
 }
