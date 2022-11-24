@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.*;
 
 @Getter
 @Setter
@@ -18,9 +19,9 @@ public class Package {
     @Column(name = "package_id")
     private long packageId;
 
-    @OneToOne
+    @OneToMany
     @JoinColumn(name="orderId")
-    private Orders orderId; // FK
+    private List<Orders> orderId; // FK
 
     @OneToOne
     @JoinColumn(name="partyId")
@@ -34,4 +35,13 @@ public class Package {
 
     @NotNull
     private int amount;
+
+    public List<Long> getOrderIds(){
+        List<Long> ordersList = new ArrayList<>(orderId.size());
+        Iterator<Orders> iter = orderId.iterator();
+        while(iter.hasNext()){
+            ordersList.add(iter.next().getOrderId());
+        }
+        return ordersList;
+    }
 }

@@ -10,6 +10,8 @@ import com.example.moonkey.exception.NotFoundPartyException;
 import com.example.moonkey.repository.*;
 import com.example.moonkey.repository.PackageRepository;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,20 +35,24 @@ public class PackageService {
 
     @Transactional
     public PackageDto register(PackageDto packageDto, long orderId, long partyId){
-        Orders orders = orderRepository.findOneByOrderId(orderId)
-                .orElseThrow(()->new NotFoundOrderException("Order not found"));
         Party party =  partyRepository.findOneByPartyId(partyId)
                 .orElseThrow(()->new NotFoundPartyException("Party not found"));
 
+        Orders orders = orderRepository.findOneByOrderId(orderId)
+                .orElseThrow(()->new NotFoundOrderException("Order notrder found"));
+
+        List<Orders> ordersList = packageDto.getOrders(packageDto.getOrderId());
+        ordersList.add(orders);
 
         Package aPackage = Package.builder()
                 .packageId(packageDto.getPackageId())
                 .product(packageDto.getProduct())
                 .address(packageDto.getAddress())
                 .amount(packageDto.getAmount())
-                .orderId(orders)
+                .orderId(ordersList)
                 .partyId(party)
                 .build();
+
 
         return packageDto.from(packageRepository.save(aPackage));
     }
@@ -62,12 +68,13 @@ public class PackageService {
         while(iter.hasNext())
         {
             Package aPackage = iter.next();
+
             PackageDto packageDto = PackageDto.builder()
                     .packageId(aPackage.getPackageId())
                     .product(aPackage.getProduct())
                     .address(aPackage.getAddress())
                     .amount(aPackage.getAmount())
-                    .orderId(aPackage.getOrderId().getOrderId())
+                    .orderId(aPackage.getOrderIds())
                     .partyId(aPackage.getPartyId().getPartyId())
                     .build();
 
