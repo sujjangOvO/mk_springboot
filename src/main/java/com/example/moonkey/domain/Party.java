@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -14,6 +16,8 @@ import java.util.*;
 @Getter
 @AllArgsConstructor
 @RequiredArgsConstructor
+@Where(clause = "deleted = false")
+@SQLDelete(sql="UPDATE party SET deleted = true WHERE party_id = ?")
 @Table(name = "party")
 public class Party {
 

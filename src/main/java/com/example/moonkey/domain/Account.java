@@ -2,6 +2,8 @@ package com.example.moonkey.domain;
 
 import lombok.*;
 import org.hibernate.annotations.GeneratorType;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -15,6 +17,8 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Where(clause = "deleted = false")
+@SQLDelete(sql="UPDATE account SET deleted = true WHERE uid = ?")
 @Table(name = "account")
 public class Account {
 

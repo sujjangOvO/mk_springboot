@@ -1,6 +1,8 @@
 package com.example.moonkey.domain;
 
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -11,12 +13,14 @@ import java.util.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Where(clause = "deleted = false")
+@SQLDelete(sql="UPDATE package SET deleted = true WHERE package_id = ?")
 @Entity
 @Table(name = "package")
 public class Package {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "package_id")
+    @Column(name = "packageId")
     private long packageId;
 
     @OneToMany

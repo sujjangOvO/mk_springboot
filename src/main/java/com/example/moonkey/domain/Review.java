@@ -3,6 +3,8 @@ package com.example.moonkey.domain;
 
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,6 +14,8 @@ import javax.validation.constraints.NotNull;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Where(clause = "deleted = false")
+@SQLDelete(sql="UPDATE review SET deleted = true WHERE review_id = ?")
 @Entity
 @Table(name = "review")
 public class Review {

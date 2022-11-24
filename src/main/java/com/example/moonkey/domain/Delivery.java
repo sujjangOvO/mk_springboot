@@ -3,6 +3,8 @@ package com.example.moonkey.domain;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -13,6 +15,8 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @DynamicInsert
+@Where(clause = "deleted = false")
+@SQLDelete(sql="UPDATE delivery SET deleted = true WHERE delivery_id = ?")
 @Entity
 @Table(name = "delivery")
 public class Delivery {

@@ -1,6 +1,8 @@
 package com.example.moonkey.domain;
 
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 
 import javax.persistence.*;
@@ -11,6 +13,8 @@ import javax.validation.constraints.NotNull;
 @Getter
 @AllArgsConstructor
 @RequiredArgsConstructor
+@Where(clause = "deleted = false")
+@SQLDelete(sql="UPDATE store SET deleted = true WHERE store_id = ?")
 @Table(name = "store")
 public class Store {
 
