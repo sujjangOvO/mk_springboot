@@ -6,10 +6,7 @@ import com.example.moonkey.domain.Store;
 import com.example.moonkey.dto.PartyDisplayDto;
 import com.example.moonkey.dto.PartyDto;
 import com.example.moonkey.dto.StatsDto;
-import com.example.moonkey.exception.DuplicateMemberInPartyException;
-import com.example.moonkey.exception.NotFoundMemberException;
-import com.example.moonkey.exception.NotFoundPartyException;
-import com.example.moonkey.exception.NotIncludeMemberException;
+import com.example.moonkey.exception.*;
 import com.example.moonkey.repository.AccountRepository;
 import com.example.moonkey.repository.PartyRepository;
 import com.example.moonkey.repository.StoreRepository;
@@ -34,14 +31,18 @@ public class PartyService {
     }
 
     @Transactional // 가게 정보 받아와야 함
-    public PartyDto register(long storeId, PartyDto partyDto){
-        Store store = storeRepository.findOneByStoreId(storeId);
+    public PartyDto register(long storeId, long uid, PartyDto partyDto){ // uid는 파티장
+        Store store = storeRepository.findStoreByStoreId(storeId)
+                .orElseThrow(()->new NotFoundStoreException("Store not found"));
+
+        Set<Account> members = new HashSet<>(Collections.emptyList());
+        members.add(accountRepository.findAccountByUid(uid).orElseThrow(()-> new NotFoundMemberException("Member not found")));
 
         Party party = Party.builder()
                 .storeId(store)
                 .partyId(partyDto.getPartyId())
                 .partyTitle(partyDto.getPartyTitle())
-                .members(partyDto.getAccounts(partyDto.getMembers()))
+                .members(members)
                 .build();
 
         return PartyDto.from(partyRepository.save(party));

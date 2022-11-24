@@ -52,11 +52,12 @@ public class PartyController {
         return ResponseEntity.ok(partyService.getParty(partyId));
     }
 
-    @PostMapping("/party/reg/{storeId}") // 어느 가게에 등록할 건지 추가 해둘 것
+    @PostMapping("/party/reg/{storeId}/{uid}") // 어느 가게에 누가 등록할 건지 추가 해둘 것
     public ResponseEntity<PartyDto> register(
-            @PathVariable @Valid long storeId, @Valid @RequestBody PartyDto partyDto
+            @PathVariable @Valid long storeId, @Valid @RequestBody PartyDto partyDto,
+            @PathVariable @Valid long uid
     ){
-        return ResponseEntity.ok(partyService.register(storeId,partyDto));
+        return ResponseEntity.ok(partyService.register(storeId, uid, partyDto));
     }
 
     @PostMapping("/party/unreg/{partyId}")
