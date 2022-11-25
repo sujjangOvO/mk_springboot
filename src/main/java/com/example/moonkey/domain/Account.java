@@ -1,14 +1,11 @@
 package com.example.moonkey.domain;
 
 import lombok.*;
-import org.hibernate.annotations.GeneratorType;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -48,14 +45,14 @@ public class Account {
     @Column(name="activated")
     private boolean activated; // 활성화여부
 
-    @ManyToMany // Account 객체와 authority 객체의 다대다 관계를 일대다, 다대일 관계의 조인 테이블로 정의하는 어노테이션
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "account_authority",
             joinColumns = @JoinColumn(name = "uid"),
             inverseJoinColumns = @JoinColumn(name="authorityName"))
     private Set<Authority> authorities;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(
             name="account_store",
             joinColumns = @JoinColumn(name = "uid"),

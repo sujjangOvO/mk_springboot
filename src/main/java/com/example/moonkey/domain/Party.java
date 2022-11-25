@@ -30,7 +30,7 @@ public class Party {
     @JoinColumn(name = "storeId")
     private Store storeId;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "accountUid")
     @Builder.Default
     private Set<Account> members = new HashSet<>();

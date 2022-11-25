@@ -67,6 +67,20 @@ public class AccountService {
         return accountDto.from(accountRepository.save(account));
     }
 
+    @Transactional
+    public AccountDto signout(long uid){
+        Account account = accountRepository.findAccountByUid(uid).
+                orElseThrow(() -> new NotFoundMemberException("Member not found"));
+
+        AccountDto accountDto = AccountDto.from(account);
+
+        accountRepository.delete(account);
+
+        return accountDto;
+    }
+
+
+
     @Transactional(readOnly = true)
     public AccountDto getUserWithAuthorities(String username){ // 인자로 받은 username에 해당하는 유저 객체와 권한 정보를 가져오는 메소드
         return AccountDto.from(accountRepository.findOneWithAuthoritiesById(username).orElse(null));

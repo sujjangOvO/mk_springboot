@@ -1,9 +1,11 @@
 package com.example.moonkey.controller;
 
+import com.example.moonkey.domain.Account;
 import com.example.moonkey.dto.AccountDto;
 import com.example.moonkey.dto.StatsDto;
+import com.example.moonkey.exception.NotFoundMemberException;
+import com.example.moonkey.repository.AccountRepository;
 import com.example.moonkey.service.AccountService;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +23,11 @@ import java.util.List;
 @RequestMapping("/app")
 public class AccountController {
     private final AccountService accountService;
+    private final AccountRepository accountRepository;
 
-    public AccountController(AccountService accountService){
+    public AccountController(AccountService accountService, AccountRepository accountRepository){
         this.accountService = accountService;
+        this.accountRepository = accountRepository;
     }
 
     @GetMapping("/helloAccount")
@@ -43,6 +47,16 @@ public class AccountController {
     ){
         return ResponseEntity.ok(accountService.signup(accountDto));
     }
+
+    @PostMapping("/account/signout/{uid}")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<AccountDto> signout(@PathVariable long uid){
+        Account account = accountRepository.findAccountByUid(uid)
+                .orElseThrow(()->new NotFoundMemberException("Member not found"));
+
+        return ResponseEntity.ok(accountService.signout(uid));
+    }
+
 
 
     // @PreAuthorize를 통해 USER, ADMIN 두가지 권한을 모두 허용했고
