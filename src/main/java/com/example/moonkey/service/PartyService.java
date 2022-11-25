@@ -80,9 +80,8 @@ public class PartyService {
                     .build();
             partyDtos.add(partyDto);
         }
-        /* TO-DO
-            현재 로그인 계정 기준 정렬
-         */
+
+        //TODO 사용자 기준 정렬
         List<StatsDto> statsList = accountService.getMyUserStats(); // 카테고리별 사용자 주문량 및 순서
         int i =0;
         Iterator<StatsDto> statsIter = statsList.iterator();
@@ -224,6 +223,7 @@ public class PartyService {
         else{
             members.remove(account);
         }
+        //TODO 마지막 사용자(파티장)이 호출할 경우 unregister 호출
 
         party = Party.builder()
                 .partyId(party.getPartyId())
