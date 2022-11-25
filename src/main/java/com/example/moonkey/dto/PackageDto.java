@@ -2,7 +2,6 @@ package com.example.moonkey.dto;
 
 import com.example.moonkey.domain.*;
 import com.example.moonkey.domain.Package;
-import com.example.moonkey.exception.NotFoundMemberException;
 import com.example.moonkey.exception.NotFoundOrderException;
 import com.example.moonkey.repository.OrderRepository;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -25,19 +24,19 @@ public class PackageDto {
     @NotNull
     private long packageId;
 
-    @NotNull
+
     private List<Long> orderId; // FK
 
     @NotNull
     private long partyId; // FK
 
-    @NotNull
-    private String product;
+
+    private List<String> product = new ArrayList<String>();
 
     @NotNull
     private String address;
 
-    @NotNull
+    @JsonIgnore
     private int amount;
 
     public List<Orders> getOrders(List<Long> list){

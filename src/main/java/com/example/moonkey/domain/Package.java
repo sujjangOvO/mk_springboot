@@ -30,8 +30,9 @@ public class Package {
     @JoinColumn(name="partyId")
     private Party partyId; // FK
 
-    @NotNull
-    private String product;
+    @ElementCollection(fetch = FetchType.LAZY)
+    @Column(name = "package_product")
+    private List<String> product = new ArrayList<String>();
 
     @NotNull
     private String address;

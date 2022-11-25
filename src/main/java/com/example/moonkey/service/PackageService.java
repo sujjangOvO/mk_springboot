@@ -5,6 +5,7 @@ import com.example.moonkey.domain.Package;
 import com.example.moonkey.domain.Party;
 import com.example.moonkey.dto.*;
 
+import com.example.moonkey.exception.NotFoundMenuException;
 import com.example.moonkey.exception.NotFoundOrderException;
 import com.example.moonkey.exception.NotFoundPartyException;
 import com.example.moonkey.repository.*;
@@ -24,13 +25,15 @@ public class PackageService {
     private final AccountRepository accountRepository;
     private final OrderRepository orderRepository;
     private final PartyRepository partyRepository;
+    private final MenuRepository menuRepository;
 
     public PackageService(PackageRepository packageRepository, AccountRepository accountRepository
-                        ,OrderRepository orderRepository, PartyRepository partyRepository){
+                        ,OrderRepository orderRepository, PartyRepository partyRepository, MenuRepository menuRepository){
         this.packageRepository = packageRepository;
         this.accountRepository = accountRepository;
         this.orderRepository = orderRepository;
         this.partyRepository = partyRepository;
+        this.menuRepository = menuRepository;
     }
 
     @Transactional
@@ -39,16 +42,27 @@ public class PackageService {
                 .orElseThrow(()->new NotFoundPartyException("Party not found"));
 
         Orders orders = orderRepository.findOneByOrderId(orderId)
-                .orElseThrow(()->new NotFoundOrderException("Order notrder found"));
+                .orElseThrow(()->new NotFoundOrderException("Order not found"));
 
-        List<Orders> ordersList = packageDto.getOrders(packageDto.getOrderId());
+        List<String> productList = new ArrayList<>(Collections.emptyList());
+        List<Orders> ordersList = new ArrayList<>(Collections.emptyList());
+        // List<Orders> ordersList = packageDto.getOrders(packageDto.getOrderId());
         ordersList.add(orders);
+        int amount = 0;
+
+        Iterator<Orders> iterator = ordersList.iterator();
+        while(iterator.hasNext()){
+            Orders orders1 = iterator.next();
+            Menu menu = menuRepository.findMenuByMenuId(orders1.getMenuId().getMenuId())
+                    .orElseThrow(()->new NotFoundMenuException("Menu not found"));
+            productList.add(menu.getMenuName());
+            amount += menu.getPrice();
+        }
 
         Package aPackage = Package.builder()
                 .packageId(packageDto.getPackageId())
-                .product(packageDto.getProduct())
-                .address(packageDto.getAddress())
-                .amount(packageDto.getAmount())
+                .product(productList)
+                .amount(amount)
                 .orderId(ordersList)
                 .partyId(party)
                 .build();
