@@ -31,7 +31,7 @@ public class PackageDto {
     private long partyId; // FK
 
 
-    private List<String> product = new ArrayList<String>();
+    private List<String> product;
 
     @NotNull
     private String address;

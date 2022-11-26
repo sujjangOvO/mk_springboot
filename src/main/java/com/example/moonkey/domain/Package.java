@@ -32,7 +32,7 @@ public class Package {
 
     @ElementCollection(fetch = FetchType.LAZY)
     @Column(name = "package_product")
-    private List<String> product = new ArrayList<String>();
+    private List<String> product;
 
     @NotNull
     private String address;

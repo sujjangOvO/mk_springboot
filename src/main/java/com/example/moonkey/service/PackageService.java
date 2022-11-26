@@ -59,12 +59,15 @@ public class PackageService {
             amount += menu.getPrice();
         }
 
+        System.out.println(productList);
+
         Package aPackage = Package.builder()
                 .packageId(packageDto.getPackageId())
                 .product(productList)
                 .amount(amount)
                 .orderId(ordersList)
                 .partyId(party)
+                .address(packageDto.getAddress())
                 .build();
 
 
