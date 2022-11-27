@@ -85,7 +85,7 @@ public class PartyService {
         List<StatsDto> statsList = accountService.getMyUserStats(); // 카테고리별 사용자 주문량 및 순서
         int i =0;
         Iterator<StatsDto> statsIter = statsList.iterator();
-        HashMap<String,Integer> ordering = new HashMap<>();
+        HashMap<String,Integer> ordering = new HashMap<>(); // ordering 을 위한 순서 HashSet
 
         while(statsIter.hasNext()){
             StatsDto statsDto = statsIter.next();

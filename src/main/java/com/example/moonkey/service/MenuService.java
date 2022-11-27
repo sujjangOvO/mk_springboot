@@ -5,6 +5,7 @@ import com.example.moonkey.domain.Store;
 import com.example.moonkey.dto.MenuDto;
 import com.example.moonkey.domain.Menu;
 import com.example.moonkey.dto.StoreDto;
+import com.example.moonkey.exception.NotFoundMenuException;
 import com.example.moonkey.exception.NotFoundStoreException;
 import com.example.moonkey.repository.AccountRepository;
 import com.example.moonkey.repository.MenuRepository;
@@ -35,7 +36,8 @@ public class MenuService {
 				.orElseThrow(()-> new NotFoundStoreException("Store not found"));
 
 		if(menuDto.getMenuId()!=0) {
-			Menu originMenu = menuRepository.findOneByMenuId(menuDto.getMenuId());
+			Menu originMenu = menuRepository.findOneByMenuId(menuDto.getMenuId())
+					.orElseThrow(()-> new NotFoundMenuException("Menu not found"));
 			Menu menu = Menu.builder()
 					.menuId(originMenu.getMenuId())
 					.menuName(menuDto.getMenuName())
@@ -62,7 +64,8 @@ public class MenuService {
 
 	@Transactional
 	public String unregister(long menuId){
-		Menu menu = menuRepository.findOneByMenuId(menuId);
+		Menu menu = menuRepository.findOneByMenuId(menuId)
+				.orElseThrow(()->new NotFoundMenuException("Menu not found"));
 		if (menu != null) {
 			String name = menu.getMenuName();
 			menuRepository.delete(menu);
