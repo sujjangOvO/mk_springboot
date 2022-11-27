@@ -45,18 +45,20 @@ public class Account {
     @Column(name="activated")
     private boolean activated; // 활성화여부
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "account_authority",
             joinColumns = @JoinColumn(name = "uid"),
             inverseJoinColumns = @JoinColumn(name="authorityName"))
+    @SQLDelete(sql="UPDATE account_authority SET deleted = true WHERE uid = ?")
     private Set<Authority> authorities;
 
-    @ManyToMany(cascade = CascadeType.REMOVE)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name="account_store",
             joinColumns = @JoinColumn(name = "uid"),
-            inverseJoinColumns = @JoinColumn(name="storeId"))
+            inverseJoinColumns = @JoinColumn(name="storeId")
+    )
     private Set<Store> stores;
 
     @ManyToOne
