@@ -73,6 +73,7 @@ public class StoreService {
 			menuRepository.deleteAll(menuList);
 			storeRepository.delete(store);
 
+			//TODO 현재 진행중인 파티 or 배달에 대해 확인할 것
 			return "Success to delete" + name;
 		}
 		return "Store not found";

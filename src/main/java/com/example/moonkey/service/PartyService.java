@@ -99,6 +99,7 @@ public class PartyService {
     @Transactional
     public List<PartyDisplayDto> getParties(){
         List<Party> partyList = partyRepository.findAll();
+        //TODO deleted entity에 대한 접근은 어떻게 할 것인가?
         Iterator<Party> iter = partyList.iterator();
 
         List<PartyDisplayDto> partyDtos = new ArrayList<>(Collections.emptyList());
@@ -225,12 +226,16 @@ public class PartyService {
         }
         //TODO 마지막 사용자(파티장)이 호출할 경우 unregister 호출
 
+
         party = Party.builder()
                 .partyId(party.getPartyId())
                 .partyTitle(party.getPartyTitle())
                 .storeId(party.getStoreId())
                 .members(members)
                 .build();
+		partyRepository.save(party);
+		if(members.isEmpty())
+			unregister(partyId);
     }
 
 }
