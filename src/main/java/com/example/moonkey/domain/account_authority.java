@@ -22,7 +22,7 @@ public class account_authority {
     private long accountAuthorityId;
 
     @ManyToOne
-    @JoinColumn(name = "partyId")
+    @JoinColumn(name = "uid")
     private Account uid;
 
     @ManyToOne
