@@ -7,6 +7,7 @@ import com.example.moonkey.dto.*;
 
 import com.example.moonkey.exception.NotFoundMenuException;
 import com.example.moonkey.exception.NotFoundOrderException;
+import com.example.moonkey.exception.NotFoundPackageException;
 import com.example.moonkey.exception.NotFoundPartyException;
 import com.example.moonkey.repository.*;
 import com.example.moonkey.repository.PackageRepository;
@@ -128,4 +129,17 @@ public class PackageService {
         return packageDtoList;
 
     }
+
+    @Transactional
+    public PackageDto setCompletePackage(long packageId){
+
+        Package aPackage = packageRepository.findOneByPackageId(packageId)
+                .orElseThrow(()->new NotFoundPackageException("Package not found"));
+
+        aPackage.setPackageActivatedFalse(aPackage);
+        packageRepository.save(aPackage);
+
+        return PackageDto.from(aPackage);
+    }
+
 }

@@ -4,6 +4,7 @@ package com.example.moonkey.controller;
 import com.example.moonkey.domain.Package;
 import com.example.moonkey.dto.OrderDto;
 import com.example.moonkey.dto.PackageDto;
+import com.example.moonkey.dto.PartyDto;
 import com.example.moonkey.repository.PackageRepository;
 import com.example.moonkey.service.PackageService;
 
@@ -46,7 +47,7 @@ public class PackageController {
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<PackageDto> register(
             @Valid @RequestBody PackageDto packageDto,
-            @PathVariable("orderId") long orderId,
+            @PathVariable("orderId") long orderId, // orderList로 받아와야 하는데
             @PathVariable("partyId") long partyId
     ){
         try{
@@ -54,6 +55,11 @@ public class PackageController {
         } catch(Exception e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
+    }
+
+    @PatchMapping("/package/complete/{packageId}")
+    public ResponseEntity<PackageDto> setCompletePackage(@PathVariable @Valid long packageId){
+        return ResponseEntity.ok((packageService.setCompletePackage(packageId)));
     }
 
 }
