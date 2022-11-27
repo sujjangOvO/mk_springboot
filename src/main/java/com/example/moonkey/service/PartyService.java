@@ -10,6 +10,7 @@ import com.example.moonkey.exception.*;
 import com.example.moonkey.repository.AccountRepository;
 import com.example.moonkey.repository.PartyRepository;
 import com.example.moonkey.repository.StoreRepository;
+import com.example.moonkey.util.SecurityUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -204,7 +205,8 @@ public class PartyService {
                 .members(members)
                 .build();
 
-        return PartyDto.from(party);
+
+        return PartyDto.from(partyRepository.save(party));
     }
 
     @Transactional
@@ -248,6 +250,69 @@ public class PartyService {
         partyRepository.save(party);
 
         return PartyDto.from(party);
+    }
+
+    @Transactional
+    public List<PartyDisplayDto> getMyParties(){ //TODO 사용자의 파티 완료 기록
+        Account account =
+                SecurityUtil.getCurrentUsername()
+                        .flatMap(accountRepository::findOneWithAuthoritiesById)
+                        .orElseThrow(()->new NotFoundMemberException("Member not found"));
+
+
+        List<Party> partyList = partyRepository.findAll();
+        // List<Party> partyList = partyRepository.findAllByDeleted();
+        Iterator<Party> iter = partyList.iterator();
+
+        List<PartyDisplayDto> partyDtos = new ArrayList<>(Collections.emptyList());
+
+        while(iter.hasNext())
+        {
+            Party party = iter.next();
+
+            if(!party.getMembers().contains(account)) continue;
+
+            PartyDisplayDto partyDto = PartyDisplayDto.builder()
+                    .partyId(party.getPartyId())
+                    .partyTitle(party.getPartyTitle())
+                    .members(party.getUids())
+                    .build();
+            partyDtos.add(partyDto);
+        }
+
+
+        return	partyDtos;
+    }
+
+    @Transactional
+    public List<PartyDisplayDto> getActivates(){
+        Account account =
+                SecurityUtil.getCurrentUsername()
+                        .flatMap(accountRepository::findOneWithAuthoritiesById)
+                        .orElseThrow(()->new NotFoundMemberException("Member not found"));
+
+
+        List<Party> partyList = partyRepository.findAll();
+        Iterator<Party> iter = partyList.iterator();
+
+        List<PartyDisplayDto> partyDtos = new ArrayList<>(Collections.emptyList());
+
+        while(iter.hasNext())
+        {
+            Party party = iter.next();
+
+            if(party.isActivated() == false) continue;
+
+            PartyDisplayDto partyDto = PartyDisplayDto.builder()
+                    .partyId(party.getPartyId())
+                    .partyTitle(party.getPartyTitle())
+                    .members(party.getUids())
+                    .build();
+            partyDtos.add(partyDto);
+        }
+
+
+        return	partyDtos;
     }
 
 }
