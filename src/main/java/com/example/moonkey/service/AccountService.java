@@ -74,7 +74,7 @@ public class AccountService {
 
         AccountDto accountDto = AccountDto.from(account);
 
-        accountRepository.deleteById(uid);
+        accountRepository.delete(account);
 
         return accountDto;
     }
