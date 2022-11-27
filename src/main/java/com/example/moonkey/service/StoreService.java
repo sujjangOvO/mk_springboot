@@ -1,15 +1,13 @@
 package com.example.moonkey.service;
 
-import com.example.moonkey.domain.Account;
-import com.example.moonkey.domain.Category;
-import com.example.moonkey.domain.Menu;
+import com.example.moonkey.domain.*;
 import com.example.moonkey.dto.StoreDisplayDto;
 import com.example.moonkey.dto.StoreDto;
 import com.example.moonkey.exception.NotFoundMemberException;
 import com.example.moonkey.exception.NotFoundStoreException;
+import com.example.moonkey.exception.PartyRunningException;
 import com.example.moonkey.repository.*;
 import com.example.moonkey.util.SecurityUtil;
-import com.example.moonkey.domain.Store;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,13 +66,20 @@ public class StoreService {
 	public StoreDto unregister(long store_id){
 		Store store = storeRepository.findOneByStoreId(store_id)
 				.orElseThrow(()->new NotFoundStoreException("Store not found"));
+		//TODO 현재 진행중인 파티 or 배달에 대해 확인할 것
+		List<Party> partyList = partyRepository.findAllByStoreId(store);
+		Iterator<Party> partyIterator = partyList.iterator();
+		while(partyIterator.hasNext()){
+			Party party = partyIterator.next();
+			if(party.isActivated()){
+				throw new PartyRunningException("There is running parties on the store");
+			}
+		}
 
 		StoreDto storeDto = StoreDto.from(store);
-
 		String name = store.getName();
 		List<Menu> menuList = menuRepository.findAllByStoreId(store);
 		Iterator<Menu> menuIter = menuList.iterator();
-		//TODO 현재 진행중인 파티 or 배달에 대해 확인할 것
 
 		menuRepository.deleteAll(menuList);
 		storeRepository.delete(store);
