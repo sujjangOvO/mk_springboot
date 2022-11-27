@@ -90,7 +90,10 @@ public class PartyController {
         Party party =  partyRepository.findOneByPartyId(partyId)
                 .orElseThrow(()->new NotFoundPartyException("Party not found"));
 
-        partyService.leave(partyId, uid);
+        if(party.getMembers().size() == 1)
+            partyService.unregister(partyId);
+        else
+            partyService.leave(partyId, uid);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create("/app/party/list"));
