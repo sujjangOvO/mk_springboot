@@ -46,22 +46,19 @@ public class Account {
     private boolean activated; // 활성화여부
 
 
-/*    @ManyToMany(cascade = CascadeType.REMOVE)
+    @ManyToMany
     @JoinTable(
             name = "account_authority",
             joinColumns = @JoinColumn(name = "uid"),
             inverseJoinColumns = @JoinColumn(name="authorityName"))
-    @SQLDelete(sql="UPDATE account_authority SET deleted = true WHERE uid = ?")*/
-    @OneToMany(cascade = CascadeType.REMOVE)
     private Set<Authority> authorities;
 
-/*    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name="account_store",
             joinColumns = @JoinColumn(name = "uid"),
             inverseJoinColumns = @JoinColumn(name="storeId")
-    )*/
-    @OneToMany(cascade = CascadeType.REMOVE)
+    )
     private Set<Store> stores;
 
     @ManyToOne
