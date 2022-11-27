@@ -7,6 +7,7 @@ import com.example.moonkey.dto.DeliveryDto;
 import com.example.moonkey.exception.NotFoundDeliveryException;
 import com.example.moonkey.exception.NotFoundMemberException;
 import com.example.moonkey.exception.NotFoundOrderException;
+import com.example.moonkey.exception.NotFoundStoreException;
 import com.example.moonkey.repository.AccountRepository;
 import com.example.moonkey.repository.DeliveryRepository;
 import com.example.moonkey.repository.OrderRepository;
@@ -48,7 +49,8 @@ public class DeliveryService {
         Delivery delivery = Delivery.builder()
                 .uid(account)
                 .orderId(orders)
-                .storeId(storeRepository.findOneByStoreId(deliveryDto.getStoreId()))
+                .storeId(storeRepository.findOneByStoreId(deliveryDto.getStoreId())
+                        .orElseThrow(()->new NotFoundStoreException()))
                 .distance(deliveryDto.getDistance())
                 .address(deliveryDto.getAddress())
                 .callCheck(false)

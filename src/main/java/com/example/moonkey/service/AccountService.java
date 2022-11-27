@@ -1,7 +1,9 @@
 package com.example.moonkey.service;
 
 
-import com.example.moonkey.domain.*;
+import com.example.moonkey.domain.Authority;
+import com.example.moonkey.domain.Category;
+import com.example.moonkey.domain.Orders;
 import com.example.moonkey.dto.AccountDto;
 import com.example.moonkey.dto.StatsDto;
 import com.example.moonkey.exception.DuplicateMemberException;
@@ -9,10 +11,10 @@ import com.example.moonkey.exception.NotFoundMemberException;
 import com.example.moonkey.repository.AccountRepository;
 import com.example.moonkey.repository.CategoryRepository;
 import com.example.moonkey.repository.OrderRepository;
-import com.example.moonkey.repository.StoreRepository;
 import com.example.moonkey.util.SecurityUtil;
 import com.example.moonkey.util.StatsDtoCompartor;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import com.example.moonkey.domain.Account;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,15 +26,12 @@ public class AccountService {
     private final OrderRepository orderRepository;
     private final PasswordEncoder passwordEncoder;
     private final CategoryRepository categoryRepository;
-    private final StoreService storeService;
 
-    public AccountService(AccountRepository accountRepository, OrderRepository orderRepository, PasswordEncoder passwordEncoder, CategoryRepository categoryRepository
-                            ,StoreService storeService){
+    public AccountService(AccountRepository accountRepository, OrderRepository orderRepository, PasswordEncoder passwordEncoder, CategoryRepository categoryRepository){
         this.accountRepository = accountRepository;
         this.orderRepository = orderRepository;
         this.passwordEncoder = passwordEncoder;
         this.categoryRepository = categoryRepository;
-        this.storeService = storeService;
     }
 
     @Transactional
@@ -69,22 +68,15 @@ public class AccountService {
     }
 
     @Transactional
-    public AccountDto signout(){
-        Account account =  SecurityUtil.getCurrentUsername()
-                .flatMap(accountRepository::findOneWithAuthoritiesById)
-                .orElseThrow(()->new NotFoundMemberException("Member not found"));
+    public AccountDto signout(long uid){
+        Account account = accountRepository.findAccountByUid(uid).
+                orElseThrow(() -> new NotFoundMemberException("Member not found"));
 
-        Set<Store> stores = account.getStores();
-        Iterator<Store> iterator = stores.iterator();
-        while(iterator.hasNext()){
-            Store store = iterator.next();
-            storeService.unregister(store.getStoreId());
-        }
+        AccountDto accountDto = AccountDto.from(account);
 
-        AccountDto accountDto = AccountDto.from(account); // 수정
         accountRepository.delete(account);
 
-        return accountDto; // 수정
+        return accountDto;
     }
 
 
