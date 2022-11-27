@@ -24,19 +24,17 @@ public class PackageDto {
     @NotNull
     private long packageId;
 
-
     private List<Long> orderId; // FK
 
     @NotNull
     private long partyId; // FK
-
 
     private List<String> product;
 
     @NotNull
     private String address;
 
-    @JsonIgnore
+    @NotNull
     private int amount;
 
     public List<Orders> getOrders(List<Long> list){
