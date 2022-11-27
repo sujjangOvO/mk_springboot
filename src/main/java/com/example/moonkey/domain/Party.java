@@ -57,4 +57,9 @@ public class Party {
 
     @Builder.Default
     private boolean deleted = Boolean.FALSE;
+
+    public void setPartyActivatedFalse(Party party){
+        this.activated = false;
+    }
+
 }

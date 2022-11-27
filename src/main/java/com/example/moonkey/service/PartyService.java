@@ -238,4 +238,16 @@ public class PartyService {
 			unregister(partyId);
     }
 
+    @Transactional
+    public PartyDto setCompleteParty(long partyId){
+
+        Party party = partyRepository.findOneByPartyId(partyId)
+                .orElseThrow(()->new NotFoundPartyException("Party not found"));
+
+        party.setPartyActivatedFalse(party);
+        partyRepository.save(party);
+
+        return PartyDto.from(party);
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.example.moonkey.controller;
 
 import com.example.moonkey.domain.Party;
+import com.example.moonkey.dto.DeliveryDto;
 import com.example.moonkey.dto.PartyDisplayDto;
 import com.example.moonkey.dto.PartyDto;
 import com.example.moonkey.exception.NotFoundPartyException;
@@ -101,4 +102,10 @@ public class PartyController {
     public ResponseEntity<List<PartyDisplayDto>> partyRecList(HttpServletRequest request){
         return ResponseEntity.ok(partyService.getRecParties());
     }
+
+    @PatchMapping("/party/complete/{partyId}")
+    public ResponseEntity<PartyDto> setCompleteParty(@PathVariable @Valid long partyId){
+        return ResponseEntity.ok((partyService.setCompleteParty(partyId)));
+    }
+
 }

@@ -54,4 +54,8 @@ public class Package {
 
     @Builder.Default
     private boolean deleted = Boolean.FALSE;
+
+    public void setPackageActivatedFalse(Package aPackage){
+        this.activated = false;
+    }
 }
