@@ -48,13 +48,10 @@ public class AccountController {
         return ResponseEntity.ok(accountService.signup(accountDto));
     }
 
-    @PostMapping("/account/signout/{uid}")
+    @PostMapping("/account/signout")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<AccountDto> signout(@PathVariable long uid){
-        Account account = accountRepository.findAccountByUid(uid)
-                .orElseThrow(()->new NotFoundMemberException("Member not found"));
-
-        return ResponseEntity.ok(accountService.signout(uid));
+    public ResponseEntity<AccountDto> signout(HttpServletRequest request){
+        return ResponseEntity.ok(accountService.signout());
     }
 
 

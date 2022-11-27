@@ -68,13 +68,14 @@ public class AccountService {
     }
 
     @Transactional
-    public AccountDto signout(long uid){
-        Account account = accountRepository.findAccountByUid(uid).
-                orElseThrow(() -> new NotFoundMemberException("Member not found"));
+    public AccountDto signout(){
+        Account account = SecurityUtil.getCurrentUsername()
+                        .flatMap(accountRepository::findOneWithAuthoritiesById)
+                        .orElseThrow(()->new NotFoundMemberException("Member not found"));
 
         AccountDto accountDto = AccountDto.from(account);
 
-        accountRepository.deleteById(uid);
+        accountRepository.delete(account);
 
         return accountDto;
     }
