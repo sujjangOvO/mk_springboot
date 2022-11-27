@@ -50,5 +50,8 @@ public class Package {
     }
 
     @Builder.Default
+    private boolean activated = Boolean.TRUE;
+
+    @Builder.Default
     private boolean deleted = Boolean.FALSE;
 }
