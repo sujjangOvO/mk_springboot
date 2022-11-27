@@ -17,10 +17,7 @@ import com.example.moonkey.domain.Store;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 
 @Service
@@ -56,10 +53,15 @@ public class StoreService {
 				.contact(storeDto.getContact())
 				.build();
 
+		Store resultStore = storeRepository.save(store);
 
 		// account 접근해서 account의 store 변경
+		Set<Store> stores = account.getStores();
+		stores.add(store);
+		account.setStores(stores);
+		accountRepository.save(account);
 
-		return storeDto.from(storeRepository.save(store)); // occurs errors Field "category" dosen't have a default value
+		return storeDto.from(resultStore); // occurs errors Field "category" dosen't have a default value
 	}
 
 	@Transactional
