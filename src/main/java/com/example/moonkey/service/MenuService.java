@@ -31,7 +31,8 @@ public class MenuService {
 	@Transactional
 	public MenuDto register(Long storeId, MenuDto menuDto){
 
-		Store store = storeRepository.findOneByStoreId(storeId);
+		Store store = storeRepository.findOneByStoreId(storeId)
+				.orElseThrow(()-> new NotFoundStoreException("Store not found"));
 
 		if(menuDto.getMenuId()!=0) {
 			Menu originMenu = menuRepository.findOneByMenuId(menuDto.getMenuId());
@@ -72,7 +73,8 @@ public class MenuService {
 	@Transactional
 	public List<MenuDto> getMenu(long storeid){
 
-		Store store = storeRepository.findOneByStoreId(storeid);
+		Store store = storeRepository.findOneByStoreId(storeid)
+				.orElseThrow(()->new NotFoundStoreException("Store not found"));
 		List<Menu> menuList = menuRepository.findAllByStoreId(store);
 		Iterator<Menu> iter = menuList.iterator();
 

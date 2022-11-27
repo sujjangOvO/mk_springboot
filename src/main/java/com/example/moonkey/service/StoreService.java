@@ -7,10 +7,7 @@ import com.example.moonkey.dto.StoreDisplayDto;
 import com.example.moonkey.dto.StoreDto;
 import com.example.moonkey.exception.NotFoundMemberException;
 import com.example.moonkey.exception.NotFoundStoreException;
-import com.example.moonkey.repository.AccountRepository;
-import com.example.moonkey.repository.CategoryRepository;
-import com.example.moonkey.repository.MenuRepository;
-import com.example.moonkey.repository.StoreRepository;
+import com.example.moonkey.repository.*;
 import com.example.moonkey.util.SecurityUtil;
 import com.example.moonkey.domain.Store;
 
@@ -29,13 +26,18 @@ public class StoreService {
 	private final AccountRepository accountRepository;
 	private final CategoryRepository categoryRepository;
 	private final MenuRepository menuRepository;
+	private final PartyRepository partyRepository;
+	private final PackageRepository packageRepository;
 
 
-	public StoreService(StoreRepository storeRepository, AccountRepository accountRepository, CategoryRepository categoryRepository, MenuRepository menuRepository){
+
+	public StoreService(StoreRepository storeRepository, AccountRepository accountRepository, CategoryRepository categoryRepository, MenuRepository menuRepository, PartyRepository partyRepository, PackageRepository packageRepository){
 		this.storeRepository = storeRepository;
 		this.accountRepository = accountRepository;
 		this.categoryRepository = categoryRepository;
 		this.menuRepository = menuRepository;
+		this.partyRepository = partyRepository;
+		this.packageRepository = packageRepository;
 	}
 
 	@Transactional
@@ -63,20 +65,21 @@ public class StoreService {
 	}
 
 	@Transactional
-	public String unregister(long store_id){
-		Store store = storeRepository.findOneByStoreId(store_id);
-		if (store != null) {
-			String name = store.getName();
-			List<Menu> menuList = menuRepository.findAllByStoreId(store);
-			Iterator<Menu> menuIter = menuList.iterator();
+	public StoreDto unregister(long store_id){
+		Store store = storeRepository.findOneByStoreId(store_id)
+				.orElseThrow(()->new NotFoundStoreException("Store not found"));
 
-			menuRepository.deleteAll(menuList);
-			storeRepository.delete(store);
+		StoreDto storeDto = StoreDto.from(store);
 
-			//TODO 현재 진행중인 파티 or 배달에 대해 확인할 것
-			return "Success to delete" + name;
-		}
-		return "Store not found";
+		String name = store.getName();
+		List<Menu> menuList = menuRepository.findAllByStoreId(store);
+		Iterator<Menu> menuIter = menuList.iterator();
+		//TODO 현재 진행중인 파티 or 배달에 대해 확인할 것
+
+		menuRepository.deleteAll(menuList);
+		storeRepository.delete(store);
+
+		return  storeDto;
 	}
 
 	@Transactional

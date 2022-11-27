@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface StoreRepository extends JpaRepository<Store,Long> {
 
 	Optional<Store> findOneByName(String name);
-	Store findOneByStoreId(long id);
+	Optional<Store> findOneByStoreId(long id);
 
 	Optional<Store> findStoreByOwnerId(Account ownerId);
 

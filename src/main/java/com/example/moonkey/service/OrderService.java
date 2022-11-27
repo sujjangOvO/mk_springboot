@@ -109,7 +109,8 @@ public class OrderService {
         Menu menu = menuRepository.findOneByMenuId(orderDto.getMenuId());
         if(menu == null) throw new NotFoundMenuException("Menu not found");
 
-        Store store = storeRepository.findOneByStoreId(orderDto.getStoreId());
+        Store store = storeRepository.findOneByStoreId(orderDto.getStoreId())
+                .orElseThrow(()->new NotFoundStoreException("Store not found"));
         if(store == null) throw new NotFoundStoreException("Store not found");
 
         LocalDateTime now = LocalDateTime.now();
