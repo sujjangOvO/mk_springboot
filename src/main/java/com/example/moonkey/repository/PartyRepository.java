@@ -4,6 +4,7 @@ import com.example.moonkey.domain.Party;
 import com.example.moonkey.domain.Store;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import javax.servlet.http.Part;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,4 +16,6 @@ public interface PartyRepository extends JpaRepository<Party,Long> {
     List<Party> findAll();
 
     List<Party> findAllByStoreId(Store store);
+
+    // List<Party> findAllByDeleted();
 }

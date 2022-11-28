@@ -44,6 +44,8 @@ public class PartyService {
                 .partyId(partyDto.getPartyId())
                 .partyTitle(partyDto.getPartyTitle())
                 .members(members)
+                .maxnum(partyDto.getMaxnum())
+                .addr(partyDto.getAddr())
                 .build();
 
         return PartyDto.from(partyRepository.save(party));
@@ -54,11 +56,7 @@ public class PartyService {
         Party party =  partyRepository.findOneByPartyId(partyId)
                 .orElseThrow(()->new NotFoundPartyException("Party not found"));
 
-        PartyDto partyDto = PartyDto.builder()
-                .partyId(party.getPartyId())
-                .partyTitle(party.getPartyTitle())
-                .members(party.getUids())
-                .build();
+        PartyDto partyDto = PartyDto.from(party);
 
         partyRepository.deleteById(partyDto.getPartyId());
     }
@@ -74,11 +72,7 @@ public class PartyService {
         while(iter.hasNext())
         {
             Party party = iter.next();
-            PartyDisplayDto partyDto = PartyDisplayDto.builder()
-                    .partyId(party.getPartyId())
-                    .partyTitle(party.getPartyTitle())
-                    .members(party.getUids())
-                    .build();
+            PartyDisplayDto partyDto = PartyDisplayDto.from(party);
             partyDtos.add(partyDto);
         }
 
@@ -107,11 +101,7 @@ public class PartyService {
 
         while(iter.hasNext()) {
             Party party = iter.next();
-            PartyDisplayDto partyDto = PartyDisplayDto.builder()
-                    .partyId(party.getPartyId())
-                    .partyTitle(party.getPartyTitle())
-                    .members(party.getUids())
-                    .build();
+            PartyDisplayDto partyDto = PartyDisplayDto.from(party);
             partyDtos.add(partyDto);
         }
 
@@ -132,11 +122,7 @@ public class PartyService {
             Set<Account> members = party.getMembers();
 
             if(members.contains(user)){
-                partyDto = PartyDisplayDto.builder()
-                        .partyId(party.getPartyId())
-                        .partyTitle(party.getPartyTitle())
-                        .members(party.getUids())
-                        .build();
+                partyDto = PartyDisplayDto.from(party);
             }
         }
 
@@ -156,11 +142,7 @@ public class PartyService {
 
             if(party.getStoreId().getStoreId() != storeId) continue;
 
-            PartyDisplayDto partyDto = PartyDisplayDto.builder()
-                    .partyId(party.getPartyId())
-                    .partyTitle(party.getPartyTitle())
-                    .members(party.getUids())
-                    .build();
+            PartyDisplayDto partyDto = PartyDisplayDto.from(party);
             partyDtos.add(partyDto);
         }
 
@@ -195,14 +177,21 @@ public class PartyService {
 
         Set<Account> members = party.getMembers();
 
-        if(!members.contains(account)) members.add(account);
+        if(!members.contains(account)) {
+            if(members.size() >= party.getMaxnum()){
+                throw new FullPartyNumException("Party member maxnum Full");
+            }
+            members.add(account);
+        }
         else throw new DuplicateMemberInPartyException("Member already exits in party"); // 파티에 이미 있는 사용자인 경우 예외 처리
 
         party = Party.builder()
                 .partyId(party.getPartyId())
                 .partyTitle(party.getPartyTitle())
-                .storeId(party.getStoreId())
                 .members(members)
+                .storeId(party.getStoreId())
+                .maxnum(party.getMaxnum())
+                .addr(party.getAddr())
                 .build();
 
 
@@ -234,7 +223,10 @@ public class PartyService {
                 .partyTitle(party.getPartyTitle())
                 .storeId(party.getStoreId())
                 .members(members)
+                .addr(party.getAddr())
+                .maxnum(party.getMaxnum())
                 .build();
+
 		partyRepository.save(party);
 		if(members.isEmpty())
 			unregister(partyId);
@@ -272,11 +264,7 @@ public class PartyService {
 
             if(!party.getMembers().contains(account)) continue;
 
-            PartyDisplayDto partyDto = PartyDisplayDto.builder()
-                    .partyId(party.getPartyId())
-                    .partyTitle(party.getPartyTitle())
-                    .members(party.getUids())
-                    .build();
+            PartyDisplayDto partyDto = PartyDisplayDto.from(party);
             partyDtos.add(partyDto);
         }
 
@@ -303,11 +291,7 @@ public class PartyService {
 
             if(party.isActivated() == false) continue;
 
-            PartyDisplayDto partyDto = PartyDisplayDto.builder()
-                    .partyId(party.getPartyId())
-                    .partyTitle(party.getPartyTitle())
-                    .members(party.getUids())
-                    .build();
+            PartyDisplayDto partyDto = PartyDisplayDto.from(party);
             partyDtos.add(partyDto);
         }
 
