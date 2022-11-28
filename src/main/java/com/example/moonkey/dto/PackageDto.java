@@ -52,7 +52,7 @@ public class PackageDto {
         return PackageDto.builder()
                 .packageId(aPackage.getPackageId())
                 .product(aPackage.getProduct())
-                .address(aPackage.getAddress())
+                .address(aPackage.getPartyId().getAddr())
                 .amount(aPackage.getAmount())
                 .orderId(aPackage.getOrderIds())
                 .partyId(aPackage.getPartyId().getPartyId())

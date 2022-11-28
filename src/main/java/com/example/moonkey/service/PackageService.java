@@ -68,7 +68,7 @@ public class PackageService {
                 .amount(amount)
                 .orderId(ordersList)
                 .partyId(party)
-                .address(packageDto.getAddress())
+                .address(party.getAddr()) // party로 부터 addr 받아오도록 변경
                 .build();
 
 
@@ -80,22 +80,12 @@ public class PackageService {
         List<Package> packageList = packageRepository.findAll();
         Iterator<Package> iter = packageList.iterator();
 
-
         List<PackageDto> packageDtoList = new ArrayList<>(Collections.emptyList());
 
         while(iter.hasNext())
         {
             Package aPackage = iter.next();
-
-            PackageDto packageDto = PackageDto.builder()
-                    .packageId(aPackage.getPackageId())
-                    .product(aPackage.getProduct())
-                    .address(aPackage.getAddress())
-                    .amount(aPackage.getAmount())
-                    .orderId(aPackage.getOrderIds())
-                    .partyId(aPackage.getPartyId().getPartyId())
-                    .build();
-
+            PackageDto packageDto = PackageDto.from(aPackage);
             packageDtoList.add(packageDto);
         }
         return packageDtoList;
@@ -115,14 +105,7 @@ public class PackageService {
             Package aPackage = iter.next();
 
             if(aPackage.getPartyId().getStoreId().getStoreId() == storeId){
-                PackageDto packageDto = PackageDto.builder()
-                        .packageId(aPackage.getPackageId())
-                        .product(aPackage.getProduct())
-                        .address(aPackage.getAddress())
-                        .amount(aPackage.getAmount())
-                        .orderId(aPackage.getOrderIds())
-                        .partyId(aPackage.getPartyId().getPartyId())
-                        .build();
+                PackageDto packageDto = PackageDto.from(aPackage);
                 packageDtoList.add(packageDto);
             }
         }
