@@ -36,6 +36,12 @@ public class PartyDto {
 
     private long storeId;
 
+    @NotNull
+    private int maxnum;
+
+    @NotNull
+    private String addr;
+
 
     public Set<Account> getAccounts(Set<Long> list){
         Set<Account> memberList = new HashSet<>();
@@ -53,6 +59,8 @@ public class PartyDto {
                 partyTitle(party.getPartyTitle()).
                 members(party.getUids()).
                 storeId(party.getStoreId().getStoreId()).
+                maxnum(party.getMaxnum()).
+                addr(party.getAddr()).
                 build();
     }
 }

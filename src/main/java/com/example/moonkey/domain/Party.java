@@ -35,6 +35,11 @@ public class Party {
     @Builder.Default
     private Set<Account> members = new HashSet<>();
 
+    @NotNull
+    private int maxnum;
+
+    @NotNull
+    private String addr;
 
     @NotNull
     private String partyTitle;

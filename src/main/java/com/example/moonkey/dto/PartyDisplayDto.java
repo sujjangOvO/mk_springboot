@@ -1,6 +1,5 @@
 package com.example.moonkey.dto;
 
-import com.example.moonkey.domain.Account;
 import com.example.moonkey.domain.Party;
 import lombok.*;
 
@@ -25,6 +24,12 @@ public class PartyDisplayDto {
     private String partyTitle;
 
     @NotNull
+    private int maxnum;
+
+    @NotNull
+    private String addr;
+
+    @NotNull
     @Builder.Default
     private Set<Long> members = new HashSet<>();
 
@@ -34,6 +39,8 @@ public class PartyDisplayDto {
                 partyId(party.getPartyId()).
                 partyTitle(party.getPartyTitle()).
                 members(party.getUids()).
+                maxnum(party.getMaxnum()).
+                addr(party.getAddr()).
                 build();
     }
 }
