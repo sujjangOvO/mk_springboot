@@ -32,7 +32,8 @@ public class Package {
 
     @ElementCollection(fetch = FetchType.LAZY)
     @Column(name = "package_product")
-    private List<String> product;
+    @Builder.Default
+    private List<String> product = new ArrayList<>(Collections.emptyList());
 
     @NotNull
     private String address;

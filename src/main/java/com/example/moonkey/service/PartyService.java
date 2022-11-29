@@ -292,7 +292,7 @@ public class PartyService {
         {
             Party party = iter.next();
 
-            if(party.isActivated() == false) continue;
+            if(party.isActivated()) continue;
 
             PartyDisplayDto partyDto = PartyDisplayDto.from(party);
             partyDtos.add(partyDto);
