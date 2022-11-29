@@ -23,6 +23,10 @@ public class Package {
     @Column(name = "packageId")
     private long packageId;
 
+    @OneToOne
+    @JoinColumn(name="storeId")
+    private Store storeId;
+
     @OneToMany(mappedBy= "orderId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Orders> orderId; // FK
 

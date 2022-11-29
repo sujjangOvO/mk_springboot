@@ -33,7 +33,7 @@ public class Party {
     @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "accountUid")
     @Builder.Default
-    private Set<Account> members = new HashSet<>();
+    private Set<Account> members = new HashSet<>(Collections.emptySet());
 
     @NotNull
     private int maxnum;

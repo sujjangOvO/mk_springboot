@@ -48,6 +48,8 @@ public class PartyService {
                 .addr(partyDto.getAddr())
                 .build();
 
+        // 패키지 생성 호출
+
         return PartyDto.from(partyRepository.save(party));
     }
 
