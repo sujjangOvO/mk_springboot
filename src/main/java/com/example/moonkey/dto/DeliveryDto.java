@@ -3,6 +3,7 @@ package com.example.moonkey.dto;
 import com.example.moonkey.domain.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
@@ -20,8 +21,8 @@ public class DeliveryDto {
     @NotNull
     private long uid; // 배달원
 
-    @NotNull
-    private long orderId;
+    @Nullable
+    private long packageId;
 
     @NotNull
     private long storeId;
@@ -52,7 +53,7 @@ public class DeliveryDto {
         return DeliveryDto.builder().
                 deliveryId(delivery.getDeliveryId()).
                 uid(delivery.getUid().getUid()).
-                orderId(delivery.getOrderId().getOrderId()).
+                packageId(delivery.getPackageId().getPackageId()).
                 storeId(delivery.getStoreId().getStoreId()).
                 distance(delivery.getDistance()).
                 address(delivery.getAddress()).

@@ -31,8 +31,8 @@ public class Delivery {
     private Account uid; // 배달원
 
     @OneToOne
-    @JoinColumn(name = "orderId")
-    private Orders orderId;
+    @JoinColumn(name = "packageId")
+    private Package packageId;
 
     @ManyToOne
     @JoinColumn(name = "storeId")
@@ -45,10 +45,12 @@ public class Delivery {
     private String address;
 
     @NotNull
-    private boolean callCheck; // 콜 승인 여부
+    @Builder.Default
+    private boolean callCheck=Boolean.FALSE; // 콜 승인 여부
 
     @NotNull
-    private boolean deliveryCheck; // 배달 완로 여부
+    @Builder.Default
+    private boolean deliveryCheck=Boolean.FALSE; // 배달 완로 여부
 
     @Column(nullable = true)
     private String requests; // 요청사항

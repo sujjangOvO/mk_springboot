@@ -2,16 +2,12 @@ package com.example.moonkey.service;
 
 import com.example.moonkey.domain.Account;
 import com.example.moonkey.domain.Delivery;
-import com.example.moonkey.domain.Orders;
+import com.example.moonkey.domain.Package;
 import com.example.moonkey.dto.DeliveryDto;
 import com.example.moonkey.exception.NotFoundDeliveryException;
 import com.example.moonkey.exception.NotFoundMemberException;
-import com.example.moonkey.exception.NotFoundOrderException;
 import com.example.moonkey.exception.NotFoundStoreException;
-import com.example.moonkey.repository.AccountRepository;
-import com.example.moonkey.repository.DeliveryRepository;
-import com.example.moonkey.repository.OrderRepository;
-import com.example.moonkey.repository.StoreRepository;
+import com.example.moonkey.repository.*;
 import com.example.moonkey.util.SecurityUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,12 +24,15 @@ public class DeliveryService {
     private StoreRepository storeRepository;
     private OrderRepository orderRepository;
 
+    private final PackageRepository packageRepository;
+
     public DeliveryService(DeliveryRepository deliveryRepository, AccountRepository accountRepository
-                            ,StoreRepository storeRepository, OrderRepository orderRepository){
+                            , StoreRepository storeRepository, OrderRepository orderRepository, PackageRepository packageRepository){
         this.deliveryRepository = deliveryRepository;
         this.accountRepository = accountRepository;
         this.storeRepository = storeRepository;
         this.orderRepository = orderRepository;
+        this.packageRepository = packageRepository;
     }
 
     @Transactional
@@ -43,18 +42,16 @@ public class DeliveryService {
                         .flatMap(accountRepository::findOneWithAuthoritiesById)
                         .orElseThrow(()->new NotFoundMemberException("Member not found"));
 
-        Orders orders = orderRepository.findOneByOrderId(deliveryDto.getOrderId())
-                .orElseThrow(()->new NotFoundOrderException("Order not found"));
+        Package packages =  packageRepository.findOneByPackageId(deliveryDto.getPackageId())
+                .orElseThrow(()-> new RuntimeException(("Package not found")));
+
 
         Delivery delivery = Delivery.builder()
                 .uid(account)
-                .orderId(orders)
-                .storeId(storeRepository.findOneByStoreId(deliveryDto.getStoreId())
-                        .orElseThrow(()->new NotFoundStoreException()))
+                .packageId(packages)
+                .storeId(packages.getStoreId())
                 .distance(deliveryDto.getDistance())
                 .address(deliveryDto.getAddress())
-                .callCheck(false)
-                .deliveryCheck(false)
                 .requests(deliveryDto.getRequests())
                 .pay(deliveryDto.getPay())
                 .totalPay(deliveryDto.getTotalPay())
