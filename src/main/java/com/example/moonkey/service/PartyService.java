@@ -87,6 +87,9 @@ public class PartyService {
             ordering.put(statsDto.getCategory(),i++);
         }
         //Collections.sort(partyDtos,);
+        Collections.sort(partyDtos,
+                Comparator.comparingInt(item -> ordering.get(item.getCategory())));
+
 
         return partyDtos;
     }

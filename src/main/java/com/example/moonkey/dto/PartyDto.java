@@ -40,6 +40,9 @@ public class PartyDto {
     private int maxnum;
 
     @NotNull
+    private String category;
+
+    @NotNull
     private String addr;
 
 
@@ -61,6 +64,7 @@ public class PartyDto {
                 storeId(party.getStoreId().getStoreId()).
                 maxnum(party.getMaxnum()).
                 addr(party.getAddr()).
+                category(party.getStoreId().getCategoryName().getCategoryName()).
                 build();
     }
 }
