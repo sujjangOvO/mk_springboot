@@ -80,13 +80,13 @@ public class PartyService {
 
         //TODO 사용자 기준 정렬
         List<StatsDto> statsList = accountService.getMyUserStats(); // 카테고리별 사용자 주문량 및 순서
-        int i =0;
+
         Iterator<StatsDto> statsIter = statsList.iterator();
         HashMap<String,Integer> ordering = new HashMap<>(); // ordering 을 위한 순서 HashSet
-
+        int i = statsList.size();
         while(statsIter.hasNext()){
             StatsDto statsDto = statsIter.next();
-            ordering.put(statsDto.getCategory(),i++);
+            ordering.put(statsDto.getCategory(),i--);
         }
         //Collections.sort(partyDtos,);
         Collections.sort(partyDtos,
@@ -221,6 +221,7 @@ public class PartyService {
             members.remove(account);
         }
         //TODO 마지막 사용자(파티장)이 호출할 경우 unregister 호출
+        //TODO Package에서 해당 인원이 추가한 order 지우기
 
 
         party = Party.builder()
@@ -294,7 +295,7 @@ public class PartyService {
         {
             Party party = iter.next();
 
-            if(party.isActivated()) continue;
+            if(!party.isActivated()) continue;
 
             PartyDisplayDto partyDto = PartyDisplayDto.from(party);
             partyDtos.add(partyDto);
