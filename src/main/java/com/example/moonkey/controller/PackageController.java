@@ -46,8 +46,8 @@ public class PackageController {
     @PostMapping("/package/reg/{orderId}/{partyId}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<PackageDto> register(
-            @Valid @RequestBody PackageDto packageDto,
-            @PathVariable("orderId") long orderId, // orderList로 받아와야 하는데
+            @RequestBody PackageDto packageDto,
+            @PathVariable("orderId") long orderId,
             @PathVariable("partyId") long partyId
     ){
         try{

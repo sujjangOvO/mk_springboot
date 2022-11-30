@@ -28,7 +28,8 @@ public class Package {
     private Store storeId;
 
     @OneToMany(mappedBy= "orderId", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Orders> orderId; // FK
+    @Builder.Default
+    private List<Orders> orderId = new ArrayList<>(Collections.emptyList()); // FK
 
     @OneToOne
     @JoinColumn(name="partyId")

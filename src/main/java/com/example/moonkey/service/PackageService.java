@@ -38,37 +38,57 @@ public class PackageService {
     }
 
     @Transactional
-    public PackageDto register(PackageDto packageDto, long orderId, long partyId){
-        Party party =  partyRepository.findOneByPartyId(partyId)
-                .orElseThrow(()->new NotFoundPartyException("Party not found"));
+    public PackageDto register(PackageDto packageDto, long orderId, long partyId) {
+        Party party = partyRepository.findOneByPartyId(partyId)
+                .orElseThrow(() -> new NotFoundPartyException("Party not found"));
 
         Orders orders = orderRepository.findOneByOrderId(orderId)
-                .orElseThrow(()->new NotFoundOrderException("Order not found"));
+                .orElseThrow(() -> new NotFoundOrderException("Order not found"));
 
-        List<String> productList = new ArrayList<>(Collections.emptyList());
-        List<Orders> ordersList = new ArrayList<>(Collections.emptyList());
-        // List<Orders> ordersList = packageDto.getOrders(packageDto.getOrderId());
+        Package packs = packageRepository.findOneByPartyId(party)
+                .orElseThrow(() -> new RuntimeException("Package not found"));
+
+        List<String> productList;
+        List<Orders> ordersList;
+        if (packs != null) {
+            productList = packs.getProduct();
+            ordersList = packs.getOrderId();
+        } else {
+            productList = new ArrayList<>(Collections.emptyList());
+            ordersList = new ArrayList<>(Collections.emptyList());
+        }
+
         ordersList.add(orders);
         int amount = 0;
 
         Iterator<Orders> iterator = ordersList.iterator();
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             Orders orders1 = iterator.next();
             Menu menu = menuRepository.findMenuByMenuId(orders1.getMenuId().getMenuId())
-                    .orElseThrow(()->new NotFoundMenuException("Menu not found"));
+                    .orElseThrow(() -> new NotFoundMenuException("Menu not found"));
             productList.add(menu.getMenuName());
             amount += menu.getPrice();
         }
+        Package aPackage;
+        if(packs==null) {
+            aPackage = Package.builder()
+                    .product(productList)
+                    .amount(amount)
+                    .orderId(ordersList)
+                    .partyId(party)
+                    .address(party.getAddr()) // party로 부터 addr 받아오도록 변경
+                    .build();
+        }
+        else{
+            aPackage = Package.builder()
+                    .packageId(packs.getPackageId())
+                    .product(productList)
+                    .orderId(ordersList)
+                    .partyId(party)
+                    .address(party.getAddr())
+                    .build();
 
-        Package aPackage = Package.builder()
-                .packageId(packageDto.getPackageId())
-                .product(productList)
-                .amount(amount)
-                .orderId(ordersList)
-                .partyId(party)
-                .address(party.getAddr()) // party로 부터 addr 받아오도록 변경
-                .build();
-
+        }
 
         return packageDto.from(packageRepository.save(aPackage));
     }
