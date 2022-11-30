@@ -1,6 +1,6 @@
 package com.example.moonkey.dto;
 
-import com.example.moonkey.domain.*;
+import com.example.moonkey.domain.Delivery;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.lang.Nullable;
@@ -49,7 +49,7 @@ public class DeliveryDto {
     @JsonIgnore
     private long totalPay;
 
-    public static DeliveryDto from(Delivery delivery){
+    public static DeliveryDto from(Delivery delivery) {
         return DeliveryDto.builder().
                 deliveryId(delivery.getDeliveryId()).
                 uid(delivery.getUid().getUid()).

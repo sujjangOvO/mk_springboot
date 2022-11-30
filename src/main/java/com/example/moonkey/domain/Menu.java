@@ -16,8 +16,8 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Where(clause = "deleted = false")
-@SQLDelete(sql="UPDATE menu SET deleted = true WHERE menu_id = ?")
-@Table(name="menu")
+@SQLDelete(sql = "UPDATE menu SET deleted = true WHERE menu_id = ?")
+@Table(name = "menu")
 public class Menu {
 
     @Id
@@ -26,7 +26,7 @@ public class Menu {
     private long menuId;
 
     @ManyToOne
-    @JoinColumn(name="storeId")
+    @JoinColumn(name = "storeId")
     private Store storeId; // FK
 
     @NotNull

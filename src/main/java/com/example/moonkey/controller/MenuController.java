@@ -14,35 +14,35 @@ import java.util.List;
 
 public class MenuController {
 
-		private final MenuService menuService;
+    private final MenuService menuService;
 
-		public MenuController(MenuService menuService){
-			this.menuService = menuService;
-		}
+    public MenuController(MenuService menuService) {
+        this.menuService = menuService;
+    }
 
-		@PostMapping("{storeId}/menu/reg")
-		public ResponseEntity<MenuDto> register (
-				@PathVariable("storeId") Long storeId , @Valid @RequestBody MenuDto menuDto
-		){
+    @PostMapping("{storeId}/menu/reg")
+    public ResponseEntity<MenuDto> register(
+            @PathVariable("storeId") Long storeId, @Valid @RequestBody MenuDto menuDto
+    ) {
 
-			return ResponseEntity.ok(
-					menuService.register(storeId,menuDto));
-		}
+        return ResponseEntity.ok(
+                menuService.register(storeId, menuDto));
+    }
 
-		@PostMapping("{storeId}/menu/unreg/{menuId}")
-		public ResponseEntity<String> unregister(
-				@PathVariable("storeId") Long storeId, @PathVariable("menuId") Long menuId
-		){
-			return ResponseEntity.ok(menuService.unregister(menuId));
-		}
+    @PostMapping("{storeId}/menu/unreg/{menuId}")
+    public ResponseEntity<String> unregister(
+            @PathVariable("storeId") Long storeId, @PathVariable("menuId") Long menuId
+    ) {
+        return ResponseEntity.ok(menuService.unregister(menuId));
+    }
 
-		@GetMapping("/{storeId}/menu/list")
-		public ResponseEntity<List<MenuDto>> search(
-				@PathVariable("storeId") String storeId
-		){
+    @GetMapping("/{storeId}/menu/list")
+    public ResponseEntity<List<MenuDto>> search(
+            @PathVariable("storeId") String storeId
+    ) {
 
-			return ResponseEntity.ok(
-					menuService.getMenu(Long.parseLong(storeId)));
-		}
+        return ResponseEntity.ok(
+                menuService.getMenu(Long.parseLong(storeId)));
+    }
 
 }

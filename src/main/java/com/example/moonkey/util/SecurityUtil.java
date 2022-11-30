@@ -12,7 +12,8 @@ public class SecurityUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(SecurityUtil.class);
 
-    private SecurityUtil() {}
+    private SecurityUtil() {
+    }
 
     // 유틸성 메소드
     // Security Context에 Authentication 객체가 저장되는 시점은 JwtFilter의 doFilter 메소드에서 Request가 들어올 때 저장된다.
@@ -25,8 +26,7 @@ public class SecurityUtil {
         }
 
         String username = null;
-        if (authentication.getPrincipal() instanceof UserDetails) {
-            UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
+        if (authentication.getPrincipal() instanceof UserDetails springSecurityUser) {
             username = springSecurityUser.getUsername();
         } else if (authentication.getPrincipal() instanceof String) {
             username = (String) authentication.getPrincipal();

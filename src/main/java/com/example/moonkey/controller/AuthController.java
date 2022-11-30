@@ -43,7 +43,7 @@ public class AuthController { // 로그인 api
                 new UsernamePasswordAuthenticationToken(loginDto.getId(), loginDto.getPassword());
 
         Account account = accountRepository.findOneWithAuthoritiesById(loginDto.getId())
-                .orElseThrow(()->new NotFoundMemberException("Member not found"));
+                .orElseThrow(() -> new NotFoundMemberException("Member not found"));
 
         AccountDto accountDto = AccountDto.from(account);
 

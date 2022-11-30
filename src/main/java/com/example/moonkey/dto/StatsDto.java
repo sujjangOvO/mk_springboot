@@ -13,11 +13,11 @@ import javax.validation.constraints.NotNull;
 
 public class StatsDto {
 
-	@NotNull
-	private String category;
+    @NotNull
+    private String category;
 
-	@NotNull
-	private float score;
+    @NotNull
+    private float score;
 
-	private int counts;
+    private int counts;
 }

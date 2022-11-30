@@ -1,6 +1,9 @@
 package com.example.moonkey.domain;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -10,13 +13,12 @@ import java.sql.Timestamp;
 
 
 @Getter
-@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Where(clause = "deleted = false")
-@SQLDelete(sql="UPDATE orders SET deleted = true WHERE order_id = ?")
+@SQLDelete(sql = "UPDATE orders SET deleted = true WHERE order_id = ?")
 @Table(name = "orders")
 public class Orders {
 
@@ -32,7 +34,7 @@ public class Orders {
     private Timestamp orderDate;
 
     @ManyToOne
-    @JoinColumn(name="menuId")
+    @JoinColumn(name = "menuId")
     private Menu menuId;
 
     @ManyToOne
@@ -44,7 +46,7 @@ public class Orders {
     private Account uid;
 
     @ManyToOne
-    @JoinColumn(name="packageId")
+    @JoinColumn(name = "packageId")
     private Package packageId;
 
     @Builder.Default
