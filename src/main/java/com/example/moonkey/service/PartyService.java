@@ -239,15 +239,26 @@ public class PartyService {
     }
 
     @Transactional
-    public PartyDto setCompleteParty(long partyId){
-
+    public boolean setCompleteParty(long partyId){
         Party party = partyRepository.findOneByPartyId(partyId)
                 .orElseThrow(()->new NotFoundPartyException("Party not found"));
 
         party.setPartyActivatedFalse(party);
         partyRepository.save(party);
 
-        return PartyDto.from(party);
+        Set<Account> members = party.getMembers();
+        Account account =
+                SecurityUtil.getCurrentUsername()
+                        .flatMap(accountRepository::findOneWithAuthoritiesById)
+                        .orElseThrow(()->new NotFoundMemberException("Member not found"));
+
+        if(members.contains(account)){
+             return true;
+        }
+        else{
+            return false;
+        }
+
     }
 
     @Transactional

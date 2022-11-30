@@ -57,6 +57,14 @@ public class OrderController {
         return ResponseEntity.ok(orderService.register(orderDto));
     }
 
+    @GetMapping("/order/reg")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<OrderDto> registerByGet(
+            @Valid @RequestBody OrderDto orderDto
+    ) {
+        return ResponseEntity.ok(orderService.register(orderDto));
+    }
+
     @PostMapping("/order/unreg/{orderId}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<?> register(

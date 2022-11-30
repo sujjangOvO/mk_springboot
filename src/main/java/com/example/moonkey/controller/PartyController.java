@@ -1,13 +1,12 @@
 package com.example.moonkey.controller;
 
 import com.example.moonkey.domain.Party;
-import com.example.moonkey.dto.DeliveryDto;
 import com.example.moonkey.dto.PartyDisplayDto;
 import com.example.moonkey.dto.PartyDto;
 import com.example.moonkey.exception.NotFoundPartyException;
+import com.example.moonkey.exception.NotIncludeMemberException;
 import com.example.moonkey.repository.PartyRepository;
 import com.example.moonkey.service.PartyService;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -114,8 +113,19 @@ public class PartyController {
     }
 
     @PatchMapping("/party/complete/{partyId}")
-    public ResponseEntity<PartyDto> setCompleteParty(@PathVariable @Valid long partyId){
-        return ResponseEntity.ok((partyService.setCompleteParty(partyId)));
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<?> setCompleteParty(@PathVariable @Valid long partyId){
+
+        boolean result = partyService.setCompleteParty(partyId);
+
+        if(result){
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(URI.create("/app/order/reg/"));
+            return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+        }
+        else{
+            throw new NotIncludeMemberException("Member not include in party");
+        }
     }
 
 }
