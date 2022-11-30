@@ -45,13 +45,14 @@ public class PackageService {
         Orders orders = orderRepository.findOneByOrderId(orderId)
                 .orElseThrow(() -> new NotFoundOrderException("Order not found"));
 
-        Package packs = packageRepository.findOneByPartyId(party)
-                .orElseThrow(() -> new RuntimeException("Package not found"));
+        Package packs = packageRepository.findOneByPartyId(party);
+
 
         List<String> productList;
         List<Orders> ordersList;
         if (packs != null) {
-            productList = packs.getProduct();
+//            productList = packs.getProduct();
+            productList = new ArrayList<>(Collections.emptyList());
             ordersList = packs.getOrderId();
         } else {
             productList = new ArrayList<>(Collections.emptyList());
@@ -70,27 +71,25 @@ public class PackageService {
             amount += menu.getPrice();
         }
         Package aPackage;
+        PackageDto result;
         if(packs==null) {
             aPackage = Package.builder()
+                    .storeId(party.getStoreId())
                     .product(productList)
                     .amount(amount)
                     .orderId(ordersList)
                     .partyId(party)
                     .address(party.getAddr()) // party로 부터 addr 받아오도록 변경
                     .build();
+            result = PackageDto.from(packageRepository.save(aPackage));
         }
         else{
-            aPackage = Package.builder()
-                    .packageId(packs.getPackageId())
-                    .product(productList)
-                    .orderId(ordersList)
-                    .partyId(party)
-                    .address(party.getAddr())
-                    .build();
+            packs.setOrderId(ordersList);
+            result= PackageDto.from(packageRepository.save(packs));
 
         }
 
-        return packageDto.from(packageRepository.save(aPackage));
+        return result;
     }
 
     @Transactional

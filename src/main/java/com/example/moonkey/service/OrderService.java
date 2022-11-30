@@ -15,10 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 
 @Service
@@ -138,8 +135,8 @@ public class OrderService {
     }
 
     public void add(Party party, Orders order){
-        Package pack = packageRepository.findOneByPartyId(party)
-                .orElseThrow(()->new RuntimeException("Package not found"));
+        Package pack = packageRepository.findOneByPartyId(party);
+
         List<Orders> ordersList = pack.getOrderId();
         List<String> products = pack.getProduct();
         int new_price = order.getNumber()*order.getMenuId().getPrice();
@@ -162,8 +159,7 @@ public class OrderService {
 
 
     public void sub(Party party, long orderId){
-        Package pack = packageRepository.findOneByPartyId(party)
-                .orElseThrow(()->new RuntimeException("Package not found"));
+        Package pack = packageRepository.findOneByPartyId(party);
         List<Orders> ordersList = pack.getOrderId();
 
         Orders order = orderRepository.findOneByOrderId(orderId)

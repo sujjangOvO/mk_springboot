@@ -19,6 +19,6 @@ public interface PackageRepository extends JpaRepository<Package,Long>{
     Optional<Package> findOneByPackageId(long id);
 
     @Where(clause="activated=true")
-    Optional<Package> findOneByPartyId(Party party);
+    Package findOneByPartyId(Party party);
 
 }

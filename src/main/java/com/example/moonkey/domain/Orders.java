@@ -43,6 +43,10 @@ public class Orders {
     @JoinColumn(name = "uid")
     private Account uid;
 
+    @ManyToOne
+    @JoinColumn(name="packageId")
+    private Package packageId;
+
     @Builder.Default
     private boolean deleted = Boolean.FALSE;
 }
