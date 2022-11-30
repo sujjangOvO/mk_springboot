@@ -7,6 +7,7 @@ import com.example.moonkey.repository.AccountRepository;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
@@ -39,7 +40,7 @@ public class PartyDto {
     @NotNull
     private int maxnum;
 
-    @NotNull
+    @Nullable
     private String category;
 
     @NotNull
