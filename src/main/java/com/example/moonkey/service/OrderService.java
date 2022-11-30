@@ -128,8 +128,10 @@ public class OrderService {
                 .build();
 
         OrderDto result = OrderDto.from(orderRepository.save(order));
+        Orders orders = orderRepository.findOneByOrderId(order.getOrderId())
+                .orElseThrow(()->new NotFoundOrderException("Orders not found"));
         if(party!=null){
-            add(party,order);
+            add(party,orders);
         }
 
         return result;
