@@ -1,7 +1,6 @@
 package com.example.moonkey.dto;
 
 import com.example.moonkey.domain.Store;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -16,34 +15,34 @@ import javax.validation.constraints.NotNull;
 
 public class StoreDisplayDto {
 
-	@NotNull
-	private long storeId;
+    @NotNull
+    private long storeId;
 
-	@NotNull
-	private String name;
+    @NotNull
+    private String name;
 
-	@NotNull
-	private String address;
+    @NotNull
+    private String address;
 
-	@Column(nullable = true)
-	private String description;
+    @Column(nullable = true)
+    private String description;
 
-	@NotNull
-	private String category;
+    @NotNull
+    private String category;
 
-	@NotNull
-	private String contact;
+    @NotNull
+    private String contact;
 
-	public static StoreDisplayDto from(Store store){
-		if(store==null) return null;
-		return StoreDisplayDto.builder()
-				.storeId(store.getStoreId())
-				.name(store.getName())
-				.address(store.getAddress())
-				.description(store.getDescription())
-				.category(store.getCategoryName().getCategoryName())
-				.contact(store.getContact())
-				.build();
-	}
+    public static StoreDisplayDto from(Store store) {
+        if (store == null) return null;
+        return StoreDisplayDto.builder()
+                .storeId(store.getStoreId())
+                .name(store.getName())
+                .address(store.getAddress())
+                .description(store.getDescription())
+                .category(store.getCategoryName().getCategoryName())
+                .contact(store.getContact())
+                .build();
+    }
 
 }

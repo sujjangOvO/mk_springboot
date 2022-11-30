@@ -40,8 +40,8 @@ public class AccountDto { // 회원가입시 사용할 Dto
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Set<AuthorityDto> authorityDtoSet;
 
-    public static AccountDto from(Account account){
-        if(account == null) return null;
+    public static AccountDto from(Account account) {
+        if (account == null) return null;
 
         return AccountDto.builder()
                 .uid(account.getUid())

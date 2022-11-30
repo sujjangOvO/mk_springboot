@@ -1,47 +1,37 @@
 package com.example.moonkey.service;
 
-import com.example.moonkey.domain.*;
 import com.example.moonkey.domain.Package;
-import com.example.moonkey.dto.OrderDto;
+import com.example.moonkey.domain.*;
 import com.example.moonkey.dto.OrderDisplayDto;
-
-import com.example.moonkey.exception.*;
+import com.example.moonkey.dto.OrderDto;
+import com.example.moonkey.exception.NotFoundMenuException;
+import com.example.moonkey.exception.NotFoundOrderException;
+import com.example.moonkey.exception.NotFoundStoreException;
 import com.example.moonkey.repository.*;
-import com.example.moonkey.util.SecurityUtil;
-
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
-
+@RequiredArgsConstructor
 @Service
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final AccountRepository accountRepository;
     private final MenuRepository menuRepository;
     private final StoreRepository storeRepository;
-
-    private final PartyRepository partyRepository;
     private final PackageRepository packageRepository;
+    private final PartyRepository partyRepository;
+    private final AccountService accountService;
 
-    public OrderService(OrderRepository orderRepository, AccountRepository accountRepository
-                        , MenuRepository menuRepository, StoreRepository storeRepository, PartyRepository partyRepository, PackageRepository packageRepository){
-        this.orderRepository = orderRepository;
-        this.accountRepository = accountRepository;
-        this.menuRepository = menuRepository;
-        this.storeRepository = storeRepository;
-        this.partyRepository = partyRepository;
-        this.packageRepository = packageRepository;
-    }
-
-
-    @Transactional
-    public List<OrderDisplayDto> getOrderList(){
+    @Transactional(readOnly = true)
+    public List<OrderDisplayDto> getOrderList() {
 
         List<Orders> ordersList = orderRepository.findAll();
         Iterator<Orders> iter = ordersList.iterator();
@@ -49,8 +39,7 @@ public class OrderService {
 
         List<OrderDisplayDto> orderDisplayDtoList = new ArrayList<>(Collections.emptyList());
 
-        while(iter.hasNext())
-        {
+        while (iter.hasNext()) {
             Orders order = iter.next();
             OrderDisplayDto orderDisplayDto = OrderDisplayDto.builder().
                     orderId(order.getOrderId()).
@@ -58,7 +47,7 @@ public class OrderService {
                     orderDate(order.getOrderDate()).
                     menuName(order.getMenuId().getMenuName()).
                     storeNmae(order.getStoreId().getName()).
-                    price(order.getMenuId().getPrice()*order.getNumber()).
+                    price(order.getMenuId().getPrice() * order.getNumber()).
                     categoryName(order.getStoreId().getCategoryName().getCategoryName()).
                     build();
 
@@ -67,19 +56,18 @@ public class OrderService {
         return orderDisplayDtoList;
     }
 
-    @Transactional
-    public List<OrderDisplayDto> getOrderListByUid(long uid){
+    @Transactional(readOnly = true)
+    public List<OrderDisplayDto> getOrderListByUid(long uid) {
 
         List<Orders> ordersList = orderRepository.findAll();
         Iterator<Orders> iter = ordersList.iterator();
 
         List<OrderDisplayDto> orderDisplayDtoList = new ArrayList<>(Collections.emptyList());
 
-        while(iter.hasNext())
-        {
+        while (iter.hasNext()) {
             Orders order = iter.next();
 
-            if(order.getUid().getUid() == uid) {
+            if (order.getUid().getUid() == uid) {
                 OrderDisplayDto orderDisplayDto = OrderDisplayDto.builder().
                         orderId(order.getOrderId()).
                         number(order.getNumber()).
@@ -97,18 +85,14 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderDto register(OrderDto orderDto){
-
-        Account account =
-                SecurityUtil.getCurrentUsername()
-                        .flatMap(accountRepository::findOneWithAuthoritiesById)
-                        .orElseThrow(()->new NotFoundMemberException("Member not found"));
+    public OrderDto register(OrderDto orderDto) {
+        Account account = accountService.getAccount();
 
         Menu menu = menuRepository.findOneByMenuId(orderDto.getMenuId())
-                .orElseThrow(()->new NotFoundMenuException("Menu not found"));
+                .orElseThrow(() -> new NotFoundMenuException("Menu not found"));
 
         Store store = storeRepository.findOneByStoreId(orderDto.getStoreId())
-                .orElseThrow(()->new NotFoundStoreException("Store not found"));
+                .orElseThrow(() -> new NotFoundStoreException("Store not found"));
 
         //현재 파티 찾아서 패키지 등록에 자동 등록
         Party party = getCurrentParty(account);
@@ -126,20 +110,20 @@ public class OrderService {
 
         OrderDto result = OrderDto.from(orderRepository.save(order));
         Orders orders = orderRepository.findOneByOrderId(order.getOrderId())
-                .orElseThrow(()->new NotFoundOrderException("Orders not found"));
-        if(party!=null){
-            add(party,orders);
+                .orElseThrow(() -> new NotFoundOrderException("Orders not found"));
+        if (party != null) {
+            add(party, orders);
         }
 
         return result;
     }
 
-    public void add(Party party, Orders order){
+    public void add(Party party, Orders order) {
         Package pack = packageRepository.findOneByPartyId(party);
 
         List<Orders> ordersList = pack.getOrderId();
         List<String> products = pack.getProduct();
-        int new_price = order.getNumber()*order.getMenuId().getPrice();
+        int new_price = order.getNumber() * order.getMenuId().getPrice();
 
         ordersList.add(order);
         products.add(order.getMenuId().getMenuName());
@@ -150,7 +134,7 @@ public class OrderService {
                 partyId(pack.getPartyId()).
                 storeId(pack.getStoreId()).
                 address(pack.getAddress()).
-                amount(pack.getAmount()+new_price).
+                amount(pack.getAmount() + new_price).
                 product(products).
                 build();
 
@@ -158,12 +142,12 @@ public class OrderService {
     }
 
 
-    public void sub(Party party, long orderId){
+    public void sub(Party party, long orderId) {
         Package pack = packageRepository.findOneByPartyId(party);
         List<Orders> ordersList = pack.getOrderId();
 
         Orders order = orderRepository.findOneByOrderId(orderId)
-                .orElseThrow(()->new NotFoundOrderException("Order not found"));
+                .orElseThrow(() -> new NotFoundOrderException("Order not found"));
 
         ordersList.remove(order);
 
@@ -172,30 +156,28 @@ public class OrderService {
         packageRepository.save(pack);
     }
 
-    public Party getCurrentParty(Account account){
+    public Party getCurrentParty(Account account) {
         List<Party> partyList = partyRepository.findAll();
         Iterator<Party> iter = partyList.iterator();
         Party party = null;
-        while(iter.hasNext()){
+        while (iter.hasNext()) {
             Party temp = iter.next();
-            if(temp.isActivated()){
-                if(temp.getMembers().contains(account));
-                    party = temp;
-                    break;
+            if (temp.isActivated()) {
+                if (temp.getMembers().contains(account)) ;
+                party = temp;
+                break;
             }
         }
 
         return party;
     }
+
     @Transactional
-    public void unregister(long orderId){
-        Account account =
-                SecurityUtil.getCurrentUsername()
-                        .flatMap(accountRepository::findOneWithAuthoritiesById)
-                        .orElseThrow(()->new NotFoundMemberException("Member not found"));
+    public void unregister(long orderId) {
+        Account account = accountService.getAccount();
 
         Orders orders = orderRepository.findOneByOrderId(orderId)
-                .orElseThrow(()->new NotFoundOrderException("Order not found"));
+                .orElseThrow(() -> new NotFoundOrderException("Order not found"));
 
         OrderDto orderDto = OrderDto.builder()
                 .orderId(orders.getOrderId())
@@ -207,18 +189,17 @@ public class OrderService {
                 .build();
 
         Party party = getCurrentParty(account);
-        if(party!=null){
-            sub(party,orderId);
+        if (party != null) {
+            sub(party, orderId);
         }
 
         orderRepository.deleteById(orderDto.getOrderId());
     }
 
-    @Transactional
-    public OrderDisplayDto getOrdersByOrderId(long orderId){
+    @Transactional(readOnly = true)
+    public OrderDisplayDto getOrdersByOrderId(long orderId) {
         Orders orders = orderRepository.findOneByOrderId(orderId)
-                .orElseThrow(()->new NotFoundOrderException("Order not found"));
-
+                .orElseThrow(() -> new NotFoundOrderException("Order not found"));
         return OrderDisplayDto.from(orders);
     }
 }

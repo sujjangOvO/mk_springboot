@@ -33,7 +33,7 @@ public class OrderDto {
     @NotNull
     private long uid;
 
-    public static OrderDto from(Orders order){
+    public static OrderDto from(Orders order) {
         return OrderDto.builder().
                 orderId(order.getOrderId()).
                 number(order.getNumber()).

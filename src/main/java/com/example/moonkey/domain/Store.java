@@ -1,9 +1,11 @@
 package com.example.moonkey.domain;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -14,12 +16,13 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Where(clause = "deleted = false")
-@SQLDelete(sql="UPDATE store SET deleted = true WHERE store_id = ?")
+@SQLDelete(sql = "UPDATE store SET deleted = true WHERE store_id = ?")
 @Table(name = "store")
 public class Store {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="storeId")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "storeId")
     private long storeId;
 
     @NotNull
@@ -36,7 +39,7 @@ public class Store {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name="categoryName")
+    @JoinColumn(name = "categoryName")
     private Category categoryName;
 
     @NotNull

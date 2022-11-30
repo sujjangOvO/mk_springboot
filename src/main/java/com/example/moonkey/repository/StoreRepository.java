@@ -2,22 +2,22 @@ package com.example.moonkey.repository;
 
 import com.example.moonkey.domain.Account;
 import com.example.moonkey.domain.Store;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface StoreRepository extends JpaRepository<Store,Long> {
+public interface StoreRepository extends JpaRepository<Store, Long> {
 
-	Optional<Store> findOneByName(String name);
-	Optional<Store> findOneByStoreId(long id);
+    Optional<Store> findOneByName(String name);
 
-	Optional<Store> findStoreByOwnerId(Account ownerId);
+    Optional<Store> findOneByStoreId(long id);
 
-	Optional<Store> findStoreByStoreId(long storeId);
+    Optional<Store> findStoreByOwnerId(Account ownerId);
 
-	List<Store> findAll();
+    Optional<Store> findStoreByStoreId(long storeId);
 
-	List<Store> findAllByOwnerId(Account ownerId);
+    List<Store> findAll();
+
+    List<Store> findAllByOwnerId(Account ownerId);
 }

@@ -5,45 +5,31 @@ import com.example.moonkey.domain.Delivery;
 import com.example.moonkey.domain.Package;
 import com.example.moonkey.dto.DeliveryDto;
 import com.example.moonkey.exception.NotFoundDeliveryException;
-import com.example.moonkey.exception.NotFoundMemberException;
-import com.example.moonkey.exception.NotFoundStoreException;
-import com.example.moonkey.repository.*;
-import com.example.moonkey.util.SecurityUtil;
+import com.example.moonkey.repository.DeliveryRepository;
+import com.example.moonkey.repository.OrderRepository;
+import com.example.moonkey.repository.PackageRepository;
+import com.example.moonkey.repository.StoreRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class DeliveryService {
+    private final AccountService accountService;
     private final DeliveryRepository deliveryRepository;
-    private AccountRepository accountRepository;
-    private StoreRepository storeRepository;
-    private OrderRepository orderRepository;
-
+    private final StoreRepository storeRepository;
+    private final OrderRepository orderRepository;
     private final PackageRepository packageRepository;
 
-    public DeliveryService(DeliveryRepository deliveryRepository, AccountRepository accountRepository
-                            , StoreRepository storeRepository, OrderRepository orderRepository, PackageRepository packageRepository){
-        this.deliveryRepository = deliveryRepository;
-        this.accountRepository = accountRepository;
-        this.storeRepository = storeRepository;
-        this.orderRepository = orderRepository;
-        this.packageRepository = packageRepository;
-    }
-
     @Transactional
-    public DeliveryDto register(DeliveryDto deliveryDto){
-        Account account =
-                SecurityUtil.getCurrentUsername()
-                        .flatMap(accountRepository::findOneWithAuthoritiesById)
-                        .orElseThrow(()->new NotFoundMemberException("Member not found"));
+    public DeliveryDto register(DeliveryDto deliveryDto) {
+        Account account = accountService.getAccount();
 
-        Package packages =  packageRepository.findOneByPackageId(deliveryDto.getPackageId())
-                .orElseThrow(()-> new RuntimeException(("Package not found")));
+        Package packages = packageRepository.findOneByPackageId(deliveryDto.getPackageId())
+                .orElseThrow(() -> new RuntimeException(("Package not found")));
 
 
         Delivery delivery = Delivery.builder()
@@ -57,121 +43,60 @@ public class DeliveryService {
                 .totalPay(deliveryDto.getTotalPay())
                 .build();
 
-
-        return deliveryDto.from(deliveryRepository.save(delivery));
+        return DeliveryDto.from(deliveryRepository.save(delivery));
     }
 
+    @Transactional(readOnly = true)
+    public List<DeliveryDto> getMyDeliveries(long uid) {
+        List<Delivery> deliveryList = deliveryRepository.findAll();
+        return deliveryList.stream()
+                .filter(delivery -> delivery.getUid().getUid() == uid)
+                .map(DeliveryDto::from)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<DeliveryDto> getRequests() {
+        List<Delivery> deliveryList = deliveryRepository.findAll();
+        return deliveryList.stream()
+                .filter(delivery -> !delivery.isCallCheck() && !delivery.isDeliveryCheck())
+                .map(DeliveryDto::from)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<DeliveryDto> getProcesses() {
+        List<Delivery> deliveryList = deliveryRepository.findAll();
+        return deliveryList.stream()
+                .filter(Delivery::isCallCheck)
+                .filter(delivery -> !delivery.isDeliveryCheck())
+                .map(DeliveryDto::from)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<DeliveryDto> getCompletes() {
+        List<Delivery> deliveryList = deliveryRepository.findAll();
+        return deliveryList.stream()
+                .filter(Delivery::isCallCheck)
+                .filter(Delivery::isDeliveryCheck)
+                .map(DeliveryDto::from)
+                .toList();
+    }
 
     @Transactional
-    public List<DeliveryDto> getMyDeliveries(long uid){
+    public List<DeliveryDto> getDeliveries() {
 
         List<Delivery> deliveryList = deliveryRepository.findAll();
-        Iterator<Delivery> iter = deliveryList.iterator();
-
-
-        List<DeliveryDto> deliveryDtos = new ArrayList<>(Collections.emptyList());
-
-        while(iter.hasNext())
-        {
-            Delivery delivery = iter.next();
-
-            if(delivery.getUid().getUid() != uid) continue;
-
-            DeliveryDto deliveryDto = DeliveryDto.from(delivery);
-            deliveryDtos.add(deliveryDto);
-        }
-        return deliveryDtos;
-
-    }
-
-
-    @Transactional
-    public List<DeliveryDto> getRequests(){
-
-        List<Delivery> deliveryList = deliveryRepository.findAll();
-        Iterator<Delivery> iter = deliveryList.iterator();
-
-        List<DeliveryDto> deliveryDtos = new ArrayList<>(Collections.emptyList());
-        while(iter.hasNext())
-        {
-            Delivery delivery = iter.next();
-            if(delivery.isCallCheck() == false && delivery.isDeliveryCheck() == false) {
-                DeliveryDto deliveryDto = DeliveryDto.from(delivery);
-                deliveryDtos.add(deliveryDto);
-            }
-        }
-        return deliveryDtos;
-
-    }
-    @Transactional
-    public List<DeliveryDto> getProcesses(){
-
-        List<Delivery> deliveryList = deliveryRepository.findAll();
-        Iterator<Delivery> iter = deliveryList.iterator();
-
-
-        List<DeliveryDto> deliveryDtos = new ArrayList<>(Collections.emptyList());
-
-        while(iter.hasNext())
-        {
-            Delivery delivery = iter.next();
-            if(delivery.isCallCheck()==true)
-                if(delivery.isDeliveryCheck()==false){
-                    DeliveryDto deliveryDto = DeliveryDto.from(delivery);
-                    deliveryDtos.add(deliveryDto);
-                }
-
-        }
-        return deliveryDtos;
-
-    }
-
-
-    @Transactional
-    public List<DeliveryDto> getCompletes(){
-
-        List<Delivery> deliveryList = deliveryRepository.findAll();
-        Iterator<Delivery> iter = deliveryList.iterator();
-
-
-        List<DeliveryDto> deliveryDtos = new ArrayList<>(Collections.emptyList());
-
-        while(iter.hasNext())
-        {
-            Delivery delivery = iter.next();
-            if(delivery.isCallCheck()==false || delivery.isDeliveryCheck()==false) continue;
-
-            DeliveryDto deliveryDto = DeliveryDto.from(delivery);
-            deliveryDtos.add(deliveryDto);
-        }
-        return deliveryDtos;
-
-    }
-
-
-    @Transactional
-    public List<DeliveryDto> getDeliveries(){
-
-        List<Delivery> deliveryList = deliveryRepository.findAll();
-        Iterator<Delivery> iter = deliveryList.iterator();
-
-
-        List<DeliveryDto> deliveryDtos = new ArrayList<>(Collections.emptyList());
-
-        while(iter.hasNext())
-        {
-            Delivery delivery = iter.next();
-            DeliveryDto deliveryDto = DeliveryDto.from(delivery);
-            deliveryDtos.add(deliveryDto);
-        }
-        return deliveryDtos;
+        return deliveryList.stream()
+                .map(DeliveryDto::from)
+                .toList();
     }
 
     @Transactional
-    public DeliveryDto setDeliveryCheck(long deliveryId){
-
+    public DeliveryDto setDeliveryCheck(long deliveryId) {
         Delivery delivery = deliveryRepository.findOneByDeliveryId(deliveryId)
-                .orElseThrow(()->new NotFoundDeliveryException("Delivery not found"));
+                .orElseThrow(() -> new NotFoundDeliveryException("Delivery not found"));
 
         delivery.setDeliveryCheck(true);
         deliveryRepository.save(delivery);
@@ -180,14 +105,12 @@ public class DeliveryService {
     }
 
     @Transactional
-    public DeliveryDto setCallCheck(long deliveryId){
-
+    public DeliveryDto setCallCheck(long deliveryId) {
         Delivery delivery = deliveryRepository.findOneByDeliveryId(deliveryId)
-                .orElseThrow(()->new NotFoundDeliveryException("Delivery not found"));
+                .orElseThrow(() -> new NotFoundDeliveryException("Delivery not found"));
 
         delivery.setCallCheck(true);
         deliveryRepository.save(delivery);
-
         return DeliveryDto.from(delivery);
     }
 

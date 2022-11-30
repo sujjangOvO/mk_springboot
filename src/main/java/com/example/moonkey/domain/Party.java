@@ -9,7 +9,9 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Builder
@@ -17,13 +19,13 @@ import java.util.*;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Where(clause = "deleted = false")
-@SQLDelete(sql="UPDATE party SET deleted = true WHERE party_id = ?")
+@SQLDelete(sql = "UPDATE party SET deleted = true WHERE party_id = ?")
 @Table(name = "party")
 public class Party {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="partyId")
+    @Column(name = "partyId")
     private long partyId;
 
     @ManyToOne
@@ -43,27 +45,24 @@ public class Party {
 
     @NotNull
     private String partyTitle;
+    @Builder.Default
+    private boolean activated = Boolean.TRUE;
+    @Builder.Default
+    private boolean deleted = Boolean.FALSE;
 
     public void setStoreId(Store storeId) {
         this.storeId = storeId;
     }
 
-    public Set<Long> getUids(){
+    public Set<Long> getUids() {
         Set<Long> memberList = new HashSet<>(members.size());
-        Iterator<Account> iter = members.iterator();
-        while(iter.hasNext()){
-            memberList.add(iter.next().getUid());
+        for (Account member : members) {
+            memberList.add(member.getUid());
         }
         return memberList;
     }
 
-    @Builder.Default
-    private boolean activated = Boolean.TRUE;
-
-    @Builder.Default
-    private boolean deleted = Boolean.FALSE;
-
-    public void setPartyActivatedFalse(Party party){
+    public void setPartyActivatedFalse(Party party) {
         this.activated = false;
     }
 

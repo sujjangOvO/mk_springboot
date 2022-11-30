@@ -24,41 +24,41 @@ public class PartyController {
     private final PartyService partyService;
     private final PartyRepository partyRepository;
 
-    public PartyController(PartyService partyService, PartyRepository partyRepository){
+    public PartyController(PartyService partyService, PartyRepository partyRepository) {
         this.partyService = partyService;
         this.partyRepository = partyRepository;
     }
 
     @GetMapping("/party/list")
-    public ResponseEntity<List<PartyDisplayDto>> partyList(HttpServletRequest request){
+    public ResponseEntity<List<PartyDisplayDto>> partyList(HttpServletRequest request) {
         return ResponseEntity.ok(partyService.getParties());
     }
 
     @GetMapping("/party/{uid}/list")
-    public ResponseEntity<PartyDisplayDto> userPartyList(@PathVariable long uid){
+    public ResponseEntity<PartyDisplayDto> userPartyList(@PathVariable long uid) {
         return ResponseEntity.ok(partyService.getUserParties(uid));
     }
 
     @GetMapping("/party/myPartyList")
-    public ResponseEntity<List<PartyDisplayDto>> getMyParties(HttpServletRequest request){
+    public ResponseEntity<List<PartyDisplayDto>> getMyParties(HttpServletRequest request) {
         return ResponseEntity.ok(partyService.getMyParties());
     }
 
     @GetMapping("/party/activatesList")
-    public ResponseEntity<List<PartyDisplayDto>> getActivates(HttpServletRequest request){
+    public ResponseEntity<List<PartyDisplayDto>> getActivates(HttpServletRequest request) {
         return ResponseEntity.ok(partyService.getActivates());
     }
 
     @GetMapping("/party/list/{storeId}")
     public ResponseEntity<List<PartyDisplayDto>> storePartyList(
-            @PathVariable @Valid long storeId){
+            @PathVariable @Valid long storeId) {
         return ResponseEntity.ok(partyService.getParties(storeId));
     }
 
     @GetMapping("/party/{partyId}")
     public ResponseEntity<PartyDto> getParty(
             @PathVariable @Valid long partyId
-    ){
+    ) {
         return ResponseEntity.ok(partyService.getParty(partyId));
     }
 
@@ -66,16 +66,16 @@ public class PartyController {
     public ResponseEntity<PartyDto> register(
             @PathVariable @Valid long storeId, @Valid @RequestBody PartyDto partyDto,
             @PathVariable @Valid long uid
-    ){
+    ) {
         return ResponseEntity.ok(partyService.register(storeId, uid, partyDto));
     }
 
     @PostMapping("/party/unreg/{partyId}")
     public ResponseEntity<?> unregister(
             @PathVariable @Valid Long partyId
-    ){
-        Party party =  partyRepository.findOneByPartyId(partyId)
-                .orElseThrow(()->new NotFoundPartyException("Party not found"));
+    ) {
+        Party party = partyRepository.findOneByPartyId(partyId)
+                .orElseThrow(() -> new NotFoundPartyException("Party not found"));
 
         partyService.unregister(partyId);
 
@@ -88,7 +88,7 @@ public class PartyController {
     public ResponseEntity<PartyDto> partyJoin(
             @Valid @PathVariable long partyId,
             @Valid @PathVariable long uid
-    ){
+    ) {
         return ResponseEntity.ok(partyService.join(partyId, uid));
     }
 
@@ -96,9 +96,9 @@ public class PartyController {
     public ResponseEntity<?> partyLeave(
             @PathVariable @Valid long partyId,
             @PathVariable @Valid long uid
-    ){
-        Party party =  partyRepository.findOneByPartyId(partyId)
-                .orElseThrow(()->new NotFoundPartyException("Party not found"));
+    ) {
+        Party party = partyRepository.findOneByPartyId(partyId)
+                .orElseThrow(() -> new NotFoundPartyException("Party not found"));
 
         partyService.leave(partyId, uid);
 
@@ -106,24 +106,24 @@ public class PartyController {
         headers.setLocation(URI.create("/app/party/list"));
         return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
     }
+
     @GetMapping("party/list/rec")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<List<PartyDisplayDto>> partyRecList(HttpServletRequest request){
+    public ResponseEntity<List<PartyDisplayDto>> partyRecList(HttpServletRequest request) {
         return ResponseEntity.ok(partyService.getRecParties());
     }
 
     @PatchMapping("/party/complete/{partyId}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<?> setCompleteParty(@PathVariable @Valid long partyId){
+    public ResponseEntity<?> setCompleteParty(@PathVariable @Valid long partyId) {
 
         boolean result = partyService.setCompleteParty(partyId);
 
-        if(result){
+        if (result) {
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(URI.create("/app/order/reg/"));
             return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
-        }
-        else{
+        } else {
             throw new NotIncludeMemberException("Member not include in party");
         }
     }

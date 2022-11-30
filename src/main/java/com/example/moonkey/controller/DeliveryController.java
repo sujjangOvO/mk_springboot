@@ -16,27 +16,27 @@ public class DeliveryController {
 
     private final DeliveryService deliveryService;
 
-    public DeliveryController(DeliveryService deliveryService){
+    public DeliveryController(DeliveryService deliveryService) {
         this.deliveryService = deliveryService;
     }
 
     @GetMapping("/delivery/list")
-    public ResponseEntity<List<DeliveryDto>> getDeliveries(HttpServletRequest request){
+    public ResponseEntity<List<DeliveryDto>> getDeliveries(HttpServletRequest request) {
         return ResponseEntity.ok(deliveryService.getDeliveries());
     }
 
     @GetMapping("/delivery/requestList")
-    public ResponseEntity<List<DeliveryDto>> getRequests(HttpServletRequest request){
+    public ResponseEntity<List<DeliveryDto>> getRequests(HttpServletRequest request) {
         return ResponseEntity.ok(deliveryService.getRequests());
     }
 
     @GetMapping("/delivery/processList")
-    public ResponseEntity<List<DeliveryDto>> getProcesses(HttpServletRequest request){
+    public ResponseEntity<List<DeliveryDto>> getProcesses(HttpServletRequest request) {
         return ResponseEntity.ok(deliveryService.getProcesses());
     }
 
     @GetMapping("/delivery/completeList")
-    public ResponseEntity<List<DeliveryDto>> getCompletes(HttpServletRequest request){
+    public ResponseEntity<List<DeliveryDto>> getCompletes(HttpServletRequest request) {
         return ResponseEntity.ok(deliveryService.getCompletes());
     }
 
@@ -44,22 +44,22 @@ public class DeliveryController {
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<DeliveryDto> register(
             @Valid @RequestBody DeliveryDto deliveryDto
-    ){
+    ) {
         return ResponseEntity.ok(deliveryService.register(deliveryDto));
     }
 
     @GetMapping("/delivery/list/{uid}")
-    public ResponseEntity<List<DeliveryDto>> getMyDeliveries(@PathVariable @Valid long uid){
+    public ResponseEntity<List<DeliveryDto>> getMyDeliveries(@PathVariable @Valid long uid) {
         return ResponseEntity.ok(deliveryService.getMyDeliveries(uid));
     }
 
     @PatchMapping("/delivery/deliveryCheck/{deliveryId}")
-    public ResponseEntity<DeliveryDto> setDeliveryCheck(@PathVariable @Valid long deliveryId){
+    public ResponseEntity<DeliveryDto> setDeliveryCheck(@PathVariable @Valid long deliveryId) {
         return ResponseEntity.ok((deliveryService.setDeliveryCheck(deliveryId)));
     }
 
     @PatchMapping("/delivery/callCheck/{deliveryId}")
-    public ResponseEntity<DeliveryDto> setCallCheck(@PathVariable @Valid long deliveryId){
+    public ResponseEntity<DeliveryDto> setCallCheck(@PathVariable @Valid long deliveryId) {
         return ResponseEntity.ok((deliveryService.setCallCheck(deliveryId)));
     }
 

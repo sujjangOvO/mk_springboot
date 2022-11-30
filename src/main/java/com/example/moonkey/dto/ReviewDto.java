@@ -1,10 +1,9 @@
 package com.example.moonkey.dto;
 
-import com.example.moonkey.domain.Party;
 import com.example.moonkey.domain.Review;
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -31,7 +30,7 @@ public class ReviewDto {
     @NotNull
     private long storeId;
 
-    public static ReviewDto from(Review review){
+    public static ReviewDto from(Review review) {
         return ReviewDto.builder().
                 reviewId(review.getReviewId()).
                 content(review.getContent()).

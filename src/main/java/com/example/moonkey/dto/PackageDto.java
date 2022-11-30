@@ -1,6 +1,6 @@
 package com.example.moonkey.dto;
 
-import com.example.moonkey.domain.*;
+import com.example.moonkey.domain.Orders;
 import com.example.moonkey.domain.Package;
 import com.example.moonkey.exception.NotFoundOrderException;
 import com.example.moonkey.repository.OrderRepository;
@@ -9,7 +9,9 @@ import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.constraints.NotNull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 @Getter
 @Setter
@@ -37,18 +39,7 @@ public class PackageDto {
     @NotNull
     private int amount;
 
-    public List<Orders> getOrders(List<Long> list){
-        List<Orders> memberList = new ArrayList<>();
-        Iterator iter = list.iterator();
-        while(iter.hasNext()){
-            long num = (long) iter.next();
-            memberList.add(orderRepository.findOneByOrderId(num).orElseThrow(()->new NotFoundOrderException("Order not found")));
-        }
-        return memberList;
-    }
-
-
-    public static PackageDto from(Package aPackage){
+    public static PackageDto from(Package aPackage) {
         return PackageDto.builder()
                 .packageId(aPackage.getPackageId())
                 .product(aPackage.getProduct())
@@ -57,5 +48,15 @@ public class PackageDto {
                 .orderId(aPackage.getOrderIds())
                 .partyId(aPackage.getPartyId().getPartyId())
                 .build();
+    }
+
+    public List<Orders> getOrders(List<Long> list) {
+        List<Orders> memberList = new ArrayList<>();
+        Iterator iter = list.iterator();
+        while (iter.hasNext()) {
+            long num = (long) iter.next();
+            memberList.add(orderRepository.findOneByOrderId(num).orElseThrow(() -> new NotFoundOrderException("Order not found")));
+        }
+        return memberList;
     }
 }

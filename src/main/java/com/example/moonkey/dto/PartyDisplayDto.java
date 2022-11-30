@@ -36,7 +36,7 @@ public class PartyDisplayDto {
     @Builder.Default
     private Set<Long> members = new HashSet<>();
 
-    public static PartyDisplayDto from(Party party){
+    public static PartyDisplayDto from(Party party) {
         return PartyDisplayDto.builder().
                 storeName(party.getStoreId().getName()).
                 partyId(party.getPartyId()).

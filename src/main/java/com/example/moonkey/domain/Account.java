@@ -15,7 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Where(clause = "deleted = false")
-@SQLDelete(sql="UPDATE account SET deleted = true WHERE uid = ?")
+@SQLDelete(sql = "UPDATE account SET deleted = true WHERE uid = ?")
 @Table(name = "account")
 public class Account {
 
@@ -42,7 +42,7 @@ public class Account {
     @NotNull
     private String addr;
 
-    @Column(name="activated")
+    @Column(name = "activated")
     private boolean activated; // 활성화여부
 
 
@@ -50,14 +50,14 @@ public class Account {
     @JoinTable(
             name = "account_authority",
             joinColumns = @JoinColumn(name = "uid"),
-            inverseJoinColumns = @JoinColumn(name="authorityName"))
+            inverseJoinColumns = @JoinColumn(name = "authorityName"))
     private Set<Authority> authorities;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name="account_store",
+            name = "account_store",
             joinColumns = @JoinColumn(name = "uid"),
-            inverseJoinColumns = @JoinColumn(name="storeId")
+            inverseJoinColumns = @JoinColumn(name = "storeId")
     )
     private Set<Store> stores;
 

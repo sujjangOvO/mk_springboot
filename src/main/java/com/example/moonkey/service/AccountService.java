@@ -6,44 +6,38 @@ import com.example.moonkey.dto.AccountDto;
 import com.example.moonkey.dto.StatsDto;
 import com.example.moonkey.exception.DuplicateMemberException;
 import com.example.moonkey.exception.NotFoundMemberException;
-import com.example.moonkey.repository.AccountRepository;
-import com.example.moonkey.repository.CategoryRepository;
-import com.example.moonkey.repository.OrderRepository;
+import com.example.moonkey.exception.PartyRunningException;
+import com.example.moonkey.repository.*;
 import com.example.moonkey.util.SecurityUtil;
 import com.example.moonkey.util.StatsDtoCompartor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
+@RequiredArgsConstructor
 @Service
 public class AccountService {
     private final AccountRepository accountRepository;
     private final OrderRepository orderRepository;
     private final PasswordEncoder passwordEncoder;
     private final CategoryRepository categoryRepository;
-    private final StoreService storeService;
+    private final MenuRepository menuRepository;
+    private final StoreRepository storeRepository;
+    private final PartyRepository partyRepository;
 
-    public AccountService(AccountRepository accountRepository, OrderRepository orderRepository, PasswordEncoder passwordEncoder, CategoryRepository categoryRepository
-                            ,StoreService storeService){
-        this.accountRepository = accountRepository;
-        this.orderRepository = orderRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.categoryRepository = categoryRepository;
-        this.storeService = storeService;
-    }
-
-    @Transactional
-    public AccountDto getMyAccountInformation(long uid){
+    @Transactional(readOnly = true)
+    public AccountDto getMyAccountInformation(long uid) {
         return AccountDto.from(
                 accountRepository.findAccountByUid(uid)
-                        .orElseThrow(()->new NotFoundMemberException("Member not found")));
+                        .orElseThrow(() -> new NotFoundMemberException("Member not found")));
     }
 
     @Transactional
-    public AccountDto signup(AccountDto accountDto){
-        if(accountRepository.findOneWithAuthoritiesById(accountDto.getId()).orElse(null) != null){
+    public AccountDto signup(AccountDto accountDto) {
+        if (accountRepository.findOneWithAuthoritiesById(accountDto.getId()).orElse(null) != null) {
             throw new DuplicateMemberException("이미 가입되어 있는 유저입니다.");
         }
 
@@ -64,20 +58,26 @@ public class AccountService {
                 .activated(true)
                 .build();
 
-        return accountDto.from(accountRepository.save(account));
+        return AccountDto.from(accountRepository.save(account));
     }
 
     @Transactional
-    public AccountDto signout(){
-        Account account =  SecurityUtil.getCurrentUsername()
-                .flatMap(accountRepository::findOneWithAuthoritiesById)
-                .orElseThrow(()->new NotFoundMemberException("Member not found"));
+    public AccountDto signout() {
+        Account account = getAccount();
 
         Set<Store> stores = account.getStores();
-        Iterator<Store> iterator = stores.iterator();
-        while(iterator.hasNext()){
-            Store store = iterator.next();
-            storeService.unregister(store.getStoreId());
+        for (Store store : stores) {
+            List<Party> partyList = partyRepository.findAllByStoreId(store);
+            for (Party party : partyList) {
+                if (party.isActivated()) {
+                    throw new PartyRunningException("There is running parties on the store");
+                }
+            }
+
+            List<Menu> menuList = menuRepository.findAllByStoreId(store);
+
+            menuRepository.deleteAll(menuList);
+            storeRepository.delete(store);
         }
 
         AccountDto accountDto = AccountDto.from(account); // 수정
@@ -87,63 +87,51 @@ public class AccountService {
     }
 
 
-
     @Transactional(readOnly = true)
-    public AccountDto getUserWithAuthorities(String username){ // 인자로 받은 username에 해당하는 유저 객체와 권한 정보를 가져오는 메소드
+    public AccountDto getUserWithAuthorities(String username) { // 인자로 받은 username에 해당하는 유저 객체와 권한 정보를 가져오는 메소드
         return AccountDto.from(accountRepository.findOneWithAuthoritiesById(username).orElse(null));
     }
 
     @Transactional(readOnly = true)
     public AccountDto getMyUserWithAuthorities() { // 현재 Security Context에 저장된 username에 해당하는 유저, 권한 정보를 가져오는 메소드.
-        return AccountDto.from(
-                SecurityUtil.getCurrentUsername()
-                        .flatMap(accountRepository::findOneWithAuthoritiesById)
-                        .orElseThrow(()->new NotFoundMemberException("Member not found"))
-        );
+        return AccountDto.from(getAccount());
     }
 
     // 따라서 이 두 가지 메소드의 허용 권한을 다르게 하여 권한 검증에 대한 부분을 테스트한다.
     // UserService의 메소드를 호출할 AccountController를 생성
-    @Transactional
-    public List<StatsDto> getMyUserStats(){
+    @Transactional(readOnly = true)
+    public List<StatsDto> getMyUserStats() {
+        Account account = getAccount();
 
-        Account account = SecurityUtil.getCurrentUsername()
-                .flatMap(accountRepository::findOneWithAuthoritiesById)
-                .orElseThrow(()->new NotFoundMemberException("Member not found"));
-
-        HashMap<String,Integer> categoryCounts = new HashMap<>();
+        HashMap<String, Integer> categoryCounts = new HashMap<>();
         List<StatsDto> statsList = new ArrayList<>(Collections.emptyList());
 
         List<Category> categories = categoryRepository.findAll();
-        Iterator<Category> categoryIterator =categories.iterator();
 
-        while (categoryIterator.hasNext()){
-            String name = categoryIterator.next().getCategoryName();
-            categoryCounts.put(name,0);
+        for (Category value : categories) {
+            String name = value.getCategoryName();
+            categoryCounts.put(name, 0);
         }
 
         List<Orders> ordersList = orderRepository.findAllByUid(account);
-        Iterator<Orders> iter = ordersList.iterator();
-
 
         // 받아온 order를 기반으로 category별 주문 횟수를 categoryCounts 에 HashMap 형태로 정리
-        while(iter.hasNext()){
-            Orders order = iter.next();
+        for (Orders order : ordersList) {
             String category = order.getStoreId().getCategoryName().getCategoryName();
             int nums = order.getNumber();
 
-            categoryCounts.put(category, categoryCounts.getOrDefault(category,0)+nums);
+            categoryCounts.put(category, categoryCounts.getOrDefault(category, 0) + nums);
         }
         // 정리된 categoryCounts를 기반으로 Category별 통계량 분석
         int totalCounts = 0;
-        for (int val : categoryCounts.values()){
-            totalCounts+=val;
+        for (int val : categoryCounts.values()) {
+            totalCounts += val;
         }
 
-        for(Map.Entry<String, Integer> entry:categoryCounts.entrySet()){
+        for (Map.Entry<String, Integer> entry : categoryCounts.entrySet()) {
             StatsDto statsDto = StatsDto.builder()
                     .category(entry.getKey())
-                    .score(totalCounts!=0?entry.getValue()/totalCounts:0f)
+                    .score(totalCounts != 0 ? entry.getValue() / totalCounts : 0f)
                     .counts(entry.getValue())
                     .build();
 
@@ -151,8 +139,15 @@ public class AccountService {
         }
         StatsDtoCompartor statsDtoCompartor = new StatsDtoCompartor();
 
-        Collections.sort(statsList, statsDtoCompartor.reversed());
+        statsList.sort(statsDtoCompartor.reversed());
 
         return statsList;
+    }
+
+    @Transactional(readOnly = true)
+    public Account getAccount() {
+        return SecurityUtil.getCurrentUsername()
+                .flatMap(accountRepository::findOneWithAuthoritiesById)
+                .orElseThrow(() -> new NotFoundMemberException("Member not found"));
     }
 }
