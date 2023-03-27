@@ -24,7 +24,7 @@ public class ReviewController {
     private final StoreRepository storeRepository;
     private final AccountRepository accountRepository;
 
-    public ReviewController(ReviewService reviewService, ReviewRepository reviewRepository, StoreRepository storeRepository, AccountRepository accountRepository){
+    public ReviewController(ReviewService reviewService, ReviewRepository reviewRepository, StoreRepository storeRepository, AccountRepository accountRepository) {
         this.reviewRepository = reviewRepository;
         this.reviewService = reviewService;
         this.storeRepository = storeRepository;
@@ -33,26 +33,26 @@ public class ReviewController {
 
     @GetMapping("/review/{storeId}")
     public ResponseEntity<List<ReviewDto>> storeReviewList( // 가게의 리뷰 리스트 반환
-            @PathVariable("storeId") @Valid long storeId){
-        Store store = storeRepository.findStoreByStoreId(storeId).orElseThrow(()->new NotFoundStoreException("Store not found"));
+                                                            @PathVariable("storeId") @Valid long storeId) {
+        Store store = storeRepository.findStoreByStoreId(storeId).orElseThrow(() -> new NotFoundStoreException("Store not found"));
 
         return ResponseEntity.ok(reviewService.storeReviewList(storeId));
     }
 
     @GetMapping("/review/list/{uid}")
     public ResponseEntity<List<ReviewDto>> myReviewList( // 사용자가 작성한 리뷰 리스트 반환
-             @PathVariable @Valid long uid){
-        Account account = accountRepository.findAccountByUid(uid).orElseThrow(()->new NotFoundMemberException("Member not found"));
+                                                         @PathVariable @Valid long uid) {
+        Account account = accountRepository.findAccountByUid(uid).orElseThrow(() -> new NotFoundMemberException("Member not found"));
         return ResponseEntity.ok(reviewService.myReviewList(uid));
     }
 
     @PostMapping("/review/{storeId}/post")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<ReviewDto> reviewRegister(@PathVariable("storeId") long storeId
-            , @RequestBody ReviewDto reviewDto){
+            , @RequestBody ReviewDto reviewDto) {
 
-        Store store = storeRepository.findStoreByStoreId(storeId).orElseThrow(()->new NotFoundStoreException("Store not found"));
-        return ResponseEntity.ok(reviewService.reviewRegister(reviewDto,store));
+        Store store = storeRepository.findStoreByStoreId(storeId).orElseThrow(() -> new NotFoundStoreException("Store not found"));
+        return ResponseEntity.ok(reviewService.reviewRegister(reviewDto, store));
     }
 
 }

@@ -4,81 +4,46 @@ import com.example.moonkey.domain.Account;
 import com.example.moonkey.domain.Review;
 import com.example.moonkey.domain.Store;
 import com.example.moonkey.dto.ReviewDto;
-import com.example.moonkey.exception.NotFoundMemberException;
-import com.example.moonkey.repository.AccountRepository;
 import com.example.moonkey.repository.ReviewRepository;
-import com.example.moonkey.util.SecurityUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class ReviewService {
     private final ReviewRepository reviewRepository;
-    private final AccountRepository accountRepository;
+    private final AccountService accountService;
 
-    public ReviewService(ReviewRepository reviewRepository, AccountRepository accountRepository){
-        this.reviewRepository = reviewRepository;
-        this.accountRepository = accountRepository;
-    }
-
-    @Transactional
-    public List<ReviewDto> myReviewList(long uid){
+    @Transactional(readOnly = true)
+    public List<ReviewDto> myReviewList(long uid) {
         List<Review> reviewList = reviewRepository.findAll();
-        Iterator<Review> iter = reviewList.iterator();
-
-        List<ReviewDto> reviewDtos = new ArrayList<>(Collections.emptyList());
-
-        while(iter.hasNext())
-        {
-            Review review = iter.next();
-
-            if(review.getAccount().getUid() == uid) {
-                ReviewDto reviewDto = ReviewDto.from(review);
-                reviewDtos.add(reviewDto);
-            }
-        }
-
-        return reviewDtos;
+        return reviewList.stream()
+                .filter(review -> review.getAccount().getUid() == uid)
+                .map(ReviewDto::from)
+                .toList();
     }
 
     @Transactional
-    public List<ReviewDto> storeReviewList(long storeId){
+    public List<ReviewDto> storeReviewList(long storeId) {
         List<Review> reviewList = reviewRepository.findAll();
-        Iterator<Review> iter = reviewList.iterator();
-
-        List<ReviewDto> reviewDtos = new ArrayList<>(Collections.emptyList());
-
-        while(iter.hasNext())
-        {
-            Review review = iter.next();
-
-            if(review.getStoreId().getStoreId() == storeId) {
-                ReviewDto reviewDto = ReviewDto.from(review);
-                reviewDtos.add(reviewDto);
-            }
-        }
-
-        return reviewDtos;
+        return reviewList.stream()
+                .filter(review -> review.getStoreId().getStoreId() == storeId)
+                .map(ReviewDto::from)
+                .toList();
     }
 
     @Transactional
-    public ReviewDto reviewRegister(ReviewDto reviewDto, Store store){
-        Account account = SecurityUtil.getCurrentUsername()
-                .flatMap(accountRepository::findOneWithAuthoritiesById)
-                .orElseThrow(()->new NotFoundMemberException("Member not found"));
+    public ReviewDto reviewRegister(ReviewDto reviewDto, Store store) {
+        Account account = accountService.getAccount();
         Review review = Review.builder()
                 .account(account)
                 .content(reviewDto.getContent())
                 .storeId(store)
                 .stars(reviewDto.getStars())
                 .build();
-
         return ReviewDto.from(reviewRepository.save(review));
     }
-
 }

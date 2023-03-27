@@ -46,18 +46,7 @@ public class PartyDto {
     @NotNull
     private String addr;
 
-
-    public Set<Account> getAccounts(Set<Long> list){
-        Set<Account> memberList = new HashSet<>();
-        Iterator iter = list.iterator();
-        while(iter.hasNext()){
-            long num = (long) iter.next();
-            memberList.add(accountRepository.findAccountByUid((num)).orElseThrow(()->new NotFoundMemberException("Member not found")));
-        }
-        return memberList;
-    }
-
-    public static PartyDto from(Party party){
+    public static PartyDto from(Party party) {
         return PartyDto.builder().
                 partyId(party.getPartyId()).
                 partyTitle(party.getPartyTitle()).
@@ -67,5 +56,15 @@ public class PartyDto {
                 addr(party.getAddr()).
                 category(party.getStoreId().getCategoryName().getCategoryName()).
                 build();
+    }
+
+    public Set<Account> getAccounts(Set<Long> list) {
+        Set<Account> memberList = new HashSet<>();
+        Iterator iter = list.iterator();
+        while (iter.hasNext()) {
+            long num = (long) iter.next();
+            memberList.add(accountRepository.findAccountByUid((num)).orElseThrow(() -> new NotFoundMemberException("Member not found")));
+        }
+        return memberList;
     }
 }

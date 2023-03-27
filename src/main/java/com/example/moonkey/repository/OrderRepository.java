@@ -9,9 +9,11 @@ import java.util.List;
 import java.util.Optional;
 
 
-public interface OrderRepository extends  JpaRepository<Orders,Long>{
+public interface OrderRepository extends JpaRepository<Orders, Long> {
     Orders findAllByOrderDate(LocalDateTime now);
+
     Optional<Orders> findOneByOrderId(long id);
+
     List<Orders> findAll();
 
     List<Orders> findAllByUid(Account account);

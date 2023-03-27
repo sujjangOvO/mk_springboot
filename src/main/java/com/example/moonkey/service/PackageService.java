@@ -1,41 +1,34 @@
 package com.example.moonkey.service;
 
-import com.example.moonkey.domain.*;
+import com.example.moonkey.domain.Menu;
+import com.example.moonkey.domain.Orders;
 import com.example.moonkey.domain.Package;
 import com.example.moonkey.domain.Party;
-import com.example.moonkey.dto.*;
-
+import com.example.moonkey.dto.PackageDto;
 import com.example.moonkey.exception.NotFoundMenuException;
 import com.example.moonkey.exception.NotFoundOrderException;
 import com.example.moonkey.exception.NotFoundPackageException;
 import com.example.moonkey.exception.NotFoundPartyException;
-import com.example.moonkey.repository.*;
+import com.example.moonkey.repository.MenuRepository;
+import com.example.moonkey.repository.OrderRepository;
 import com.example.moonkey.repository.PackageRepository;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.moonkey.repository.PartyRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class PackageService {
 
     private final PackageRepository packageRepository;
-    private final AccountRepository accountRepository;
     private final OrderRepository orderRepository;
     private final PartyRepository partyRepository;
     private final MenuRepository menuRepository;
-
-    public PackageService(PackageRepository packageRepository, AccountRepository accountRepository
-                        ,OrderRepository orderRepository, PartyRepository partyRepository, MenuRepository menuRepository){
-        this.packageRepository = packageRepository;
-        this.accountRepository = accountRepository;
-        this.orderRepository = orderRepository;
-        this.partyRepository = partyRepository;
-        this.menuRepository = menuRepository;
-    }
 
     @Transactional
     public PackageDto register(PackageDto packageDto, long orderId, long partyId) {
@@ -62,9 +55,7 @@ public class PackageService {
         ordersList.add(orders);
         int amount = 0;
 
-        Iterator<Orders> iterator = ordersList.iterator();
-        while (iterator.hasNext()) {
-            Orders orders1 = iterator.next();
+        for (Orders orders1 : ordersList) {
             Menu menu = menuRepository.findMenuByMenuId(orders1.getMenuId().getMenuId())
                     .orElseThrow(() -> new NotFoundMenuException("Menu not found"));
             productList.add(menu.getMenuName());
@@ -72,7 +63,7 @@ public class PackageService {
         }
         Package aPackage;
         PackageDto result;
-        if(packs==null) {
+        if (packs == null) {
             aPackage = Package.builder()
                     .storeId(party.getStoreId())
                     .product(productList)
@@ -82,64 +73,37 @@ public class PackageService {
                     .address(party.getAddr()) // party로 부터 addr 받아오도록 변경
                     .build();
             result = PackageDto.from(packageRepository.save(aPackage));
-        }
-        else{
+        } else {
             packs.setOrderId(ordersList);
-            result= PackageDto.from(packageRepository.save(packs));
+            result = PackageDto.from(packageRepository.save(packs));
 
         }
 
         return result;
     }
 
-    @Transactional
-    public List<PackageDto> getPackages(){
+    @Transactional(readOnly = true)
+    public List<PackageDto> getPackages() {
         List<Package> packageList = packageRepository.findAll();
-        Iterator<Package> iter = packageList.iterator();
-
-        List<PackageDto> packageDtoList = new ArrayList<>(Collections.emptyList());
-
-        while(iter.hasNext())
-        {
-            Package aPackage = iter.next();
-            PackageDto packageDto = PackageDto.from(aPackage);
-            packageDtoList.add(packageDto);
-        }
-        return packageDtoList;
-
+        return packageList.stream()
+                .map(PackageDto::from).toList();
     }
 
-
-    @Transactional
-    public List<PackageDto> getPackagesByStoreId(long storeId){
+    @Transactional(readOnly = true)
+    public List<PackageDto> getPackagesByStoreId(long storeId) {
         List<Package> packageList = packageRepository.findAll();
-        Iterator<Package> iter = packageList.iterator();
-
-        List<PackageDto> packageDtoList = new ArrayList<>(Collections.emptyList());
-
-        while(iter.hasNext())
-        {
-            Package aPackage = iter.next();
-
-            if(aPackage.getPartyId().getStoreId().getStoreId() == storeId){
-                PackageDto packageDto = PackageDto.from(aPackage);
-                packageDtoList.add(packageDto);
-            }
-        }
-        return packageDtoList;
-
+        return packageList.stream()
+                .filter(aPackage -> aPackage.getPartyId().getStoreId().getStoreId() == storeId)
+                .map(PackageDto::from)
+                .toList();
     }
 
     @Transactional
-    public PackageDto setCompletePackage(long packageId){
-
+    public PackageDto setCompletePackage(long packageId) {
         Package aPackage = packageRepository.findOneByPackageId(packageId)
-                .orElseThrow(()->new NotFoundPackageException("Package not found"));
-
+                .orElseThrow(() -> new NotFoundPackageException("Package not found"));
         aPackage.setPackageActivatedFalse(aPackage);
         packageRepository.save(aPackage);
-
         return PackageDto.from(aPackage);
     }
-
 }
